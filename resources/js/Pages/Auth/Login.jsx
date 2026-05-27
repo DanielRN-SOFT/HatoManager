@@ -1,8 +1,8 @@
+import InputError from '@/Components/Auth/InputError';
+import InputLabel from '@/Components/Auth/InputLabel';
+import PrimaryButton from '@/Components/Auth/PrimaryButton';
+import TextInput from '@/Components/Auth/TextInput';
 import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
@@ -15,7 +15,6 @@ export default function Login({ status, canResetPassword }) {
 
     const submit = (e) => {
         e.preventDefault();
-
         post(route('login'), {
             onFinish: () => reset('password'),
         });
@@ -23,50 +22,65 @@ export default function Login({ status, canResetPassword }) {
 
     return (
         <GuestLayout>
-            <Head title="Log in" />
+            <Head title="Iniciar sesión" />
 
+            {/* Header de marca */}
+            <div className="flex flex-col items-center px-8 pb-6 pt-8">
+                <span className="mb-1 text-2xl font-bold tracking-tight text-primary">
+                    HatoManager
+                </span>
+                <h1 className="text-center text-xl font-bold text-on-surface">
+                    Bienvenido de nuevo
+                </h1>
+                <p className="mt-1 text-center text-sm text-on-surface-variant">
+                    Gestión ganadera inteligente y profesional.
+                </p>
+            </div>
+
+            {/* Mensaje de estado (ej. "contraseña restablecida") */}
             {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
+                <div className="mx-8 mb-4 rounded-lg bg-secondary-container px-4 py-3 text-sm font-medium text-on-secondary-container">
                     {status}
                 </div>
             )}
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} className="space-y-5 px-8 pb-8">
+                {/* Email */}
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
+                    <InputLabel htmlFor="email" value="Correo electrónico" />
                     <TextInput
                         id="email"
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
                         autoComplete="username"
                         isFocused={true}
+                        hasError={!!errors.email}
+                        placeholder="ej. juan@rancho.com"
                         onChange={(e) => setData('email', e.target.value)}
                     />
-
-                    <InputError message={errors.email} className="mt-2" />
+                    <InputError message={errors.email} />
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
+                {/* Contraseña */}
+                <div>
+                    <InputLabel htmlFor="password" value="Contraseña" />
                     <TextInput
                         id="password"
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
                         autoComplete="current-password"
+                        hasError={!!errors.password}
+                        placeholder="••••••••"
                         onChange={(e) => setData('password', e.target.value)}
                     />
-
-                    <InputError message={errors.password} className="mt-2" />
+                    <InputError message={errors.password} />
                 </div>
 
-                <div className="mt-4 block">
-                    <label className="flex items-center">
+                {/* Recordarme + Olvidé contraseña */}
+                <div className="flex items-center justify-between">
+                    <label className="flex cursor-pointer items-center gap-2">
                         <Checkbox
                             name="remember"
                             checked={data.remember}
@@ -74,26 +88,36 @@ export default function Login({ status, canResetPassword }) {
                                 setData('remember', e.target.checked)
                             }
                         />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
+                        <span className="text-sm text-on-surface-variant">
+                            Recordarme
                         </span>
                     </label>
-                </div>
 
-                <div className="mt-4 flex items-center justify-end">
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="text-sm font-semibold text-primary hover:underline"
                         >
-                            Forgot your password?
+                            ¿Olvidaste tu contraseña?
                         </Link>
                     )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
                 </div>
+
+                {/* Botón */}
+                <PrimaryButton disabled={processing}>
+                    {processing ? 'Ingresando...' : 'Iniciar sesión'}
+                </PrimaryButton>
+
+                {/* Link a registro */}
+                <p className="pt-1 text-center text-sm text-on-surface-variant">
+                    ¿No tienes cuenta?{' '}
+                    <Link
+                        href={route('register')}
+                        className="font-semibold text-primary hover:underline"
+                    >
+                        Regístrate
+                    </Link>
+                </p>
             </form>
         </GuestLayout>
     );
