@@ -38,14 +38,6 @@ export default function AuthenticatedLayout({ header, children }) {
                         sidebarWidth="0px" // ya maneja el margin arriba
                     />
 
-                    {header && (
-                        <div className="border-b border-outline-variant bg-surface">
-                            <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-                                {header}
-                            </div>
-                        </div>
-                    )}
-
                     <main className="flex-1 bg-background p-4 sm:p-6 lg:p-8">
                         {children}
                     </main>

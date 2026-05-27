@@ -1,9 +1,7 @@
 import { Link } from '@inertiajs/react';
+import { PiCowFill } from 'react-icons/pi';
 
 const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
-    // ─────────────────────────────────────────────
-    // NAV ITEMS —  arreglo para agregar/quitar rutas
-    // ─────────────────────────────────────────────
     const NAV_ITEMS = [
         { label: 'Dashboard', icon: 'dashboard', route: 'dashboard' },
         { label: 'Inventario', icon: 'inventory_2', route: 'login' },
@@ -11,11 +9,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
         { label: 'Pesajes', icon: 'monitor_weight', route: 'login' },
         { label: 'Ventas', icon: 'sell', route: 'login' },
         { label: 'Subastas', icon: 'gavel', route: 'login' },
-        {
-            label: 'Mis Veterinarios',
-            icon: 'medical_services',
-            route: 'login',
-        },
+        { label: 'Mis Veterinarios', icon: 'medical_services', route: 'login' },
     ];
 
     const NAV_BOTTOM = [
@@ -24,7 +18,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
 
     return (
         <>
-            {/* Overlay móvil — fade in/out */}
+            {/* Overlay móvil */}
             <div
                 onClick={onClose}
                 className={[
@@ -39,13 +33,11 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
             {/* Panel lateral */}
             <aside
                 className={[
-                    // Base
-                    'fixed left-0 top-0 z-50 flex h-full flex-col',
-                    'bg-primary shadow-2xl',
+                    'fixed left-0 top-0 z-50 flex h-screen flex-col',
+                    'border-r border-outline-variant bg-primary dark:bg-primary-container',
+                    'gap-2 p-4 shadow-sm',
                     'transition-all duration-300 ease-in-out',
-                    // Ancho — colapsado en desktop, normal en móvil
-                    collapsed ? 'w-[72px]' : 'w-64',
-                    // En móvil: translate para entrar/salir
+                    collapsed ? 'w-[72px]' : 'w-[220px]',
                     'lg:translate-x-0',
                     open
                         ? 'translate-x-0'
@@ -53,48 +45,32 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
                 ].join(' ')}
             >
                 {/* Header / Logo */}
-                <div
-                    className={[
-                        'flex shrink-0 flex-col items-center gap-2 px-4 transition-all duration-300',
-                        collapsed ? 'py-0' : 'border-b border-white/10 py-5',
-                    ].join(' ')}
-                >
-                    <div
-                        className={[
-                            'overflow-hidden transition-all duration-300',
-                            collapsed
-                                ? 'h-0 w-0 opacity-0'
-                                : 'h-auto w-auto opacity-100',
-                        ].join(' ')}
-                    >
-                        <div className="rounded-xl bg-white/20 p-2 ring-1 ring-white/20">
-                            <img
-                                src="images/HatoManager-logo.png"
-                                alt="HatoManager logo"
-                                className="w-32 object-contain"
-                            />
+                <div className="mb-8 flex items-center gap-3 px-2">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-on-primary/10">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-on-primary/10">
+                            <PiCowFill className="text-[22px] text-on-primary" />
                         </div>
                     </div>
                     <div
                         className={[
-                            'overflow-hidden text-center transition-all duration-300',
-                            collapsed ? 'h-0 opacity-0' : 'h-auto opacity-100',
+                            'overflow-hidden transition-all duration-300',
+                            collapsed ? 'w-0 opacity-0' : 'w-auto opacity-100',
                         ].join(' ')}
                     >
-                        <h1 className="whitespace-nowrap text-sm font-bold leading-none text-on-primary">
+                        <h1 className="whitespace-nowrap font-bold leading-none text-on-primary">
                             HatoManager
                         </h1>
-                        <p className="mt-0.5 whitespace-nowrap text-[9px] uppercase tracking-widest text-primary-fixed opacity-70">
-                            Gestión Ganadera
+                        <p className="whitespace-nowrap text-[10px] tracking-wider text-on-primary/60">
+                            AGRO-PROFESSIONAL
                         </p>
                     </div>
                 </div>
 
                 {/* Navigation */}
-                <nav className="custom-scrollbar flex-1 space-y-0.5 overflow-y-auto overflow-x-hidden px-2 py-4">
+                <nav className="custom-scrollbar flex-1 space-y-1 overflow-y-auto overflow-x-hidden">
                     {NAV_ITEMS.map((item) => (
                         <SidebarNavItem
-                            key={item.route}
+                            key={item.route + item.label}
                             item={item}
                             collapsed={collapsed}
                         />
@@ -102,10 +78,10 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
                 </nav>
 
                 {/* Bottom nav */}
-                <div className="shrink-0 space-y-0.5 border-t border-white/10 px-2 py-3">
+                <div className="shrink-0 space-y-1 border-t border-outline-variant pt-3">
                     {NAV_BOTTOM.map((item) => (
                         <SidebarNavItem
-                            key={item.route}
+                            key={item.route + item.label}
                             item={item}
                             collapsed={collapsed}
                         />
@@ -114,7 +90,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
                     {/* Botón colapsar — solo desktop */}
                     <button
                         onClick={onToggleCollapse}
-                        className="group hidden w-full items-center gap-3 rounded-xl px-3 py-2.5 text-primary-fixed transition-all duration-200 hover:bg-white/10 lg:flex"
+                        className="group hidden w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-on-primary/80 transition-colors duration-200 hover:bg-primary-fixed-dim/20 hover:text-on-primary lg:flex"
                     >
                         <span
                             className={[
@@ -126,7 +102,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
                         </span>
                         <span
                             className={[
-                                'overflow-hidden whitespace-nowrap text-sm font-medium transition-all duration-300',
+                                'overflow-hidden whitespace-nowrap transition-all duration-300',
                                 collapsed
                                     ? 'w-0 opacity-0'
                                     : 'w-auto opacity-100',
@@ -151,26 +127,19 @@ const SidebarNavItem = ({ item, collapsed }) => {
         <Link
             href={route(item.route)}
             className={[
-                'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium',
-                'group relative transition-all duration-200 ease-out',
+                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium',
+                'group relative transition-colors duration-200',
                 'active:scale-95',
                 isActive
-                    ? 'bg-primary-container text-on-primary-container shadow-sm'
-                    : 'text-primary-fixed hover:bg-white/10',
+                    ? 'bg-secondary-container font-semibold text-on-secondary-container'
+                    : 'text-on-primary/80 hover:bg-primary-fixed-dim/20 hover:text-on-primary',
                 collapsed ? 'justify-center' : '',
             ].join(' ')}
         >
-            <span
-                className={[
-                    'material-symbols-outlined shrink-0 text-[22px] transition-transform duration-200',
-                    'group-hover:scale-110',
-                    isActive ? 'fill-icon' : '',
-                ].join(' ')}
-            >
+            <span className="material-symbols-outlined shrink-0 text-[22px]">
                 {item.icon}
             </span>
 
-            {/* Label — se oculta con overflow+opacity cuando está colapsado */}
             <span
                 className={[
                     'overflow-hidden whitespace-nowrap transition-all duration-300 ease-in-out',

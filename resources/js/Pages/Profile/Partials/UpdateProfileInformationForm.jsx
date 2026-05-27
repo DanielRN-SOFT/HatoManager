@@ -25,16 +25,36 @@ export default function UpdateProfileInformation({
     };
 
     return (
+        // Dentro del return, reemplaza <section> con:
         <section className={className}>
-            <header>
-                <h2 className="text-lg font-medium text-gray-900">
-                    Profile Information
-                </h2>
+            <div className="mb-5 flex items-center gap-3 border-b border-outline-variant pb-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container text-lg">
+                    👤
+                </div>
+                <div>
+                    <h2 className="text-base font-semibold text-on-surface">
+                        Información del Perfil
+                    </h2>
+                    <p className="text-xs text-on-surface-variant">
+                        Actualiza tu nombre y correo electrónico
+                    </p>
+                </div>
+            </div>
 
-                <p className="mt-1 text-sm text-gray-600">
-                    Update your account's profile information and email address.
-                </p>
-            </header>
+            {/* Avatar preview */}
+            <div className="mb-5 flex items-center gap-3 rounded-xl border border-outline-variant bg-surface px-4 py-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-lg font-bold text-on-primary">
+                    {user.name?.slice(0, 2).toUpperCase()}
+                </div>
+                <div>
+                    <p className="text-sm font-semibold text-on-surface">
+                        {user.name}
+                    </p>
+                    <p className="text-xs text-on-surface-variant">
+                        {user.email}
+                    </p>
+                </div>
+            </div>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
@@ -92,17 +112,15 @@ export default function UpdateProfileInformation({
                     </div>
                 )}
 
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
-
-                    <Transition
-                        show={recentlySuccessful}
-                        enter="transition ease-in-out"
-                        enterFrom="opacity-0"
-                        leave="transition ease-in-out"
-                        leaveTo="opacity-0"
-                    >
-                        <p className="text-sm text-gray-600">Saved.</p>
+                {/* ...el resto del form igual, solo cambia los botones y wrapper: */}
+                <div className="flex items-center gap-4 border-t border-outline-variant pt-4">
+                    <PrimaryButton disabled={processing}>
+                        Guardar cambios
+                    </PrimaryButton>
+                    <Transition show={recentlySuccessful}>
+                        <p className="text-sm font-medium text-primary">
+                            ✓ Guardado
+                        </p>
                     </Transition>
                 </div>
             </form>
