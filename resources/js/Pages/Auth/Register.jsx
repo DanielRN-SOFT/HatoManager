@@ -123,11 +123,11 @@ function PasswordInput({
                 hasError={hasError}
                 autoComplete={autoComplete}
                 placeholder={placeholder ?? '••••••••'}
-                className="pr-11"
+                className="border-outline-variant pr-11 focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
             <button
                 type="button"
-                onClick={() => setVisible((v) => !v)}
+                onClick={() => setVisible(!visible)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors hover:text-on-surface"
                 aria-label={
                     visible ? 'Ocultar contraseña' : 'Mostrar contraseña'
