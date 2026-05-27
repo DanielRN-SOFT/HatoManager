@@ -9,7 +9,7 @@ export default function AuthenticatedLayout({ header, children }) {
     const [collapsed, setCollapsed] = useState(false);
 
     // Ancho dinámico para compensar la sidebar en el contenido
-    const sidebarWidth = collapsed ? '72px' : '256px';
+    const sidebarWidth = collapsed ? '72px' : '220px';
 
     return (
         <>

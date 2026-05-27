@@ -45,7 +45,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
                 ].join(' ')}
             >
                 {/* Header / Logo */}
-                <div className="mb-8 flex items-center gap-3 px-2">
+                <div className="mb-8 flex items-center gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-on-primary/10">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-on-primary/10">
                             <PiCowFill className="text-[22px] text-on-primary" />
@@ -133,7 +133,7 @@ const SidebarNavItem = ({ item, collapsed }) => {
                 isActive
                     ? 'bg-secondary-container font-semibold text-on-secondary-container'
                     : 'text-on-primary/80 hover:bg-primary-fixed-dim/20 hover:text-on-primary',
-                collapsed ? 'justify-center' : '',
+                collapsed ? 'justify-center pl-6' : '',
             ].join(' ')}
         >
             <span className="material-symbols-outlined shrink-0 text-[22px]">
