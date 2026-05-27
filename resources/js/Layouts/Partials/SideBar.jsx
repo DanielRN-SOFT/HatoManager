@@ -53,23 +53,39 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
                 ].join(' ')}
             >
                 {/* Header / Logo */}
-                <div className="flex shrink-0 items-center gap-3 border-b border-white/10 px-4 py-5">
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-fixed">
-                        <span className="material-symbols-outlined fill-icon text-[20px] text-primary">
-                            agriculture
-                        </span>
-                    </div>
+                <div
+                    className={[
+                        'flex shrink-0 flex-col items-center gap-2 px-4 transition-all duration-300',
+                        collapsed ? 'py-0' : 'border-b border-white/10 py-5',
+                    ].join(' ')}
+                >
                     <div
                         className={[
                             'overflow-hidden transition-all duration-300',
-                            collapsed ? 'w-0 opacity-0' : 'w-auto opacity-100',
+                            collapsed
+                                ? 'h-0 w-0 opacity-0'
+                                : 'h-auto w-auto opacity-100',
+                        ].join(' ')}
+                    >
+                        <div className="rounded-xl bg-white/20 p-2 ring-1 ring-white/20">
+                            <img
+                                src="images/HatoManager-logo.png"
+                                alt="HatoManager logo"
+                                className="w-32 object-contain"
+                            />
+                        </div>
+                    </div>
+                    <div
+                        className={[
+                            'overflow-hidden text-center transition-all duration-300',
+                            collapsed ? 'h-0 opacity-0' : 'h-auto opacity-100',
                         ].join(' ')}
                     >
                         <h1 className="whitespace-nowrap text-sm font-bold leading-none text-on-primary">
                             HatoManager
                         </h1>
                         <p className="mt-0.5 whitespace-nowrap text-[9px] uppercase tracking-widest text-primary-fixed opacity-70">
-                            Cattle Management
+                            Gestión Ganadera
                         </p>
                     </div>
                 </div>

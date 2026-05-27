@@ -25,7 +25,7 @@ export default function Login({ status, canResetPassword }) {
             <Head title="Iniciar sesión" />
 
             {/* Header de marca */}
-            <div className="flex flex-col items-center px-8 pb-6 pt-8">
+            <div className="flex flex-col items-center px-8 pb-6 pt-2">
                 <span className="mb-1 text-2xl font-bold tracking-tight text-primary">
                     HatoManager
                 </span>
@@ -80,7 +80,7 @@ export default function Login({ status, canResetPassword }) {
 
                 {/* Recordarme + Olvidé contraseña */}
                 <div className="flex items-center justify-between">
-                 
+
 
                     {canResetPassword && (
                         <Link

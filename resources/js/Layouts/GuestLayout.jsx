@@ -10,21 +10,19 @@ export default function GuestLayout({ children }) {
                 }}
             />
             <main className="relative z-10 w-full max-w-[440px] overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest shadow-sm transition-all duration-300 hover:shadow-md">
-                <div className="h-2 w-full bg-primary" />
+                <div className="h-1 w-full bg-primary" />
+
+                {/* Logo section */}
+                <div className="flex flex-col items-center gap-1 pt-3">
+                    <img
+                        src="images/HatoManager-logo.png"
+                        alt="HatoManager"
+                        className="w-48 object-contain"
+                    />{' '}
+                </div>
+
                 {children}
             </main>
-
-            <footer className="relative z-10 mt-8 flex gap-6 text-sm text-on-surface-variant">
-                <a href="#" className="transition-colors hover:text-primary">
-                    Privacidad
-                </a>
-                <a href="#" className="transition-colors hover:text-primary">
-                    Términos
-                </a>
-                <a href="#" className="transition-colors hover:text-primary">
-                    Soporte
-                </a>
-            </footer>
         </div>
     );
 }

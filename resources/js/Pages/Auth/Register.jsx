@@ -164,7 +164,7 @@ export default function Register() {
         <GuestLayout>
             <Head title="Crear cuenta" />
 
-            <div className="flex flex-col items-center px-8 pb-6 pt-8">
+            <div className="flex flex-col items-center px-8 pb-6 pt-2">
                 <span className="mb-1 text-2xl font-bold tracking-tight text-primary">
                     HatoManager
                 </span>

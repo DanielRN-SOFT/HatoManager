@@ -24,7 +24,7 @@ export default function ConfirmPassword() {
         <GuestLayout>
             <Head title="Confirmar contraseña" />
 
-            <div className="flex flex-col items-center px-8 pb-6 pt-8">
+            <div className="flex flex-col items-center px-8 pb-6 pt-2">
                 <span className="mb-1 text-2xl font-bold tracking-tight text-primary">
                     HatoManager
                 </span>
