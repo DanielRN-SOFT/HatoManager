@@ -6,56 +6,6 @@ import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 
-function RoleSelector({ value, onChange }) {
-    const roles = [
-        { id: 'ganadero', label: 'Ganadero', icon: 'agriculture' },
-        { id: 'comprador', label: 'Comprador', icon: 'shopping_bag' },
-    ];
-
-    return (
-        <div className="mb-6 grid grid-cols-2 gap-3">
-            {roles.map((role) => {
-                const selected = value === role.id;
-                return (
-                    <button
-                        key={role.id}
-                        type="button"
-                        onClick={() => onChange(role.id)}
-                        className={
-                            'flex flex-col items-center justify-center gap-1.5 rounded-lg border-2 p-4 transition-all duration-200 ' +
-                            (selected
-                                ? 'border-primary-container bg-primary-container/10'
-                                : 'border-outline-variant bg-transparent hover:border-primary-container/50')
-                        }
-                    >
-                        <span
-                            className={
-                                'material-symbols-outlined ' +
-                                (selected
-                                    ? 'text-primary'
-                                    : 'text-on-surface-variant')
-                            }
-                            style={{ fontSize: '32px' }}
-                        >
-                            {role.icon}
-                        </span>
-                        <span
-                            className={
-                                'text-sm font-bold ' +
-                                (selected
-                                    ? 'text-primary'
-                                    : 'text-on-surface-variant')
-                            }
-                        >
-                            {role.label}
-                        </span>
-                    </button>
-                );
-            })}
-        </div>
-    );
-}
-
 function PasswordStrength({ password }) {
     const getStrength = (pwd) => {
         if (!pwd) return 0;
@@ -150,7 +100,7 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
-        role: 'ganadero',
+        role: 'comprador', // Fijo: el registro público es exclusivamente para compradores
     });
 
     const submit = (e) => {
@@ -177,11 +127,6 @@ export default function Register() {
             </div>
 
             <form onSubmit={submit} className="space-y-5 px-8 pb-8">
-                <RoleSelector
-                    value={data.role}
-                    onChange={(role) => setData('role', role)}
-                />
-
                 <div>
                     <InputLabel htmlFor="name" value="Nombre completo" />
                     <TextInput
@@ -244,6 +189,23 @@ export default function Register() {
                         }
                     />
                     <InputError message={errors.password_confirmation} />
+                </div>
+
+                {/* Aviso informativo para ganaderos */}
+                <div className="flex items-start gap-2 rounded-lg border border-outline-variant bg-surface-container-low px-4 py-3">
+                    <span
+                        className="material-symbols-outlined mt-0.5 shrink-0 text-on-surface-variant"
+                        style={{ fontSize: '18px' }}
+                    >
+                        info
+                    </span>
+                    <p className="text-xs text-on-surface-variant">
+                        ¿Eres ganadero?{' '}
+                        <span className="font-semibold text-on-surface">
+                            Tu cuenta debe ser creada por un administrador.
+                        </span>{' '}
+                        Contáctanos para gestionar tu registro.
+                    </p>
                 </div>
 
                 <PrimaryButton disabled={processing} className="mt-2">

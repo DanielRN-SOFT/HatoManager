@@ -15,7 +15,7 @@ export default function GuestLayout({ children }) {
                 {/* Logo section */}
                 <div className="flex flex-col items-center gap-1 pt-3">
                     <img
-                        src="images/HatoManager-logo.png"
+                        src="/images/HatoManager-logo.png"
                         alt="HatoManager"
                         className="w-48 object-contain"
                     />{' '}
