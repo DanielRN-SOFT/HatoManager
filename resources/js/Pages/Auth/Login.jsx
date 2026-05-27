@@ -80,18 +80,7 @@ export default function Login({ status, canResetPassword }) {
 
                 {/* Recordarme + Olvidé contraseña */}
                 <div className="flex items-center justify-between">
-                    <label className="flex cursor-pointer items-center gap-2">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData('remember', e.target.checked)
-                            }
-                        />
-                        <span className="text-sm text-on-surface-variant">
-                            Recordarme
-                        </span>
-                    </label>
+                 
 
                     {canResetPassword && (
                         <Link
