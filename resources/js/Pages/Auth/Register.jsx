@@ -103,7 +103,7 @@ export default function Register({ veterinarianToken = null }) {
         password: '',
         password_confirmation: '',
         role: 'comprador', // Fijo: el registro público es exclusivamente para compradores
-        veterinarian_token: vetToken ?? '',
+        veterinarian_token: veterinarianToken ?? '',
     });
 
     const submit = (e) => {
@@ -122,12 +122,12 @@ export default function Register({ veterinarianToken = null }) {
                     HatoManager
                 </span>
                 <h1 className="text-center text-xl font-bold text-on-surface">
-                    {isVetInvitation
+                    {isVeterinarianInvitation
                         ? 'Acepta tu invitación'
                         : 'Crea tu cuenta'}
                 </h1>
                 <p className="mt-1 text-center text-sm text-on-surface-variant">
-                    {isVetInvitation
+                    {isVeterinarianInvitation
                         ? 'Crea tu cuenta de veterinario para acceder a la finca'
                         : 'Únete a la red ganadera más grande de Colombia'}
                 </p>

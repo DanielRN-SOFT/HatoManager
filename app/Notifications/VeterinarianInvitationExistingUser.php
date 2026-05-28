@@ -29,24 +29,24 @@ class VeterinarianInvitationExistingUser extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        $acceptUrl = route('veterinarios.invitation.respond', [
+        $acceptUrl = route('veterinarians.invitation.respond', [
             'invitation' => $this->invitationId,
             'action'     => 'accept',
         ]);
 
-        $rejectUrl = route('veterinarios.invitation.respond', [
+        $rejectUrl = route('veterinarians.invitation.respond', [
             'invitation' => $this->invitationId,
             'action'     => 'reject',
         ]);
 
         return (new MailMessage)
             ->subject("Invitación a la finca {$this->farm->name} — HatoManager")
-            ->greeting("Hola {$notifiable->name},")
-            ->line("El ganadero **{$this->ganadero->name}** te ha invitado a vincularte como veterinario de la finca **{$this->farm->name}** ({$this->farm->city}, {$this->farm->department}).")
-            ->line('Si aceptas, tendrás acceso al estado sanitario de los animales de esa finca y podrás registrar vacunas y generar certificados.')
-            ->action('Aceptar invitación', $acceptUrl)
-            ->line("Si no deseas vincularte, puedes [rechazar la invitación]({$rejectUrl}).")
-            ->line('Este enlace es personal y no debe compartirse.')
-            ->salutation('Equipo HatoManager');
+            ->view('emails.vet-invitation-existing-user', [
+                'farm'       => $this->farm,
+                'ganadero'   => $this->ganadero,
+                'acceptUrl'  => $acceptUrl,
+                'rejectUrl'  => $rejectUrl,
+                'notifiable' => $notifiable,
+            ]);
     }
 }

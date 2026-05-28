@@ -43,6 +43,22 @@
             ->name('veterinarians.invitation.respond')
             ->where('action', 'accept|reject')
             ->middleware('role:veterinario');
+
+
+
+        // ── SOLO DESARROLLO, PARA PROBAR EMAILS — eliminar antes de producción ──
+        Route::get('/test-emails', function () {
+            if (!app()->isLocal()) abort(404);
+
+            $farm = App\Models\Farm::first();
+            $ganadero = App\Models\User::where('email', 'ganadero@gmail.com')->first();
+
+            $ganadero->notify(new App\Notifications\VeterinarianInvitationNewUser($farm, $ganadero, 'token-de-prueba-123'));
+            $ganadero->notify(new App\Notifications\VeterinarianInvitationExistingUser($farm, $ganadero, 999));
+            $ganadero->notify(new App\Notifications\VeterinarianUnlinkedFromFarm($farm));
+
+            return response()->json(['sent' => 3, 'to' => $ganadero->email]);
+        })->middleware('auth');
     });
 
     require __DIR__ . '/auth.php';

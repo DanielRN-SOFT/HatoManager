@@ -28,10 +28,9 @@ class VeterinarianUnlinkedFromFarm extends Notification
     {
         return (new MailMessage)
             ->subject("Acceso revocado — Finca {$this->farm->name}")
-            ->greeting("Hola {$notifiable->name},")
-            ->line("Te informamos que tu acceso como veterinario a la finca **{$this->farm->name}** ({$this->farm->city}, {$this->farm->department}) ha sido revocado.")
-            ->line('A partir de este momento ya no podrás ver el inventario ni los registros sanitarios de esa finca. Tu acceso a otras fincas vinculadas no se ve afectado.')
-            ->line('Si crees que esto fue un error, comunícate directamente con el ganadero responsable de la finca.')
-            ->salutation('Equipo HatoManager');
+            ->view('emails.vet-unlinked', [
+                'farm'       => $this->farm,
+                'notifiable' => $notifiable,
+            ]);
     }
 }
