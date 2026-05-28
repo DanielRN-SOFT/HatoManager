@@ -94,13 +94,16 @@ function PasswordInput({
     );
 }
 
-export default function Register() {
+export default function Register({ veterinarianToken = null }) {
+    const isVeterinarianInvitation = !!veterinarianToken;
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
         role: 'comprador', // Fijo: el registro público es exclusivamente para compradores
+        veterinarian_token: vetToken ?? '',
     });
 
     const submit = (e) => {
@@ -119,12 +122,33 @@ export default function Register() {
                     HatoManager
                 </span>
                 <h1 className="text-center text-xl font-bold text-on-surface">
-                    Crea tu cuenta
+                    {isVetInvitation
+                        ? 'Acepta tu invitación'
+                        : 'Crea tu cuenta'}
                 </h1>
                 <p className="mt-1 text-center text-sm text-on-surface-variant">
-                    Únete a la red ganadera más grande de Colombia
+                    {isVetInvitation
+                        ? 'Crea tu cuenta de veterinario para acceder a la finca'
+                        : 'Únete a la red ganadera más grande de Colombia'}
                 </p>
             </div>
+
+            {isVeterinarianInvitation && (
+                <div className="bg-primary/8 mx-8 mb-5 flex items-start gap-3 rounded-xl border border-primary/30 px-4 py-3">
+                    <span
+                        className="material-symbols-outlined mt-0.5 shrink-0 text-primary"
+                        style={{ fontSize: '18px' }}
+                    >
+                        medical_services
+                    </span>
+                    <p className="text-xs text-on-surface">
+                        Fuiste invitado como{' '}
+                        <span className="font-semibold">veterinario</span>. Al
+                        crear tu cuenta quedarás vinculado automáticamente a la
+                        finca correspondiente.
+                    </p>
+                </div>
+            )}
 
             <form onSubmit={submit} className="space-y-5 px-8 pb-8">
                 <div>
@@ -157,6 +181,11 @@ export default function Register() {
                         required
                     />
                     <InputError message={errors.email} />
+                    {isVeterinarianInvitation && (
+                        <p className="mt-1 text-xs text-on-surface-variant">
+                            Usa el correo al que recibiste la invitación.
+                        </p>
+                    )}
                 </div>
 
                 <div>
@@ -192,24 +221,30 @@ export default function Register() {
                 </div>
 
                 {/* Aviso informativo para ganaderos */}
-                <div className="flex items-start gap-2 rounded-lg border border-outline-variant bg-surface-container-low px-4 py-3">
-                    <span
-                        className="material-symbols-outlined mt-0.5 shrink-0 text-on-surface-variant"
-                        style={{ fontSize: '18px' }}
-                    >
-                        info
-                    </span>
-                    <p className="text-xs text-on-surface-variant">
-                        ¿Eres ganadero?{' '}
-                        <span className="font-semibold text-on-surface">
-                            Tu cuenta debe ser creada por un administrador.
-                        </span>{' '}
-                        Contáctanos para gestionar tu registro.
-                    </p>
-                </div>
+                {!isVeterinarianInvitation && (
+                    <div className="flex items-start gap-2 rounded-lg border border-outline-variant bg-surface-container-low px-4 py-3">
+                        <span
+                            className="material-symbols-outlined mt-0.5 shrink-0 text-on-surface-variant"
+                            style={{ fontSize: '18px' }}
+                        >
+                            info
+                        </span>
+                        <p className="text-xs text-on-surface-variant">
+                            ¿Eres ganadero?{' '}
+                            <span className="font-semibold text-on-surface">
+                                Tu cuenta debe ser creada por un administrador.
+                            </span>{' '}
+                            Contáctanos para gestionar tu registro.
+                        </p>
+                    </div>
+                )}
 
                 <PrimaryButton disabled={processing} className="mt-2">
-                    {processing ? 'Creando cuenta...' : 'Crear cuenta'}
+                    {processing
+                        ? 'Creando cuenta...'
+                        : isVeterinarianInvitation
+                          ? 'Crear cuenta y aceptar invitación'
+                          : 'Crear cuenta'}
                 </PrimaryButton>
 
                 <p className="pt-1 text-center text-sm text-on-surface-variant">
