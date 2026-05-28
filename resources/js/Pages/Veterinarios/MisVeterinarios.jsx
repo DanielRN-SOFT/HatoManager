@@ -1,4 +1,4 @@
-// resources/js/Pages/Veterinarios/MisVeterinarios.jsx
+// resources/js/Pages/Veterinarians/MisVeterinarians.jsx
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
@@ -51,7 +51,7 @@ function InviteForm({ farm }) {
 
     function submit(e) {
         e.preventDefault();
-        post(route('veterinarios.invite', farm.id), {
+        post(route('veterinarians.invite', farm.id), {
             preserveScroll: true,
             onSuccess: () => {
                 reset('email');
@@ -148,11 +148,11 @@ function InviteForm({ farm }) {
 }
 
 /* ─── Chip de estado para invitaciones pendientes ────────────── */
-function PendingBadge({ invitation, farmId }) {
+function PendingBadge({ invitation }) {
     const [confirming, setConfirming] = useState(false);
 
     function cancel() {
-        router.delete(route('veterinarios.invitation.cancel', invitation.id), {
+        router.delete(route('veterinarians.invitation.cancel', invitation.id), {
             preserveScroll: true,
             onSuccess: () => setConfirming(false),
         });
@@ -233,7 +233,10 @@ function VetRow({ vet, farm }) {
 
     function unlink() {
         router.delete(
-            route('veterinarios.unlink', { farm: farm.id, vet: vet.id }),
+            route('veterinarians.unlink', {
+                farm: farm.id,
+                veterinarian: vet.id,
+            }),
             {
                 preserveScroll: true,
                 onSuccess: () => setConfirming(false),
@@ -294,8 +297,8 @@ function VetRow({ vet, farm }) {
 
 /* ─── Card por finca ─────────────────────────────────────────── */
 function FarmCard({ farm }) {
-    const hasVets = farm.veterinarios.length > 0;
-    const hasPending = farm.vet_invitations.length > 0;
+    const hasVets = farm.veterinarians.length > 0;
+    const hasPending = farm.veterinarian_invitations.length > 0;
 
     return (
         <div className="rounded-2xl border border-outline-variant bg-surface p-5 shadow-sm">
@@ -319,7 +322,7 @@ function FarmCard({ farm }) {
             {/* Veterinarios vinculados */}
             {hasVets ? (
                 <div className="divide-y divide-outline-variant">
-                    {farm.veterinarios.map((vet) => (
+                    {farm.veterinarians.map((vet) => (
                         <VetRow key={vet.id} vet={vet} farm={farm} />
                     ))}
                 </div>
@@ -335,12 +338,8 @@ function FarmCard({ farm }) {
                     <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
                         Invitaciones pendientes
                     </p>
-                    {farm.vet_invitations.map((inv) => (
-                        <PendingBadge
-                            key={inv.id}
-                            invitation={inv}
-                            farmId={farm.id}
-                        />
+                    {farm.veterinarian_invitations.map((inv) => (
+                        <PendingBadge key={inv.id} invitation={inv} />
                     ))}
                 </div>
             )}
@@ -352,7 +351,7 @@ function FarmCard({ farm }) {
 }
 
 /* ─── Page principal ─────────────────────────────────────────── */
-export default function MisVeterinarios({ farms }) {
+export default function MisVeterinarians({ farms }) {
     return (
         <AuthenticatedLayout>
             <Head title="Mis Veterinarios" />

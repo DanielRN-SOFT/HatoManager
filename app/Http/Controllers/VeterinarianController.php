@@ -36,7 +36,7 @@ class VeterinarianController extends Controller
                     ->where('status', 'pending')
                     ->select('id', 'farm_id', 'email', 'token_expires_at', 'status', 'created_at'),
             ])
-            ->get(['id', 'name', 'city', 'department']);
+            ->get(['farms.id', 'farms.name', 'farms.city', 'farms.department']);
 
         return Inertia::render('Veterinarios/MisVeterinarios', [
             'farms' => $farms,

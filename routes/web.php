@@ -1,22 +1,48 @@
-<?php
+    <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+    use App\Http\Controllers\ProfileController;
+    use App\Http\Controllers\VeterinarianController;
+    use Illuminate\Foundation\Application;
+    use Illuminate\Support\Facades\Route;
+    use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Auth/Login');
-});
+    Route::get('/', function () {
+        return Inertia::render('Auth/Login');
+    });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+    Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-require __DIR__ . '/auth.php';
+        Route::middleware('role:ganadero')->group(function () {
+
+            // Listado general (todas las fincas del ganadero)
+            Route::get('/my-veterinarians', [VeterinarianController::class, 'index'])
+                ->name('veterinarians.index');
+
+            // Invitar a un veterinario a una finca específica
+            Route::post('/fincas/{farm}/veterinarians/invitar', [VeterinarianController::class, 'invite'])
+                ->name('veterinarians.invite');
+
+            // Desvincular veterinario de una finca
+            Route::delete('/fincas/{farm}/veterinarians/{veterinarian}', [VeterinarianController::class, 'unlink'])
+                ->name('veterinarians.unlink');
+
+            // Cancelar invitación pendiente
+            Route::delete('/invitaciones/{invitation}/cancelar', [VeterinarianController::class, 'cancelInvitation'])
+                ->name('veterinarians.invitation.cancel');
+        });
+
+        /* ── Respuesta a invitación (rol veterinario autenticado) ── */
+        Route::get('/invitaciones/{invitation}/{action}', [VeterinarianController::class, 'respond'])
+            ->name('veterinarians.invitation.respond')
+            ->where('action', 'accept|reject')
+            ->middleware('role:veterinario');
+    });
+
+    require __DIR__ . '/auth.php';

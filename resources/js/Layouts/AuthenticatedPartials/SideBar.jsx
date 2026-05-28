@@ -1,7 +1,12 @@
-import { Link } from '@inertiajs/react';
+// resources/js/Layouts/AuthenticatedPartials/SideBar.jsx
+import { Link, usePage } from '@inertiajs/react';
 import { PiCowFill } from 'react-icons/pi';
 
 const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
+    const { auth } = usePage().props;
+    const role = auth.user?.roles?.[0]?.name ?? null;
+
+    // Ítems base (disponibles para todos los roles autenticados)
     const NAV_ITEMS = [
         { label: 'Dashboard', icon: 'dashboard', route: 'dashboard' },
         { label: 'Inventario', icon: 'inventory_2', route: 'login' },
@@ -9,7 +14,16 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
         { label: 'Pesajes', icon: 'monitor_weight', route: 'login' },
         { label: 'Ventas', icon: 'sell', route: 'login' },
         { label: 'Subastas', icon: 'gavel', route: 'login' },
-        { label: 'Mis Veterinarios', icon: 'medical_services', route: 'login' },
+        // Solo visible para ganaderos
+        ...(role === 'ganadero'
+            ? [
+                  {
+                      label: 'Mis Veterinarios',
+                      icon: 'medical_services',
+                      route: 'veterinarians.index',
+                  },
+              ]
+            : []),
     ];
 
     const NAV_BOTTOM = [
@@ -47,9 +61,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
                 {/* Header / Logo */}
                 <div className="mb-8 flex items-center gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-on-primary/10">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-on-primary/10">
-                            <PiCowFill className="text-[22px] text-on-primary" />
-                        </div>
+                        <PiCowFill className="text-[22px] text-on-primary" />
                     </div>
                     <div
                         className={[
@@ -117,9 +129,6 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
     );
 };
 
-// ─────────────────────────────────────────────
-// SidebarNavItem
-// ─────────────────────────────────────────────
 const SidebarNavItem = ({ item, collapsed }) => {
     const isActive = route().current(item.route);
 
