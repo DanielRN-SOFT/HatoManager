@@ -37,7 +37,7 @@
         }
 
         .card-enter {
-          animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: fad 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .input-field {

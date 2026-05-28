@@ -1,6 +1,7 @@
+import '../../css/login.css';
 export default function GuestLayout({ children }) {
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center overflow-x-hidden bg-background px-4 py-12">
+        <div className="card-enter flex min-h-screen flex-col items-center justify-center overflow-x-hidden bg-background px-4 py-12">
             <div
                 className="pointer-events-none fixed inset-0 opacity-20"
                 style={{
