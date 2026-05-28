@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('vet_invitations', function (Blueprint $table) {
+        Schema::create('veterinarian_invitations', function (Blueprint $table) {
             $table->id();
             $table->string('email');
             $table->string('token')->nullable()->unique();
