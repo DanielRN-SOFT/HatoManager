@@ -71,9 +71,9 @@
     // ─────────────────────────────────────────────
     // Rutas para ganadero y veterinario
     // ─────────────────────────────────────────────
-    Route::middleware(['auth', 'verified', 'role:ganadaro|veterinario'])->group(function () {
-        Route::get('/select-farm', [SelectFarmController::class, 'index'])->name('farm.select');
-        Route::post('/select-farm', [SelectFarmController::class, 'store'])->name('farm.select.store');
+    Route::middleware(['auth', 'verified', 'role:ganadero|veterinario'])->group(function () {
+        Route::get('/select-farm', [SelectFarmController::class, 'index'])->name('select-farm.index');
+        Route::post('/select-farm', [SelectFarmController::class, 'store'])->name('select-farm.store');
     });
 
     require __DIR__ . '/auth.php';

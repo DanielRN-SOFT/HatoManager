@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Farm;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +16,7 @@ class SelectFarmController extends Controller
         $user = auth()->user();
         $farms = $user->farms;
 
-        if($farms->count() > 1){
+        if ($farms->count() > 1) {
             return Inertia::render('Auth/SelectFarm', [
                 'farms' => $farms
             ]);
@@ -27,6 +28,26 @@ class SelectFarmController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'farm_id' => 'required|exists:farms,id'
+        ]);
+        $user = auth()->user();
+
+        $belongsToUser = $user->farms()
+            ->where('farms.id', $request->farm_id)
+            ->exists();
+
+        if (!$belongsToUser) {
+            abort(403);
+        }
+
+        $farm = Farm::find($request->farm_id);
+
+        session([
+            'active_farm_id'   => $farm->id,
+            'active_farm_name' => $farm->name,
+        ]);
+
+        return redirect()->route('dashboard');
     }
 }
