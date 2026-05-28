@@ -51,6 +51,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function farms()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(Farm::class);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\VeterinarianController;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +23,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        return Inertia::render('Auth/Register', [
+            'veterinarianToken' => request('vet_token'),
+        ]);
     }
 
     /**
@@ -44,11 +47,26 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        $user->assignRole('comprador');
+        $vetToken = $request->input('veterinarian_token');
+
+        if (!$vetToken) {
+            $user->assignRole('comprador');
+        }
 
         event(new Registered($user));
 
         Auth::login($user);
+
+        if ($vetToken) {
+            $accepted = VeterinarianController::acceptTokenInvitation($user, $vetToken);
+
+            if (! $accepted) {
+                $user->assignRole('comprador');
+
+                return redirect(route('dashboard', absolute: false))
+                    ->with('warning', 'Tu cuenta fue creada, pero el enlace de invitación no es válido o ha expirado. Pide al ganadero que te envíe una nueva invitación.');
+            }
+        }
 
         return redirect(route('dashboard', absolute: false));
     }

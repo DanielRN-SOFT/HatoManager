@@ -1,7 +1,7 @@
 import { usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import SideBar from './Partials/SideBar';
-import TopNavBar from './Partials/TopNavBar';
+import SideBar from './AuthenticatedPartials/SideBar';
+import TopNavBar from './AuthenticatedPartials/TopNavBar';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;

@@ -5,7 +5,8 @@
     "scripts": {
         "build": "vite build",
         "dev": "vite",
-        "lint": "eslint resources/js --ext .js,.jsx --ignore-path .gitignore --fix"
+        "lint": "eslint resources/js --ext .js,.jsx --ignore-path .gitignore --fix",
+        "start": "concurrently -n \"Laravel,Vite\" -c \"blue,green\" \"php artisan serve\" \"vite\""
     },
     "devDependencies": {
         "@headlessui/react": "^2.0.0",
