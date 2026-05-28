@@ -34,9 +34,16 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'roles' => $request->user()
+                    ?->getRoleNames() ?? [],
             ],
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
+            'flash' => [
+                'success' => session('success'),
+                'info'    => session('info'),
+                'error'   => session('error'),
+            ],
         ];
     }
 }
