@@ -297,8 +297,8 @@ function VetRow({ vet, farm }) {
 
 /* ─── Card por finca ─────────────────────────────────────────── */
 function FarmCard({ farm }) {
-    const hasVets = farm.veterinarians.length > 0;
-    const hasPending = farm.veterinarian_invitations.length > 0;
+    const hasVets = (farm.veterinarios?.length ?? 0) > 0;
+    const hasPending = (farm.veterinarian_invitations?.length ?? 0) > 0;
 
     return (
         <div className="rounded-2xl border border-outline-variant bg-surface p-5 shadow-sm">
