@@ -32,7 +32,7 @@ class VeterinarianController extends Controller
         $farms = $ganadero->farms()
             ->with([
                 'veterinarios:id,name,email',
-                'VeterinarianInvitations' => fn($q) => $q
+                'veterinarianInvitations' => fn($q) => $q
                     ->where('status', 'pending')
                     ->select('id', 'farm_id', 'email', 'token_expires_at', 'status', 'created_at'),
             ])

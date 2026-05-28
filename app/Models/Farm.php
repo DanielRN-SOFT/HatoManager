@@ -23,6 +23,15 @@ class Farm extends Model
 
     public function users()
     {
-        return $this->belongsToMany(Farm::class);
+        return $this->belongsToMany(User::class);
+    }
+
+    public function veterinarios()
+    {
+        return $this->belongsToMany(User::class)->whereHas('roles', fn($q) => $q->where('name', 'veterinario'));
+    }
+    public function veterinarianInvitations()
+    {
+        return $this->hasMany(VeterinarianInvitation::class);
     }
 }
