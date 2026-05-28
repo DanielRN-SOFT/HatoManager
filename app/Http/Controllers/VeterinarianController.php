@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\VeterinarianInvitation;
 use App\Notifications\VeterinarianInvitationExistingUser;
 use App\Notifications\VeterinarianInvitationNewUser;
-use App\Notifications\VetUnlinkedFromFarm;
+use App\Notifications\VeterinarianUnlinkedFromFarm;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\AnonymousNotifiable;
@@ -169,7 +169,7 @@ class VeterinarianController extends Controller
      |  ACCEPT TOKEN — Nuevo usuario acepta al registrarse
      |  Llamado desde RegisteredUserController después del registro
      ╚═════════════════════════════════════════════════════════ */
-    public static function acceptTokenInvitation(User $newUser, string $token): void
+    public static function acceptTokenInvitation(User $newUser, string $token): bool
     {
         $invitation = VeterinarianInvitation::where('token', $token)
             ->where('status', 'pending')
@@ -177,12 +177,12 @@ class VeterinarianController extends Controller
             ->first();
 
         if (! $invitation) {
-            return; // Token inválido o expirado — el registro igual procede
+            return false; // Token inválido o expirado — el registro igual procede
         }
 
         // Asegurar que el correo coincide
         if ($invitation->email !== $newUser->email) {
-            return;
+            return false;
         }
 
         // Asignar rol veterinario si no lo tiene
@@ -193,6 +193,7 @@ class VeterinarianController extends Controller
         // Vincular a la finca
         $invitation->farm->users()->syncWithoutDetaching([$newUser->id]);
         $invitation->update(['status' => 'accepted']);
+        return true;
     }
 
     /* ══════════════════════════════════════════════════════════
@@ -225,7 +226,7 @@ class VeterinarianController extends Controller
             ->where('status', 'pending')
             ->update(['status' => 'expired']);
 
-        $vet->notify(new VetUnlinkedFromFarm($farm));
+        $vet->notify(new VeterinarianUnlinkedFromFarm($farm));
 
         return back()->with('success', "{$vet->name} fue desvinculado de la finca {$farm->name}.");
     }
