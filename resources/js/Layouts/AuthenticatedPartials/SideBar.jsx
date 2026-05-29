@@ -18,6 +18,11 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
         ...(role === 'ganadero'
             ? [
                   {
+                      label: 'Mis Fincas',
+                      icon: 'fence',
+                      route: 'farms.index',
+                  },
+                  {
                       label: 'Mis Veterinarios',
                       icon: 'medical_services',
                       route: 'veterinarians.index',
