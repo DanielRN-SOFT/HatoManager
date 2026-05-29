@@ -9,7 +9,6 @@ import { useState } from 'react';
 export default function ConfirmPassword() {
     const [visible, setVisible] = useState(false);
 
-    // ✅ Un solo useForm
     const { data, setData, post, processing, errors, reset } = useForm({
         password: '',
     });
