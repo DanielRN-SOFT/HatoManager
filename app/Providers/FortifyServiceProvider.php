@@ -27,6 +27,10 @@ class FortifyServiceProvider extends ServiceProvider
     {
         // Reemplaza el LoginResponse de Fortify
         $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
+        // Vista del challenge al hacer login
+        Fortify::twoFactorChallengeView(function () {
+            return inertia('Auth/TwoFactorChallenge');
+        });
     }
 
     /**
@@ -60,6 +64,10 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::verifyEmailView(fn() => Inertia::render('Auth/VerifyEmail', [
             'status' => session('status'),
         ]));
+
+        Fortify::confirmPasswordView(fn() => inertia('Auth/ConfirmPassword'));
+
+        Fortify::twoFactorChallengeView(fn() => inertia('Auth/TwoFactorChallenge'));
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());

@@ -1,6 +1,6 @@
-import PrimaryButton from '@/Components/Auth/PrimaryButton';
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import PrimaryButton from '@/Components/Auth/PrimaryButton';
 
 // Helper para obtener el CSRF token que Laravel requiere
 function getCsrf() {
@@ -10,7 +10,7 @@ function getCsrf() {
         ?.split('=')[1];
 }
 
-// Wrapper de fetch con los headers que Fortify espera
+// Reemplaza tu fortifyFetch actual por esta versión
 async function fortifyFetch(url, method = 'GET', body = null) {
     const headers = {
         'Content-Type': 'application/json',
@@ -25,12 +25,18 @@ async function fortifyFetch(url, method = 'GET', body = null) {
         ...(body ? { body: JSON.stringify(body) } : {}),
     });
 
+    // Fortify devuelve 423 cuando la contraseña no ha sido confirmada
+    if (res.status === 423) {
+        // Guarda la URL actual para que Laravel redirija de vuelta al confirmar
+        window.location.href = `/user/confirm-password?redirect=${encodeURIComponent(window.location.pathname)}`;
+        return; // Detiene la ejecución
+    }
+
     if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data?.message ?? `Error ${res.status}`);
     }
 
-    // Algunos endpoints devuelven 200 sin body (ej: activar 2FA)
     const text = await res.text();
     return text ? JSON.parse(text) : null;
 }

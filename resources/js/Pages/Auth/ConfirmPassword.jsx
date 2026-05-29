@@ -1,7 +1,7 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import InputError from '@/Components/Auth/InputError';
+import InputLabel from '@/Components/Auth/InputLabel';
+import PrimaryButton from '@/Components/Auth/PrimaryButton';
+import TextInput from '@/Components/Auth/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { useState } from 'react';
@@ -9,13 +9,14 @@ import { useState } from 'react';
 export default function ConfirmPassword() {
     const [visible, setVisible] = useState(false);
 
+    // ✅ Un solo useForm
     const { data, setData, post, processing, errors, reset } = useForm({
         password: '',
     });
 
     const submit = (e) => {
         e.preventDefault();
-        post(route('password.confirm'), {
+        post('/user/confirm-password', {
             onFinish: () => reset('password'),
         });
     };
@@ -37,7 +38,6 @@ export default function ConfirmPassword() {
             </div>
 
             <form onSubmit={submit} className="space-y-5 px-8 pb-8">
-                {/* Aviso de seguridad */}
                 <div className="flex items-start gap-3 rounded-lg border border-outline-variant bg-surface-container-low p-3">
                     <span
                         className="material-symbols-outlined shrink-0 text-primary"
@@ -51,7 +51,6 @@ export default function ConfirmPassword() {
                     </p>
                 </div>
 
-                {/* Contraseña */}
                 <div>
                     <InputLabel htmlFor="password" value="Contraseña" />
                     <div className="relative">
@@ -72,11 +71,6 @@ export default function ConfirmPassword() {
                             type="button"
                             onClick={() => setVisible((v) => !v)}
                             className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors hover:text-primary"
-                            aria-label={
-                                visible
-                                    ? 'Ocultar contraseña'
-                                    : 'Mostrar contraseña'
-                            }
                         >
                             <span
                                 className="material-symbols-outlined"
