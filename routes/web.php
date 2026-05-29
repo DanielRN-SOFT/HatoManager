@@ -12,6 +12,7 @@
     });
 
     Route::get('/dashboard', function () {
+        dd(session('active_farm_id'));
         return Inertia::render('Dashboard');
     })->middleware(['auth', 'verified'])->name('dashboard');
 
