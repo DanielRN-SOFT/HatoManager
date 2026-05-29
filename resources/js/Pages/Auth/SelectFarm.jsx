@@ -1,5 +1,5 @@
 import CardFarm from '@/Components/Auth/CardFarm';
-import { useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 
 const SelectFarm = ({ farms }) => {
@@ -20,6 +20,7 @@ const SelectFarm = ({ farms }) => {
 
     return (
         <main className="mx-auto flex w-full max-w-2xl flex-grow flex-col items-center justify-start px-4 pb-32 pt-4">
+            <Head title='Seleccione una finca'></Head>
             {/* Logo section */}
             <div className="flex flex-col items-center gap-1 pt-3">
                 <img

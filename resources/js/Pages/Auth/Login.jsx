@@ -2,11 +2,10 @@ import InputError from '@/Components/Auth/InputError';
 import InputLabel from '@/Components/Auth/InputLabel';
 import PrimaryButton from '@/Components/Auth/PrimaryButton';
 import TextInput from '@/Components/Auth/TextInput';
-import Checkbox from '@/Components/Checkbox';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function Login({ status, canResetPassword }) {
+export default function Login({ canResetPassword, status }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -80,16 +79,12 @@ export default function Login({ status, canResetPassword }) {
 
                 {/* Recordarme + Olvidé contraseña */}
                 <div className="flex items-center justify-between">
-
-
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="text-sm font-semibold text-primary hover:underline"
-                        >
-                            ¿Olvidaste tu contraseña?
-                        </Link>
-                    )}
+                    <Link
+                        href={route('password.request')}
+                        className="text-sm font-semibold text-primary hover:underline"
+                    >
+                        ¿Olvidaste tu contraseña?
+                    </Link>
                 </div>
 
                 {/* Botón */}
