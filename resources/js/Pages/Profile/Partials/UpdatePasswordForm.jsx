@@ -26,7 +26,6 @@ export default function UpdatePasswordForm({ className = '' }) {
 
     const updatePassword = (e) => {
         e.preventDefault();
-
         put(route('password.update'), {
             preserveScroll: true,
             onSuccess: () => reset(),
@@ -35,7 +34,6 @@ export default function UpdatePasswordForm({ className = '' }) {
                     reset('password', 'password_confirmation');
                     passwordInput.current.focus();
                 }
-
                 if (errors.current_password) {
                     reset('current_password');
                     currentPasswordInput.current.focus();
@@ -46,27 +44,41 @@ export default function UpdatePasswordForm({ className = '' }) {
 
     return (
         <section className={className}>
+            {/* Section header */}
             <div className="mb-5 flex items-center gap-3 border-b border-outline-variant pb-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container text-lg">
-                    🔒
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container">
+                    <span className="material-symbols-outlined text-[20px] text-on-primary">
+                        lock
+                    </span>
                 </div>
                 <div>
                     <h2 className="text-base font-semibold text-on-surface">
                         Seguridad
                     </h2>
                     <p className="text-xs text-on-surface-variant">
-                        Usa una contraseña larga y aleatoria
+                        Usa una contraseña larga y segura
                     </p>
                 </div>
             </div>
 
-            <form onSubmit={updatePassword} className="mt-6 space-y-6">
+            {/* Password strength hint */}
+            <div className="mb-5 flex items-start gap-3 rounded-xl border border-outline-variant bg-surface-container-low px-4 py-3">
+                <span className="material-symbols-outlined mt-0.5 shrink-0 text-[18px] text-on-surface-variant">
+                    info
+                </span>
+                <p className="text-xs leading-relaxed text-on-surface-variant">
+                    Recomendamos una contraseña de al menos 8 caracteres con
+                    letras, números y símbolos, mayusculas y minusculas para
+                    proteger tu cuenta ganadera.
+                </p>
+            </div>
+
+            <form onSubmit={updatePassword} className="space-y-5">
                 <div>
                     <InputLabel
                         htmlFor="current_password"
-                        value="Current Password"
+                        value="Contraseña actual"
                     />
-
                     <TextInput
                         id="current_password"
                         ref={currentPasswordInput}
@@ -75,10 +87,9 @@ export default function UpdatePasswordForm({ className = '' }) {
                             setData('current_password', e.target.value)
                         }
                         type="password"
-                        className="mt-1 block w-full"
                         autoComplete="current-password"
+                        placeholder="Ingrese su contraseña actual"
                     />
-
                     <InputError
                         message={errors.current_password}
                         className="mt-2"
@@ -86,27 +97,24 @@ export default function UpdatePasswordForm({ className = '' }) {
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="password" value="New Password" />
-
+                    <InputLabel htmlFor="password" value="Nueva contraseña" />
                     <TextInput
                         id="password"
                         ref={passwordInput}
                         value={data.password}
                         onChange={(e) => setData('password', e.target.value)}
                         type="password"
-                        className="mt-1 block w-full"
                         autoComplete="new-password"
+                        placeholder="Ingrese su nueva contraseña"
                     />
-
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
                 <div>
                     <InputLabel
                         htmlFor="password_confirmation"
-                        value="Confirm Password"
+                        value="Confirmar nueva contraseña"
                     />
-
                     <TextInput
                         id="password_confirmation"
                         value={data.password_confirmation}
@@ -114,19 +122,19 @@ export default function UpdatePasswordForm({ className = '' }) {
                             setData('password_confirmation', e.target.value)
                         }
                         type="password"
-                        className="mt-1 block w-full"
                         autoComplete="new-password"
+                        placeholder="Confirme su nueva contraseña"
                     />
-
                     <InputError
                         message={errors.password_confirmation}
                         className="mt-2"
                     />
                 </div>
 
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
-
+                <div className="flex items-center gap-4 border-t border-outline-variant pt-4">
+                    <PrimaryButton disabled={processing}>
+                        Actualizar contraseña
+                    </PrimaryButton>
                     <Transition
                         show={recentlySuccessful}
                         enter="transition ease-in-out"
@@ -134,7 +142,12 @@ export default function UpdatePasswordForm({ className = '' }) {
                         leave="transition ease-in-out"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-gray-600">Saved.</p>
+                        <p className="flex items-center gap-1 text-sm font-medium text-primary">
+                            <span className="material-symbols-outlined text-[16px]">
+                                check_circle
+                            </span>
+                            Actualizado
+                        </p>
                     </Transition>
                 </div>
             </form>
