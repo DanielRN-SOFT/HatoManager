@@ -1,6 +1,6 @@
+import PrimaryButton from '@/Components/Auth/PrimaryButton';
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import PrimaryButton from '@/Components/Auth/PrimaryButton';
 
 // Helper para obtener el CSRF token que Laravel requiere
 function getCsrf() {
