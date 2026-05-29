@@ -64,7 +64,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
                 ].join(' ')}
             >
                 {/* Header / Logo */}
-                <div className="mb-8 flex items-center gap-3">
+                <div className="mb-4 flex items-center gap-3">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-on-primary/10">
                         <PiCowFill className="text-[22px] text-on-primary" />
                     </div>
