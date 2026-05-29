@@ -18,9 +18,11 @@ function Flash() {
         }
     }, [flash]);
 
-    if (!visible || (!flash?.success && !flash?.error)) return null;
+    if (!visible || (!flash?.success && !flash?.error && !flash?.info))
+        return null;
 
     const isSuccess = !!flash.success;
+    const isInfo = !!flash.info;
 
     return (
         <div
@@ -28,14 +30,16 @@ function Flash() {
                 'mb-6 flex items-start gap-3 rounded-xl border px-4 py-3',
                 isSuccess
                     ? 'bg-primary/8 border-primary/30 text-primary'
-                    : 'bg-error/8 border-error/30 text-error',
+                    : isInfo
+                      ? 'bg-tertiary/8 border-tertiary/30 text-tertiary'
+                      : 'bg-error/8 border-error/30 text-error',
             ].join(' ')}
         >
             <span className="material-symbols-outlined mt-0.5 shrink-0 text-[20px]">
-                {isSuccess ? 'check_circle' : 'error'}
+                {isSuccess ? 'check_circle' : isInfo ? 'info' : 'error'}
             </span>
             <p className="text-sm font-medium">
-                {flash.success ?? flash.error}
+                {flash.success ?? flash.info ?? flash.error}
             </p>
         </div>
     );

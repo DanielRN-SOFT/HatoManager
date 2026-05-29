@@ -29,21 +29,40 @@ class HandleInertiaRequests extends Middleware
      * @return array<string, mixed>
      */
     public function share(Request $request): array
-    {
-        return [
-            ...parent::share($request),
-            'auth' => [
-                'user' => $request->user(),
-                'roles' => $request->user()
-                    ?->getRoleNames() ?? [],
-            ],
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
-            'status' => session('status'),
-            'flash' => [
-                'success' => session('success'),
-                'info'    => session('info'),
-                'error'   => session('error'),
-            ],
-        ];
+{
+    $user = $request->user();
+
+    // Finca activa desde sesión
+    $activeFarm = null;
+    if ($user) {
+        $farmId = session('active_farm_id');
+        if ($farmId) {
+            $activeFarm = $user->farms()
+                ->where('farms.id', $farmId)
+                ->whereNull('farms.deleted_at')
+                ->first(['farms.id', 'farms.name', 'farms.city', 'farms.department']);
+        }
+
+        // Si la finca en sesión ya no es válida, limpiarla
+        if ($farmId && ! $activeFarm) {
+            session()->forget('active_farm_id');
+        }
     }
+
+    return [
+        ...parent::share($request),
+        'auth' => [
+            'user'  => $user,
+            'roles' => $user?->getRoleNames() ?? [],
+        ],
+        'activeFarm' => $activeFarm,
+        'mustVerifyEmail' => $user instanceof MustVerifyEmail,
+        'status' => session('status'),
+        'flash'  => [
+            'success' => session('success'),
+            'info'    => session('info'),
+            'error'   => session('error'),
+        ],
+    ];
+}
 }

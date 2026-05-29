@@ -77,12 +77,11 @@
         Route::get('/select-farm', [SelectFarmController::class, 'index'])->name('select-farm.index');
         Route::post('/select-farm', [SelectFarmController::class, 'store'])->name('select-farm.store');
         Route::get('/mis-fincas', [FarmController::class, 'index'])->name('farms.index');
-
         Route::post('/mis-fincas', [FarmController::class, 'store'])->name('farms.store');
-
         Route::put('/mis-fincas/{farm}', [FarmController::class, 'update'])->name('farms.update');
-
         Route::delete('/mis-fincas/{farm}', [FarmController::class, 'destroy'])->name('farms.destroy');
+        Route::post('/mis-fincas/{farm}/activar', [FarmController::class, 'setActive'])->name('farms.setActive');
+        Route::get('/mis-fincas/list', [FarmController::class, 'list'])->name('farms.list');
     });
 
     require __DIR__ . '/auth.php';

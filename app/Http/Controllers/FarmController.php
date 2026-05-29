@@ -96,6 +96,9 @@ class FarmController extends Controller
     /* ══════════════════════════════════════════════════════════
      |  DESTROY — Desactivar finca (soft delete)
      ╚═════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════════
+ |  DESTROY — Desactivar finca (soft delete)
+ ╚═════════════════════════════════════════════════════════════ */
     public function destroy(Farm $farm): RedirectResponse
     {
         $ganadero = Auth::user();
@@ -106,12 +109,60 @@ class FarmController extends Controller
             'No tienes acceso a esta finca.'
         );
 
-        // ── Verificar dependencias activas ───────────────────
-        // (aquí irán las validaciones de animales, pedidos y subastas
-        //  cuando esos módulos estén implementados)
+        $farm->delete();
 
-        $farm->delete(); // soft delete
+        // ── Manejo de sesión ─────────────────────────────────────
+        if (session('active_farm_id') === $farm->id) {
+
+            // Buscar otra finca activa del ganadero
+            $otra = $ganadero->farms()
+                ->whereNull('farms.deleted_at')
+                ->where('farms.id', '!=', $farm->id)
+                ->first(['farms.id', 'farms.name']);
+
+            if ($otra) {
+                session(['active_farm_id' => $otra->id]);
+                return redirect()->route('farms.index')
+                    ->with('success', "Finca \"{$farm->name}\" desactivada. Ahora estás en \"{$otra->name}\".");
+            }
+
+            // Sin más fincas activas
+            session()->forget('active_farm_id');
+            return redirect()->route('farms.index')
+                ->with('info', "Finca \"{$farm->name}\" desactivada. No tienes más fincas activas, crea una nueva para continuar.");
+        }
 
         return back()->with('success', "Finca \"{$farm->name}\" desactivada. Puedes consultarla en modo solo lectura.");
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+ |  SET ACTIVE — Guardar finca activa en sesión
+ ╚═════════════════════════════════════════════════════════════ */
+    public function setActive(Farm $farm): RedirectResponse
+    {
+        $ganadero = Auth::user();
+
+        abort_unless(
+            $ganadero->farms()->where('farm_id', $farm->id)->whereNull('farms.deleted_at')->exists(),
+            403,
+            'No tienes acceso a esta finca o está inactiva.'
+        );
+
+        session(['active_farm_id' => $farm->id]);
+
+        return back();
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+ |  LIST — JSON con fincas activas del ganadero (para el selector)
+ ╚═════════════════════════════════════════════════════════════ */
+    public function list(): \Illuminate\Http\JsonResponse
+    {
+        $farms = Auth::user()
+            ->farms()
+            ->whereNull('farms.deleted_at')
+            ->get(['farms.id', 'farms.name', 'farms.city', 'farms.department']);
+
+        return response()->json($farms);
     }
 }
