@@ -322,7 +322,7 @@ function FarmCard({ farm }) {
             {/* Veterinarios vinculados */}
             {hasVets ? (
                 <div className="divide-y divide-outline-variant">
-                    {farm.veterinarians.map((vet) => (
+                    {farm.veterinarios.map((vet) => (
                         <VetRow key={vet.id} vet={vet} farm={farm} />
                     ))}
                 </div>
