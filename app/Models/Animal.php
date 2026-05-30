@@ -11,7 +11,7 @@ class Animal extends Model
         'ear_tag',
         'breed',
         'sex',
-        'image',
+        'photo',
         'birth_date',
         'status',
         'description',

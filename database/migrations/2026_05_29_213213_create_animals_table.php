@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('ear_tag')->unique();
             $table->string('breed');
             $table->string('sex');
-            $table->text('image');
+            $table->text('photo');
             $table->date('birth_date');
             $table->string('status');
             $table->text('description')->nullable();
