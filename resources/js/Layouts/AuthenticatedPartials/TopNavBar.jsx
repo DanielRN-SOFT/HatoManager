@@ -85,7 +85,7 @@ function FarmSelector() {
             </button>
 
             {open && (
-                <div className="absolute left-0 top-full z-50 mt-1 w-64 rounded-xl border border-outline-variant bg-surface shadow-lg">
+                <div className="absolute left-0 top-full z-50 mt-1 w-64 overflow-hidden rounded-xl border border-outline-variant bg-surface shadow-lg">
                     <p className="px-3 pt-3 text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant/60">
                         Mis Fincas
                     </p>
@@ -103,34 +103,35 @@ function FarmSelector() {
                             No tienes fincas activas.
                         </p>
                     )}
-
-                    {!loading &&
-                        farms.map((farm) => (
-                            <button
-                                key={farm.id}
-                                onClick={() => selectFarm(farm)}
-                                className={[
-                                    'flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm transition-colors hover:bg-surface-container',
-                                    activeFarm?.id === farm.id
-                                        ? 'text-primary'
-                                        : 'text-on-surface',
-                                ].join(' ')}
-                            >
-                                <span className="material-symbols-outlined shrink-0 text-[18px]">
-                                    {activeFarm?.id === farm.id
-                                        ? 'radio_button_checked'
-                                        : 'radio_button_unchecked'}
-                                </span>
-                                <div className="min-w-0">
-                                    <p className="truncate font-medium">
-                                        {farm.name}
-                                    </p>
-                                    <p className="truncate text-xs text-on-surface-variant">
-                                        {farm.city}, {farm.department}
-                                    </p>
-                                </div>
-                            </button>
-                        ))}
+                    <div className="max-h-60 overflow-y-auto">
+                        {!loading &&
+                            farms.map((farm) => (
+                                <button
+                                    key={farm.id}
+                                    onClick={() => selectFarm(farm)}
+                                    className={[
+                                        'flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm transition-colors hover:bg-surface-container',
+                                        activeFarm?.id === farm.id
+                                            ? 'text-primary'
+                                            : 'text-on-surface',
+                                    ].join(' ')}
+                                >
+                                    <span className="material-symbols-outlined shrink-0 text-[18px]">
+                                        {activeFarm?.id === farm.id
+                                            ? 'radio_button_checked'
+                                            : 'radio_button_unchecked'}
+                                    </span>
+                                    <div className="min-w-0">
+                                        <p className="truncate font-medium">
+                                            {farm.name}
+                                        </p>
+                                        <p className="truncate text-xs text-on-surface-variant">
+                                            {farm.city}, {farm.department}
+                                        </p>
+                                    </div>
+                                </button>
+                            ))}{' '}
+                    </div>
 
                     <div className="border-t border-outline-variant p-2">
                         <button
