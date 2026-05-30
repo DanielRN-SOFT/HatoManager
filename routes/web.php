@@ -1,5 +1,6 @@
     <?php
 
+    use App\Http\Controllers\AnimalController;
     use App\Http\Controllers\ProfileController;
     use App\Http\Controllers\SelectFarmController;
     use App\Http\Controllers\VeterinarianController;
@@ -90,6 +91,8 @@
         Route::delete('/mis-fincas/{farm}', [FarmController::class, 'destroy'])->name('farms.destroy');
         Route::post('/mis-fincas/{farm}/activar', [FarmController::class, 'setActive'])->name('farms.setActive');
         Route::get('/mis-fincas/list', [FarmController::class, 'list'])->name('farms.list');
+
+        Route::resource('/animales', AnimalController::class);
     });
 
     require __DIR__ . '/auth.php';

@@ -27,7 +27,7 @@ const FilaTable = ({ animal, onEdit }) => {
             <td className="px-6 py-4 font-bold text-on-surface">
                 {animal.status}
             </td>
-            <td className="text-body-sm px-6 py-4">{animal.category}</td>
+            <td className="text-body-sm px-6 py-4">{animal.animal_category?.name}</td>
 
             <td className="px-6 py-4">
                 <div className="flex justify-center gap-3">

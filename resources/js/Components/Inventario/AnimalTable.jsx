@@ -1,17 +1,16 @@
 import { router } from '@inertiajs/react';
 import FilaTable from './FilaTable';
 
-const AnimalTable = (animals, onEdit) => {
+const AnimalTable = ({ animals, onEdit }) => {
     function handlePageChange(page) {
         router.get(
-            'inventory.index',
+            route('inventory.index'),
             { page },
             { preserveState: true, replace: true },
         );
     }
 
-
-    const { data, current_page, last_page, total, per_page } = animals;
+    const { data, current_page, last_page, total, per_page } = animals; // ← animales, no animals
     const from = (current_page - 1) * per_page + 1;
     const to = Math.min(current_page * per_page, total);
     return (

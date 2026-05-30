@@ -3,7 +3,7 @@ import { useForm } from '@inertiajs/react';
 const AnimalForm = ({ animal, onCancel }) => {
     const { data, setData, post, put, processing, errors } = useForm({
         photo: animal?.photo ?? '',
-        ear_tar: animal?.ear_tag ?? '',
+        ear_tag: animal?.ear_tag ?? '',
         breed: animal?.breed ?? '',
         sex: animal?.sex ?? '',
         birth_date: animal?.birth_date ?? '',
@@ -28,12 +28,12 @@ const AnimalForm = ({ animal, onCancel }) => {
                 </label>
                 <input
                     type="text"
-                    value={data.arete}
-                    onChange={(e) => setData('arete', e.target.value)}
+                    value={data.ear_tag}
+                    onChange={(e) => setData('ear_tag', e.target.value)}
                     placeholder="Ej. BR-4502"
                     className="text-body-sm w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 focus:border-primary focus:outline-none"
                 />
-                {errors.arete && (
+                {errors.ear_tag && (
                     <p className="mt-1 text-xs text-error">{errors.arete}</p>
                 )}
             </div>
@@ -44,8 +44,8 @@ const AnimalForm = ({ animal, onCancel }) => {
                     Raza
                 </label>
                 <select
-                    value={data.raza}
-                    onChange={(e) => setData('raza', e.target.value)}
+                    value={data.breed}
+                    onChange={(e) => setData('breed', e.target.value)}
                     className="text-body-sm w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 focus:border-primary focus:outline-none"
                 >
                     <option value="">Seleccionar raza</option>
@@ -54,7 +54,7 @@ const AnimalForm = ({ animal, onCancel }) => {
                     <option value="Gyr Lechero">Gyr Lechero</option>
                     <option value="Angus Negro">Angus Negro</option>
                 </select>
-                {errors.raza && (
+                {errors.breed && (
                     <p className="mt-1 text-xs text-error">{errors.raza}</p>
                 )}
             </div>
@@ -65,8 +65,10 @@ const AnimalForm = ({ animal, onCancel }) => {
                     Categoría
                 </label>
                 <select
-                    value={data.categoria}
-                    onChange={(e) => setData('categoria', e.target.value)}
+                    value={data.animal_category_id}
+                    onChange={(e) =>
+                        setData('animal_category_id', e.target.value)
+                    }
                     className="text-body-sm w-full rounded-lg border border-outline-variant bg-surface px-3 py-2 focus:border-primary focus:outline-none"
                 >
                     <option value="">Seleccionar categoría</option>
@@ -75,7 +77,7 @@ const AnimalForm = ({ animal, onCancel }) => {
                     <option value="Toro Reproductor">Toro Reproductor</option>
                     <option value="Ternero">Ternero</option>
                 </select>
-                {errors.categoria && (
+                {errors.animal_category_id && (
                     <p className="mt-1 text-xs text-error">
                         {errors.categoria}
                     </p>
@@ -96,7 +98,7 @@ const AnimalForm = ({ animal, onCancel }) => {
                     <option value="M">Macho</option>
                     <option value="H">Hembra</option>
                 </select>
-                {errors.ultimo_peso && (
+                {errors.sex && (
                     <p className="mt-1 text-xs text-error">{errors.sex}</p>
                 )}
             </div>
