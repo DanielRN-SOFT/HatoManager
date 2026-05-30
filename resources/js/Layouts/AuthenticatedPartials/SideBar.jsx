@@ -9,7 +9,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
     // Ítems base (disponibles para todos los roles autenticados)
     const NAV_ITEMS = [
         { label: 'Dashboard', icon: 'dashboard', route: 'dashboard' },
-        { label: 'Inventario', icon: 'inventory_2', route: 'login' },
+        { label: 'Animales', icon: 'inventory_2', route: 'animales.index' },
         { label: 'Sanidad', icon: 'health_and_safety', route: 'login' },
         { label: 'Pesajes', icon: 'monitor_weight', route: 'login' },
         { label: 'Ventas', icon: 'sell', route: 'login' },

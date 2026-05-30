@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('status');
             $table->text('description')->nullable();
             $table->text('previous_diseases');
-            $table->decimal('price', 10, 4);
+            $table->decimal('price', 15, 4);
             $table->integer('target_weight');
-            $table->decimal('price_weight', 10, 4);
+            $table->decimal('price_weight', 15, 4);
             $table->date('publication_date');
             $table->foreignId('farm_id')->constrained()->restrictOnDelete();
             $table->foreignId('animal_category_id')->constrained()->restrictOnDelete();

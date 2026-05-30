@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             FarmSeeder::class,
             VeterinarianSeeder::class,
+            AnimalCategorySeeder::class,
+            AnimalSeeder::class
         ]);
     }
 }

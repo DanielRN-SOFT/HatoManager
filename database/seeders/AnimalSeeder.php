@@ -1,0 +1,162 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Animal;
+use App\Models\AnimalCategory;
+use App\Models\Farm;
+use Illuminate\Database\Seeder;
+
+class AnimalSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $farms = Farm::all();
+        $categories = AnimalCategory::all();
+
+        if ($farms->isEmpty()) {
+            $this->command->error('No hay fincas. Ejecuta FarmSeeder primero.');
+            return;
+        }
+
+        if ($categories->isEmpty()) {
+            $this->command->error('No hay categorías de animales. Ejecuta AnimalCategorySeeder primero.');
+            return;
+        }
+
+        $breeds = [
+            'Brahman',
+            'Cebú',
+            'Angus',
+            'Hereford',
+            'Simmental',
+            'Charolais',
+            'Limousin',
+            'Holstein',
+            'Gyr',
+            'Romosinuano',
+            'Blanco Orejinegro',
+            'Costeño con Cuernos',
+            'Sanmartinero',
+        ];
+
+        $diseases = [
+            'Ninguna',
+            'Fiebre aftosa (recuperado)',
+            'Brucelosis (tratado)',
+            'Mastitis leve (recuperado)',
+            'Neumonía (tratado)',
+            'Parásitos internos (desparasitado)',
+            'Dermatitis (tratado)',
+            'Diarrea bovina (recuperado)',
+        ];
+
+        $statuses = ['disponible', 'vendido', 'en_tratamiento', 'reservado'];
+
+        $maleNames = [
+            'Tornado',
+            'Trueno',
+            'Rayo',
+            'Ciclón',
+            'Vendaval',
+            'Toro',
+            'Coloso',
+            'Titán',
+            'Goliat',
+            'Sansón',
+            'Maverick',
+            'Rocoso',
+            'Bravo',
+            'Sultán',
+            'Nero',
+            'Atlas',
+            'Zeus',
+            'Ares',
+            'Hércules',
+            'Sócrates',
+        ];
+
+        $femaleNames = [
+            'Luna',
+            'Estrella',
+            'Paloma',
+            'Dulce',
+            'Canela',
+            'Mora',
+            'Perla',
+            'Blanca',
+            'Nube',
+            'Rosa',
+            'Violeta',
+            'Azucena',
+            'Magnolia',
+            'Daisy',
+            'Lola',
+            'Princesa',
+            'Diana',
+            'Reina',
+            'Bella',
+            'Aurora',
+        ];
+
+        $totalAnimals = 0;
+
+        foreach ($farms as $farm) {
+            $count = rand(20, 28);
+
+            for ($i = 0; $i < $count; $i++) {
+                $sex = $i % 3 === 0 ? 'macho' : 'hembra';
+
+                $name = $sex === 'macho'
+                    ? $maleNames[array_rand($maleNames)]
+                    : $femaleNames[array_rand($femaleNames)];
+
+                $birthDate = now()->subDays(rand(365, 365 * 5));
+                $ageInMonths = $birthDate->diffInMonths(now());
+
+                // Peso base según edad + variación aleatoria
+                $baseWeight = min(100 + ($ageInMonths * 8), 550);
+                $weight = $baseWeight + rand(-30, 30);
+
+                Animal::create([
+                    'name'               => $name,
+                    'ear_tag'            => $this->generateUniqueEarTag(),
+                    'breed'              => $breeds[array_rand($breeds)],
+                    'sex'                => $sex,
+                    'photo'              => "https://placehold.co/400x300?text={$name}",
+                    'birth_date'         => $birthDate,
+                    'status'             => $statuses[array_rand($statuses)],
+                    'description'        => "Animal en buen estado general. Criado en {$farm->city}, {$farm->department}.",
+                    'previous_diseases'  => $diseases[array_rand($diseases)],
+                    'price' => round($weight * ($farm->price_weight / 1000), 4), // precio en miles
+                    'target_weight'      => $farm->target_weight,
+                    'price_weight'       => $farm->price_weight,
+                    'publication_date'   => now()->subDays(rand(0, 60))->toDateString(),
+                    'farm_id'            => $farm->id,
+                    'animal_category_id' => $categories->random()->id,
+                ]);
+            }
+
+            $totalAnimals += $count;
+            $this->command->info("  ✓ {$farm->name}: {$count} animales creados.");
+        }
+
+        $this->command->info("Total: {$totalAnimals} animales creados en {$farms->count()} fincas.");
+    }
+
+    // ─── Genera ear_tag único sin colisiones ─────────────────────────────────
+    private static array $usedTags = [];
+
+    private function generateUniqueEarTag(): int
+    {
+        do {
+            $tag = rand(10000, 99999);
+        } while (
+            in_array($tag, self::$usedTags) ||
+            Animal::where('ear_tag', $tag)->exists()
+        );
+
+        self::$usedTags[] = $tag;
+        return $tag;
+    }
+}
