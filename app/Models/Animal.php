@@ -37,4 +37,13 @@ class Animal extends Model implements HasMedia
     {
         return $this->belongsTo(AnimalCategory::class);
     }
+
+    public function breed()
+    {
+        return $this->belongsTo(Breed::class);
+    }
+
+    protected $casts = [
+        'birth_date' => 'date',   // or 'datetime'
+    ];
 }

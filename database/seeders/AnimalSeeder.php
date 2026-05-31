@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Animal;
 use App\Models\AnimalCategory;
+use App\Models\Breed;
 use App\Models\Farm;
 use Illuminate\Database\Seeder;
 
@@ -13,6 +14,7 @@ class AnimalSeeder extends Seeder
     {
         $farms = Farm::all();
         $categories = AnimalCategory::all();
+        $breeds = Breed::all();
 
         if ($farms->isEmpty()) {
             $this->command->error('No hay fincas. Ejecuta FarmSeeder primero.');
@@ -24,21 +26,10 @@ class AnimalSeeder extends Seeder
             return;
         }
 
-        $breeds = [
-            'Brahman',
-            'Cebú',
-            'Angus',
-            'Hereford',
-            'Simmental',
-            'Charolais',
-            'Limousin',
-            'Holstein',
-            'Gyr',
-            'Romosinuano',
-            'Blanco Orejinegro',
-            'Costeño con Cuernos',
-            'Sanmartinero',
-        ];
+        if ($breeds->isEmpty()) {
+            $this->command->error('No hay razas. Ejecuta BreedSeeder primero.');
+            return;
+        }
 
         $diseases = [
             'Ninguna',
@@ -105,30 +96,29 @@ class AnimalSeeder extends Seeder
             $count = rand(20, 28);
 
             for ($i = 0; $i < $count; $i++) {
-                $sex = $i % 3 === 0 ? 'macho' : 'hembra';
+                $sex = $i % 3 === 0 ? 'M' : 'H';
 
-                $name = $sex === 'macho'
+                $name = $sex === 'M'
                     ? $maleNames[array_rand($maleNames)]
                     : $femaleNames[array_rand($femaleNames)];
 
                 $birthDate = now()->subDays(rand(365, 365 * 5));
                 $ageInMonths = $birthDate->diffInMonths(now());
 
-                // Peso base según edad + variación aleatoria
                 $baseWeight = min(100 + ($ageInMonths * 8), 550);
                 $weight = $baseWeight + rand(-30, 30);
 
                 Animal::create([
                     'name'               => $name,
                     'ear_tag'            => $this->generateUniqueEarTag(),
-                    'breed'              => $breeds[array_rand($breeds)],
+                    'breed_id'           => $breeds->random()->id,
                     'sex'                => $sex,
                     'photo'              => "https://placehold.co/400x300?text={$name}",
                     'birth_date'         => $birthDate,
                     'status'             => $statuses[array_rand($statuses)],
                     'description'        => "Animal en buen estado general. Criado en {$farm->city}, {$farm->department}.",
                     'previous_diseases'  => $diseases[array_rand($diseases)],
-                    'price' => round($weight * ($farm->price_weight / 1000), 4), // precio en miles
+                    'price'              => round($weight * ($farm->price_weight / 1000), 4),
                     'target_weight'      => $farm->target_weight,
                     'price_weight'       => $farm->price_weight,
                     'publication_date'   => now()->subDays(rand(0, 60))->toDateString(),
@@ -144,7 +134,6 @@ class AnimalSeeder extends Seeder
         $this->command->info("Total: {$totalAnimals} animales creados en {$farms->count()} fincas.");
     }
 
-    // ─── Genera ear_tag único sin colisiones ─────────────────────────────────
     private static array $usedTags = [];
 
     private function generateUniqueEarTag(): int

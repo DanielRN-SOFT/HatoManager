@@ -15,7 +15,7 @@ class AnimalController extends Controller
     public function index(Request $request)
     {
         $farm_id = session('active_farm_id');
-        $query = Animal::with(['animalCategory', 'media'])
+        $query = Animal::with(['animalCategory', 'breed', 'media'])
             ->where('farm_id', $farm_id);
 
         if ($request->filled('status')) {
@@ -34,7 +34,7 @@ class AnimalController extends Controller
             ->through(fn($animal) => [
                 'id'                 => $animal->id,
                 'ear_tag'            => $animal->ear_tag,
-                'breed'              => $animal->breed,
+                'breed'              => $animal->breed_id,
                 'sex'                => $animal->sex,
                 'birth_date'         => $animal->birth_date?->format('Y-m-d'),
                 'status'             => $animal->status,

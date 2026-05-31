@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('animals', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->integer('ear_tag')->unique();
-            $table->string('breed');
-            $table->string('sex');
+            $table->enum('sex', ['M', 'H']);
             $table->text('photo');
             $table->date('birth_date');
             $table->string('status');
@@ -25,9 +24,10 @@ return new class extends Migration
             $table->decimal('price', 15, 4);
             $table->integer('target_weight');
             $table->decimal('price_weight', 15, 4);
-            $table->date('publication_date');
+            $table->date('publication_date')->nullable();
             $table->foreignId('farm_id')->constrained()->restrictOnDelete();
             $table->foreignId('animal_category_id')->constrained()->restrictOnDelete();
+            $table->foreignId('breed_id')->constrained()->restrictOnDelete();
             $table->timestamps();
         });
     }

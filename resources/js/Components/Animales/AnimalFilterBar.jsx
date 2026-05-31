@@ -11,7 +11,7 @@ const AnimalFilterBar = ({ filters }) => {
     function handleChange(key, value) {
         const next = { ...form, [key]: value };
         setForm(next);
-        router.get(route('inventory.index'), next, {
+        router.get(route('animales.index'), next, {
             preserveState: true,
             replace: true,
         });
@@ -20,7 +20,7 @@ const AnimalFilterBar = ({ filters }) => {
     function handleClear() {
         const empty = { status: '', breed: '', category: '' };
         setForm(empty);
-        router.get(route('inventario.index'), empty, {
+        router.get(route('animales.index'), empty, {
             preserveState: true,
             replace: true,
         });

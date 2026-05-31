@@ -4,7 +4,7 @@ const CardFarm = ({ farm, selected, onSelect }) => {
     return (
         <div
             onClick={onSelect}
-            className={`${selected ? 'bg-primary/10 border-l-primary border-l-4' : ''} group flex cursor-pointer items-center justify-between rounded-xl border border-surface-dim bg-white p-5 transition-all duration-200 hover:shadow-md`}
+            className={`${selected ? 'bg-primary/20 border-l-primary border-l-4' : ''} group flex cursor-pointer items-center justify-between rounded-xl border border-surface-dim bg-white p-5 transition-all duration-200 hover:shadow-md`}
         >
             <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-surface-container text-primary">

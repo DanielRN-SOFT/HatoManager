@@ -1,9 +1,9 @@
 // resources/js/Pages/Inventario/Index.jsx
-import AnimalFilterBar from '@/Components/Ganado/AnimalFilterBar';
-import AnimalForm from '@/Components/Ganado/AnimalForm';
-import AnimalTable from '@/Components/Ganado/AnimalTable';
-import HatoStatCards from '@/Components/Ganado/HatoStatCards';
-import SlideOver from '@/Components/SlideOver';
+import AnimalFilterBar from '@/Components/Animales/AnimalFilterBar';
+import AnimalForm from '@/Components/Animales/AnimalForm';
+import AnimalTable from '@/Components/Animales/AnimalTable';
+import HatoStatCards from '@/Components/Animales/HatoStatsCards';
+import SlideOver from '@/Components/Animales/SlideOver';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
