@@ -43,21 +43,9 @@ class AnimalController extends Controller
                 'photo'              => $animal->getFirstMediaUrl('animals'),
             ]);
 
-
-        $stats = [
-            'total_biomasa'           => 0,
-            'nacimientos_mes'         => Animal::where('farm_id', auth()->user()->farm_id)
-                ->whereMonth('birth_date', now()->month)
-                ->count(),
-            'nacimientos_crecimiento' => 0,
-            'tareas_pendientes'       => 0,
-        ];
-
-
         return Inertia::render('Animales/Index', [
             'animales' => $animales,
             'filters'  => $request->only(['status', 'breed', 'category']),
-            'stats'    => $stats,
             'finca'    => ['nombre' => auth()->user()->farm?->name ?? 'Mi finca'],
         ]);
     }

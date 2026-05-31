@@ -1,8 +1,6 @@
-// resources/js/Pages/Inventario/Index.jsx
 import AnimalFilterBar from '@/Components/Animales/AnimalFilterBar';
 import AnimalForm from '@/Components/Animales/AnimalForm';
 import AnimalTable from '@/Components/Animales/AnimalTable';
-import HatoStatCards from '@/Components/Animales/HatoStatsCards';
 import SlideOver from '@/Components/Animales/SlideOver';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
@@ -16,12 +14,10 @@ export default function Index({ animales, filters, stats, finca }) {
         setEditingAnimal(animal);
         setDrawerOpen(true);
     }
-
     function handleNuevo() {
         setEditingAnimal(null);
         setDrawerOpen(true);
     }
-
     function handleClose() {
         setDrawerOpen(false);
         setEditingAnimal(null);
@@ -30,40 +26,35 @@ export default function Index({ animales, filters, stats, finca }) {
     return (
         <AuthenticatedLayout>
             <Head title="Inventario del hato" />
-
-            <div className="flex-1 space-y-6 p-8">
-                {/* Header */}
-                <div className="flex items-end justify-between">
+            <div className="space-y-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h2 className="text-headline-lg font-bold text-on-surface">
+                        <h2 className="text-2xl font-bold text-on-surface">
                             Inventario del hato
                         </h2>
-                        <p className="text-body-md text-on-surface-variant">
-                            {finca.nombre} • {animales.total} cabezas activas
+                        <p className="mt-0.5 text-sm text-on-surface-variant">
+                            <span className="font-semibold text-primary">
+                                {finca.nombre}
+                            </span>
+                            <span className="mx-2 opacity-30">·</span>
+                            {animales.total} cabezas activas
                         </p>
                     </div>
                     <button
                         onClick={handleNuevo}
-                        className="flex items-center gap-2 rounded-xl bg-primary-container px-6 py-3 font-bold text-on-primary-container shadow-sm transition-all hover:opacity-90 active:scale-95"
+                        className="flex w-fit items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
                     >
-                        <span className="material-symbols-outlined">
+                        <span className="material-symbols-outlined text-[20px]">
                             add_circle
                         </span>
                         Registrar animal
                     </button>
                 </div>
 
-                {/* Filtros */}
                 <AnimalFilterBar filters={filters} />
-
-                {/* Tabla */}
                 <AnimalTable animales={animales} onEdit={handleEdit} />
-
-                {/* Stats */}
-                <HatoStatCards stats={stats} />
             </div>
 
-            {/* Drawer — fuera del contenedor principal */}
             <SlideOver
                 open={drawerOpen}
                 onClose={handleClose}

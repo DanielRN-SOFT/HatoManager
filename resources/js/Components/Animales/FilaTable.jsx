@@ -1,65 +1,133 @@
 import { router } from '@inertiajs/react';
 
+const SEX_LABELS = {
+    M: { label: 'Macho', cls: 'bg-blue-50 text-blue-700' },
+    H: { label: 'Hembra', cls: 'bg-pink-50 text-pink-700' },
+};
+
+const STATUS_STYLES = {
+    al_dia: {
+        icon: 'check_circle',
+        cls: 'bg-secondary-container/50 text-secondary',
+    },
+    proxima_a_vencer: { icon: 'warning', cls: 'bg-amber-50 text-amber-700' },
+    vencida: { icon: 'cancel', cls: 'bg-error-container/50 text-error' },
+};
+
 const FilaTable = ({ animal, onEdit }) => {
-    function handleExportPdf(id) {
-        window.open(route('inventory.pdf', id), '_blank');
-    }
+    const sexInfo = SEX_LABELS[animal.sex] ?? {
+        label: animal.sex,
+        cls: 'bg-surface-container text-on-surface',
+    };
+    const statusInfo = STATUS_STYLES[animal.status] ?? {
+        icon: 'help',
+        cls: 'bg-surface-container text-on-surface-variant',
+    };
 
     return (
-        <tr
-            key={animal.id}
-            className="transition-colors hover:bg-surface-container-low"
-        >
-            <td className="px-6 py-4">
-                <img src={animal.photo} alt={animal.name} />
+        <tr className="bg-white transition-colors duration-150 border-y border-gray-300">
+            {/* Foto */}
+            <td className="px-5 py-3.5">
+                {animal.photo ? (
+                    <img
+                        src={animal.photo}
+                        alt={animal.ear_tag}
+                        className="h-10 w-10 rounded-xl object-cover shadow-sm"
+                    />
+                ) : (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-container-low">
+                        <span className="material-symbols-outlined text-[20px] text-on-surface-variant/30">
+                            photo_camera
+                        </span>
+                    </div>
+                )}
             </td>
 
-            <td className="px-6 py-4 font-bold text-on-surface">
-                {animal.ear_tag}
+            {/* Arete */}
+            <td className="px-5 py-3.5">
+                <span className="rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+                    {animal.ear_tag}
+                </span>
             </td>
-            <td className="text-body-sm px-6 py-4">{animal.breed}</td>
-            <td className="px-6 py-4 font-bold text-on-surface">
-                {animal.sex}
+
+            {/* Raza */}
+            <td className="px-5 py-3.5 text-sm text-on-surface">
+                {animal.breed}
             </td>
-            <td className="px-6 py-4 font-bold text-on-surface">
+
+            {/* Sexo */}
+            <td className="px-5 py-3.5">
+                <span
+                    className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${sexInfo.cls}`}
+                >
+                    {sexInfo.label}
+                </span>
+            </td>
+
+            {/* Nacimiento */}
+            <td className="px-5 py-3.5 text-sm tabular-nums text-on-surface-variant">
                 {animal.birth_date}
             </td>
-            <td className="px-6 py-4 font-bold text-on-surface">
-                {animal.status}
-            </td>
-            <td className="text-body-sm px-6 py-4">{animal.animal_category?.name}</td>
 
-            <td className="px-6 py-4">
-                <div className="flex justify-center gap-3">
-                    <button
-                        className="text-outline transition-colors hover:text-primary"
+            {/* Estado */}
+            <td className="px-5 py-3.5">
+                <span
+                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusInfo.cls}`}
+                >
+                    <span className="material-symbols-outlined text-[13px]">
+                        {statusInfo.icon}
+                    </span>
+                    {animal.status?.replace(/_/g, ' ')}
+                </span>
+            </td>
+
+            {/* Categoría */}
+            <td className="px-5 py-3.5 text-sm text-on-surface-variant">
+                {animal.animal_category?.name ?? '—'}
+            </td>
+
+            {/* Acciones */}
+            <td className="px-5 py-3.5">
+                <div className="flex items-center justify-center gap-1">
+                    <ActionBtn
+                        icon="visibility"
+                        label="Ver detalle"
                         onClick={() =>
                             router.visit(route('inventory.show', animal.id))
                         }
-                    >
-                        <span className="material-symbols-outlined">
-                            visibility
-                        </span>
-                    </button>
-                    <button
-                        className="text-outline transition-colors hover:text-primary"
+                        hover="hover:bg-primary/10 hover:text-primary"
+                    />
+                    <ActionBtn
+                        icon="edit"
+                        label="Editar"
                         onClick={() => onEdit(animal)}
-                    >
-                        <span className="material-symbols-outlined">edit</span>
-                    </button>
-
-                    <button
-                        onClick={() => handleExportPdf(animal.id)}
-                        className="text-outline transition-colors hover:text-error"
-                    >
-                        <span className="material-symbols-outlined">
-                            picture_as_pdf
-                        </span>
-                    </button>
+                        hover="hover:bg-secondary/10 hover:text-secondary"
+                    />
+                    <ActionBtn
+                        icon="picture_as_pdf"
+                        label="Exportar PDF"
+                        onClick={() =>
+                            window.open(
+                                route('inventory.pdf', animal.id),
+                                '_blank',
+                            )
+                        }
+                        hover="hover:bg-error-container/50 hover:text-error"
+                    />
                 </div>
             </td>
         </tr>
     );
 };
+
+const ActionBtn = ({ icon, label, onClick, hover }) => (
+    <button
+        onClick={onClick}
+        title={label}
+        className={`rounded-xl p-1.5 text-on-surface-variant/50 transition-all duration-150 active:scale-90 ${hover}`}
+    >
+        <span className="material-symbols-outlined text-[20px]">{icon}</span>
+    </button>
+);
 
 export default FilaTable;
