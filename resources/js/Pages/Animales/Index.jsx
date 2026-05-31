@@ -3,6 +3,7 @@ import AnimalFilterBar from '@/Components/Animales/AnimalFilterBar';
 import AnimalTable from '@/Components/Animales/AnimalTable';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
+import { SiSwisscows } from 'react-icons/si';
 
 export default function Index({ animales, filters, finca }) {
     function handleEdit(animal) {
@@ -18,8 +19,9 @@ export default function Index({ animales, filters, finca }) {
             <Head title="Inventario del hato" />
             <div className="space-y-6">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
+                    <div className="flex flex-col">
                         <h2 className="text-2xl font-bold text-on-surface">
+                            <SiSwisscows className='inline-block mr-2' />
                             Inventario del hato
                         </h2>
                         <p className="mt-0.5 text-sm text-on-surface-variant">

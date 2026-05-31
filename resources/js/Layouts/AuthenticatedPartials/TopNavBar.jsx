@@ -1,6 +1,7 @@
 import { router, usePage } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 import UserDropdown from './UserDropDown';
+import { GiFarmTractor } from 'react-icons/gi';
 
 /* ══════════════════════════════════════════════════════════════
  |  FarmSelector — dropdown para cambiar finca activa
@@ -68,8 +69,8 @@ function FarmSelector() {
                 onClick={handleOpen}
                 className="group flex items-center gap-1.5 rounded-lg px-2 py-1 transition-colors hover:bg-surface-container"
             >
-                <span className="material-symbols-outlined text-[18px] text-primary">
-                    fence
+                <span className=" text-[30px] text-primary">
+                    <GiFarmTractor />
                 </span>
                 <h2 className="max-w-[180px] truncate text-base font-semibold text-on-surface">
                     {activeFarm ? activeFarm.name : 'Seleccionar finca'}

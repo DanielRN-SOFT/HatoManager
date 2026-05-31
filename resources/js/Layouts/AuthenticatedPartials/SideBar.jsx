@@ -1,5 +1,6 @@
 // resources/js/Layouts/AuthenticatedPartials/SideBar.jsx
 import { Link, usePage } from '@inertiajs/react';
+import { GiFarmTractor } from 'react-icons/gi';
 import { MdOutlineDashboardCustomize } from 'react-icons/md';
 import { PiCowFill } from 'react-icons/pi';
 import { SiSwisscows } from 'react-icons/si';
@@ -29,7 +30,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
             ? [
                   {
                       label: 'Mis Fincas',
-                      icon: 'fence',
+                      icon: <GiFarmTractor />,
                       route: 'farms.index',
                   },
                   {
