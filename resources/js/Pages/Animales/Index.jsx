@@ -6,7 +6,13 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function Index({ animales, filters, stats, finca }) {
+export default function Index({
+    animales,
+    filters,
+    finca,
+    razas,
+    categoriasAnimales,
+}) {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [editingAnimal, setEditingAnimal] = useState(null);
 
@@ -64,7 +70,12 @@ export default function Index({ animales, filters, stats, finca }) {
                         : 'Registrar animal'
                 }
             >
-                <AnimalForm animal={editingAnimal} onCancel={handleClose} />
+                <AnimalForm
+                    categoriasAnimal={categoriasAnimales}
+                    razas={razas}
+                    animal={editingAnimal}
+                    onCancel={handleClose}
+                />
             </SlideOver>
         </AuthenticatedLayout>
     );

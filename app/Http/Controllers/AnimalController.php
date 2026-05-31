@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Animal;
+use App\Models\AnimalCategory;
+use App\Models\Breed;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,6 +19,8 @@ class AnimalController extends Controller
         $farm_id = session('active_farm_id');
         $query = Animal::with(['animalCategory', 'breed', 'media'])
             ->where('farm_id', $farm_id);
+        $animalCategoryAll = AnimalCategory::all();
+        $breeds = Breed::all();
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -34,12 +38,13 @@ class AnimalController extends Controller
             ->through(fn($animal) => [
                 'id'                 => $animal->id,
                 'ear_tag'            => $animal->ear_tag,
-                'breed'              => $animal->breed_id,
+                'breed_id'              => $animal->breed_id,
                 'sex'                => $animal->sex,
                 'birth_date'         => $animal->birth_date?->format('Y-m-d'),
                 'status'             => $animal->status,
                 'animal_category_id' => $animal->animal_category_id,
                 'animal_category'    => $animal->animalCategory?->name,
+                'breed'              => $animal->breed?->name,
                 'photo'              => $animal->getFirstMediaUrl('animals'),
             ]);
 
@@ -47,6 +52,8 @@ class AnimalController extends Controller
             'animales' => $animales,
             'filters'  => $request->only(['status', 'breed', 'category']),
             'finca'    => ['nombre' => auth()->user()->farm?->name ?? 'Mi finca'],
+            'razas'   => $breeds,
+            'categoriasAnimales' => $animalCategoryAll
         ]);
     }
 

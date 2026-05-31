@@ -15,6 +15,7 @@ const STATUS_STYLES = {
 };
 
 const FilaTable = ({ animal, onEdit }) => {
+    console.log(animal)
     const sexInfo = SEX_LABELS[animal.sex] ?? {
         label: animal.sex,
         cls: 'bg-surface-container text-on-surface',
@@ -83,7 +84,7 @@ const FilaTable = ({ animal, onEdit }) => {
 
             {/* Categoría */}
             <td className="px-5 py-3.5 text-sm text-on-surface-variant">
-                {animal.animal_category?.name ?? '—'}
+                {animal?.animal_category ?? '—'}
             </td>
 
             {/* Acciones */}

@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
 
-const AnimalForm = ({ animal, onCancel }) => {
+const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
     const { data, setData, post, processing, errors } = useForm({
         photo: animal?.photo ?? '',
         ear_tag: animal?.ear_tag ?? '',
@@ -138,13 +138,11 @@ const AnimalForm = ({ animal, onCancel }) => {
                             onChange={(e) => setData('breed', e.target.value)}
                             className="field-input"
                         >
-                            <option value="">Seleccionar</option>
-                            <option value="Brahman Blanco">
-                                Brahman Blanco
-                            </option>
-                            <option value="Brahman Rojo">Brahman Rojo</option>
-                            <option value="Gyr Lechero">Gyr Lechero</option>
-                            <option value="Angus Negro">Angus Negro</option>
+                            {razas.map((raza) => {
+                                return (
+                                    <option value={raza.id}>{raza.name}</option>
+                                );
+                            })}
                         </select>
                     </Field>
 
@@ -160,13 +158,11 @@ const AnimalForm = ({ animal, onCancel }) => {
                             }
                             className="field-input"
                         >
-                            <option value="">Seleccionar</option>
-                            <option value="Vaca Parida">Vaca Parida</option>
-                            <option value="Novilla">Novilla</option>
-                            <option value="Toro Reproductor">
-                                Toro Reproductor
-                            </option>
-                            <option value="Ternero">Ternero</option>
+                            {categoriasAnimal.map((cat) => {
+                                return (
+                                    <option value={cat.id}>{cat.name}</option>
+                                );
+                            })}
                         </select>
                     </Field>
                 </div>
