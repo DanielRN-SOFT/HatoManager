@@ -19,19 +19,17 @@ class AnimalController extends Controller
     {
         $farm_id = session('active_farm_id');
         $query = Animal::with(['animalCategory', 'breed', 'media'])
-            ->where('farm_id', $farm_id);
+            ->where('farm_id', $farm_id)
+            ->when($request->ear_tag, fn($q, $v) => $q->where('ear_tag', 'like', $v . '%'))
+            ->when($request->breed_id, fn($q, $v) => $q->where('breed_id', $v))
+            ->when($request->animal_category_id, fn($q, $v) => $q->where('animal_category_id', $v))
+            ->when($request->status, fn($q, $v) => $q->where('status', $request->status, $v))
+            ->when($request->birth_from, fn($q, $v) => $q->where('birth_date', '>=', $v))
+            ->when($request->birth_to,   fn($q, $v) => $q->where('birth_date', '<=', $v));
 
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
+        $razas = Breed::all();
+        $categorias = AnimalCategory::all();
 
-        if ($request->filled('breed')) {
-            $query->when('breed', $request->breed);
-        }
-
-        if ($request->filled('category')) {
-            $query->when('animal_category_id', $request->category);
-        }
 
         $animales = $query->latest()->paginate(8)->withQueryString()
             ->through(fn($animal) => [
@@ -50,7 +48,9 @@ class AnimalController extends Controller
         return Inertia::render('Animales/Index', [
             'animales' => $animales,
             'filters'  => $request->only(['status', 'breed', 'category']),
-            'finca'    => ['nombre' => auth()->user()->farm?->name ?? 'Mi finca']
+            'finca'    => ['nombre' => auth()->user()->farm?->name ?? 'Mi finca'],
+            'razas'     => $razas,
+            'categorias' => $categorias
         ]);
     }
 

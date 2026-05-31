@@ -1,39 +1,38 @@
-// resources/js/Pages/Animales/Edit.jsx
 import AnimalForm from '@/Components/Animales/Form/AnimalForm';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
+import { SiSwisscows } from 'react-icons/si';
 
 export default function Edit({ animal, razas, categoriasAnimales }) {
     function handleCancel() {
         router.visit(route('animales.index'));
     }
-
     return (
         <AuthenticatedLayout>
             <Head title={`Editar animal · ${animal.ear_tag}`} />
-            <div className="px-4 py-6">
-                <div className="mb-6 flex items-center gap-3">
-                    <button
-                        onClick={handleCancel}
-                        className="flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium text-on-surface-variant transition-all hover:bg-surface-container active:scale-95"
-                    >
-                        <span className="material-symbols-outlined text-[18px]">
-                            arrow_back
-                        </span>
-                        Volver
-                    </button>
-                    <span className="rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
-                        Arete #{animal.ear_tag}
-                    </span>
+
+            {/* Page header */}
+            <div className="mb-6 flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
+                    <SiSwisscows className="text-[24px] text-on-primary" />
                 </div>
-                <div className="rounded-2xl bg-white p-8 shadow-sm shadow-black/5">
-                    <AnimalForm
-                        animal={animal}
-                        razas={razas}
-                        categoriasAnimal={categoriasAnimales}
-                        onCancel={handleCancel}
-                    />
+                <div>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
+                        Inventario
+                    </p>
+                    <h1 className="text-2xl font-semibold text-on-surface">
+                        Editar animal
+                    </h1>
                 </div>
+            </div>
+
+            <div className="rounded-2xl border border-outline-variant bg-surface p-6 shadow-sm">
+                <AnimalForm
+                    animal={animal}
+                    razas={razas}
+                    categoriasAnimal={categoriasAnimales}
+                    onCancel={handleCancel}
+                />
             </div>
         </AuthenticatedLayout>
     );

@@ -1,24 +1,37 @@
-// resources/js/Pages/Animales/Create.jsx
 import AnimalForm from '@/Components/Animales/Form/AnimalForm';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
+import { SiSwisscows } from 'react-icons/si';
 
 export default function Create({ razas, categoriasAnimales }) {
     function handleCancel() {
         router.visit(route('animales.index'));
     }
-
     return (
         <AuthenticatedLayout>
             <Head title="Registrar animal" />
-            <div className="">
-                <div className="rounded-2xl bg-white p-8 shadow-sm shadow-black/5">
-                    <AnimalForm
-                        razas={razas}
-                        categoriasAnimal={categoriasAnimales}
-                        onCancel={handleCancel}
-                    />
+
+            {/* Page header */}
+            <div className="mb-6 flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
+                    <SiSwisscows className="text-[24px] text-on-primary" />
                 </div>
+                <div>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
+                        Inventario
+                    </p>
+                    <h1 className="text-2xl font-semibold text-on-surface">
+                        Registrar animal
+                    </h1>
+                </div>
+            </div>
+
+            <div className="rounded-2xl border border-outline-variant bg-white p-6 shadow-sm">
+                <AnimalForm
+                    razas={razas}
+                    categoriasAnimal={categoriasAnimales}
+                    onCancel={handleCancel}
+                />
             </div>
         </AuthenticatedLayout>
     );

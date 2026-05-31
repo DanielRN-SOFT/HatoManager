@@ -26,7 +26,7 @@ const FilaTable = ({ animal, onEdit }) => {
     };
 
     return (
-        <tr className="bg-white transition-colors duration-150 border-y border-gray-300">
+        <tr className="bg-white transition-colors duration-150 border-y border-gray-300 rounded-lg">
             {/* Foto */}
             <td className="px-5 py-3.5">
                 {animal.photo ? (

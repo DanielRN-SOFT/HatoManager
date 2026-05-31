@@ -15,10 +15,10 @@ const AnimalTable = ({ animales, onEdit }) => {
     const to = Math.min(current_page * per_page, total);
 
     return (
-        <div className="overflow-hidden rounded-2xl bg-white shadow-sm shadow-black/5">
+        <div className="overflow-hidden rounded">
             <div className="overflow-x-auto">
-                <table className="w-full border-collapse text-left">
-                    <thead>
+                <table className="w-full text-left rounded-full">
+                    <thead className='rounded-full'>
                         <tr className="bg-surface-container-low">
                             {[
                                 'Foto',
@@ -66,7 +66,6 @@ const AnimalTable = ({ animales, onEdit }) => {
                 </table>
             </div>
 
-            {/* Paginación */}
             <div className="flex items-center justify-between bg-surface-container-low/50 px-5 py-3">
                 <span className="text-xs text-on-surface-variant">
                     {from}–{to} de{' '}
@@ -105,11 +104,7 @@ const AnimalTable = ({ animales, onEdit }) => {
                                 <button
                                     key={p}
                                     onClick={() => handlePageChange(p)}
-                                    className={`flex h-8 w-8 items-center justify-center rounded-xl text-xs font-semibold transition-all duration-150 ${
-                                        p === current_page
-                                            ? 'bg-primary text-on-primary shadow-sm shadow-primary/40'
-                                            : 'text-on-surface hover:bg-primary/10 hover:text-primary'
-                                    }`}
+                                    className={`flex h-8 w-8 items-center justify-center rounded-xl text-xs font-semibold transition-all duration-150 ${p === current_page ? 'bg-primary text-on-primary shadow-sm shadow-primary/40' : 'text-on-surface hover:bg-primary/10 hover:text-primary'}`}
                                 >
                                     {p}
                                 </button>
