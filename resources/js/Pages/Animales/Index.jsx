@@ -1,32 +1,16 @@
+// resources/js/Pages/Animales/Index.jsx
 import AnimalFilterBar from '@/Components/Animales/AnimalFilterBar';
-import AnimalForm from '@/Components/Animales/AnimalForm';
 import AnimalTable from '@/Components/Animales/AnimalTable';
-import SlideOver from '@/Components/Animales/SlideOver';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import { useState } from 'react';
+import { Head, router } from '@inertiajs/react';
 
-export default function Index({
-    animales,
-    filters,
-    finca,
-    razas,
-    categoriasAnimales,
-}) {
-    const [drawerOpen, setDrawerOpen] = useState(false);
-    const [editingAnimal, setEditingAnimal] = useState(null);
-
+export default function Index({ animales, filters, finca }) {
     function handleEdit(animal) {
-        setEditingAnimal(animal);
-        setDrawerOpen(true);
+        router.visit(route('animales.edit', animal.id));
     }
+
     function handleNuevo() {
-        setEditingAnimal(null);
-        setDrawerOpen(true);
-    }
-    function handleClose() {
-        setDrawerOpen(false);
-        setEditingAnimal(null);
+        router.visit(route('animales.create'));
     }
 
     return (
@@ -56,27 +40,9 @@ export default function Index({
                         Registrar animal
                     </button>
                 </div>
-
                 <AnimalFilterBar filters={filters} />
                 <AnimalTable animales={animales} onEdit={handleEdit} />
             </div>
-
-            <SlideOver
-                open={drawerOpen}
-                onClose={handleClose}
-                title={
-                    editingAnimal
-                        ? `Editando: ${editingAnimal.ear_tag}`
-                        : 'Registrar animal'
-                }
-            >
-                <AnimalForm
-                    categoriasAnimal={categoriasAnimales}
-                    razas={razas}
-                    animal={editingAnimal}
-                    onCancel={handleClose}
-                />
-            </SlideOver>
         </AuthenticatedLayout>
     );
 }

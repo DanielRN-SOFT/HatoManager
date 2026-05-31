@@ -19,8 +19,6 @@ class AnimalController extends Controller
         $farm_id = session('active_farm_id');
         $query = Animal::with(['animalCategory', 'breed', 'media'])
             ->where('farm_id', $farm_id);
-        $animalCategoryAll = AnimalCategory::all();
-        $breeds = Breed::all();
 
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -34,7 +32,7 @@ class AnimalController extends Controller
             $query->when('animal_category_id', $request->category);
         }
 
-        $animales = $query->latest()->paginate(15)->withQueryString()
+        $animales = $query->latest()->paginate(8)->withQueryString()
             ->through(fn($animal) => [
                 'id'                 => $animal->id,
                 'ear_tag'            => $animal->ear_tag,
@@ -51,9 +49,24 @@ class AnimalController extends Controller
         return Inertia::render('Animales/Index', [
             'animales' => $animales,
             'filters'  => $request->only(['status', 'breed', 'category']),
-            'finca'    => ['nombre' => auth()->user()->farm?->name ?? 'Mi finca'],
-            'razas'   => $breeds,
-            'categoriasAnimales' => $animalCategoryAll
+            'finca'    => ['nombre' => auth()->user()->farm?->name ?? 'Mi finca']
+        ]);
+    }
+
+    public function create()
+    {
+        return Inertia::render('Animales/Create', [
+            'razas' => Breed::all(),
+            'categoriasAnimales' => AnimalCategory::all(),
+        ]);
+    }
+
+    public function edit(Animal $animal)
+    {
+        return Inertia::render('Animales/Edit', [
+            'animal' => $animal->load('breed', 'animalCategory'),
+            'razas' => Breed::all(),
+            'categoriasAnimales' => AnimalCategory::all(),
         ]);
     }
 
