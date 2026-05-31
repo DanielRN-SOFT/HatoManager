@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('name');
             $table->integer('ear_tag')->unique();
             $table->enum('sex', ['M', 'H']);
-            $table->text('photo');
+            $table->text('photo')->nullable();
             $table->date('birth_date');
-            $table->string('status');
+            $table->string('status')->default('Activo');
             $table->text('description')->nullable();
-            $table->text('previous_diseases');
+            $table->text('previous_diseases')->nullable();
             $table->decimal('price', 15, 4);
             $table->integer('target_weight');
             $table->decimal('price_weight', 15, 4);

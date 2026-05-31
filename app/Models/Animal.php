@@ -12,7 +12,7 @@ class Animal extends Model implements HasMedia
     protected $fillable = [
         'name',
         'ear_tag',
-        'breed',
+        'breed_id',
         'sex',
         'photo',
         'birth_date',
@@ -21,6 +21,7 @@ class Animal extends Model implements HasMedia
         'previous_diseases',
         'price',
         'target_weight',
+        'price_weight',
         'publication_date',
         'farm_id',
         'animal_category_id'

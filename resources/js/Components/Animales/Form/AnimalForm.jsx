@@ -134,15 +134,19 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
                             icon="info"
                             error={errors.status}
                         >
-                            <input
+                            <select
+                                disabled={animal ? false : true}
                                 type="text"
                                 value={data.status}
                                 onChange={(e) =>
                                     setData('status', e.target.value)
                                 }
                                 placeholder="Ej. Activo"
-                                className="field-input"
-                            />
+                                className={`field-input ${animal ? 'cursor-pointer' : "cursor-not-allowed opacity-40"}`}
+                            >
+                            <option value="Activo">Activo</option>
+                            <option value="Inactivo">Inactivo</option>
+                            </select>
                         </FieldForm>
                     </div>
                 </SectionForm>
@@ -198,7 +202,7 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
                 </SectionForm>
 
                 {/* Fechas */}
-                <SectionForm label="Fechas">
+                <SectionForm label="Fecha">
                     <div className="grid grid-cols-2 gap-5">
                         <FieldForm
                             label="Fecha de nacimiento"
@@ -210,21 +214,6 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
                                 value={data.birth_date}
                                 onChange={(e) =>
                                     setData('birth_date', e.target.value)
-                                }
-                                className="field-input"
-                            />
-                        </FieldForm>
-
-                        <FieldForm
-                            label="Fecha de publicación"
-                            icon="calendar_month"
-                            error={errors.publication_date}
-                        >
-                            <input
-                                type="date"
-                                value={data.publication_date}
-                                onChange={(e) =>
-                                    setData('publication_date', e.target.value)
                                 }
                                 className="field-input"
                             />

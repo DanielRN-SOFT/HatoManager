@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AnimalRequest;
 use App\Models\Animal;
 use App\Models\AnimalCategory;
 use App\Models\Breed;
@@ -43,7 +44,7 @@ class AnimalController extends Controller
                 'animal_category_id' => $animal->animal_category_id,
                 'animal_category'    => $animal->animalCategory?->name,
                 'breed'              => $animal->breed?->name,
-                'photo'              => $animal->getFirstMediaUrl('animals'),
+                'photo'              => $animal->getFirstMediaUrl('animals') ?: null,
             ]);
 
         return Inertia::render('Animales/Index', [
@@ -86,18 +87,10 @@ class AnimalController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AnimalRequest $request)
     {
         $farm_id = session('active_farm_id');
-        $validated = $request->validate([
-            'ear_tag' => 'required|integer|unique:animals, ear_tag',
-            'breed'              => 'required|string|max:100',
-            'sex'                => 'required|in:M,H',
-            'birth_date'         => 'required|date',
-            'status'             => 'required|string|max:50',
-            'animal_category_id' => 'required|exists:animal_categories,id',
-            'photo'              => 'nullable|image|max:4096',
-        ]);
+        $validated = $request->validated();
 
         $animal = Animal::create([
             ...$validated,
