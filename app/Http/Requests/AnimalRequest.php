@@ -30,6 +30,7 @@ class AnimalRequest extends FormRequest
      */
     public function rules(): array
     {
+        $farm_id = session('active_farm_id');
         return [
             'name' => [
                 'required',
@@ -52,7 +53,9 @@ class AnimalRequest extends FormRequest
             'ear_tag' => [
                 'required',
                 'integer',
-                Rule::unique('animals', 'ear_tag')->ignore($this->animal)
+                Rule::unique('animals', 'ear_tag')
+                    ->ignore($this->animal)
+                    ->where('farm_id', $farm_id)
             ],
             'sex' => [
                 'required',

@@ -142,10 +142,10 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
                                     setData('status', e.target.value)
                                 }
                                 placeholder="Ej. Activo"
-                                className={`field-input ${animal ? 'cursor-pointer' : "cursor-not-allowed opacity-40"}`}
+                                className={`field-input ${animal ? 'cursor-pointer' : 'cursor-not-allowed opacity-40'}`}
                             >
-                            <option value="Activo">Activo</option>
-                            <option value="Inactivo">Inactivo</option>
+                                <option value="Activo">Activo</option>
+                                <option value="Inactivo">Inactivo</option>
                             </select>
                         </FieldForm>
                     </div>

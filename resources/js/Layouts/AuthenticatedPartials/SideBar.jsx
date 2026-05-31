@@ -1,6 +1,8 @@
 // resources/js/Layouts/AuthenticatedPartials/SideBar.jsx
 import { Link, usePage } from '@inertiajs/react';
+import { MdOutlineDashboardCustomize } from 'react-icons/md';
 import { PiCowFill } from 'react-icons/pi';
+import { SiSwisscows } from 'react-icons/si';
 
 const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
     const { auth } = usePage().props;
@@ -8,10 +10,14 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
 
     // Ítems base (disponibles para todos los roles autenticados)
     const NAV_ITEMS = [
-        { label: 'Dashboard', icon: 'dashboard', route: 'dashboard' },
+        {
+            label: 'Dashboard',
+            icon: <MdOutlineDashboardCustomize />,
+            route: 'dashboard',
+        },
         {
             label: 'Animales',
-            icon: <PiCowFill></PiCowFill>,
+            icon: <SiSwisscows />,
             route: 'animales.index',
         },
         { label: 'Sanidad', icon: 'health_and_safety', route: 'login' },

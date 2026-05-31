@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('animals', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('ear_tag')->unique();
+            $table->integer('ear_tag');
             $table->enum('sex', ['M', 'H']);
             $table->text('photo')->nullable();
             $table->date('birth_date');
@@ -28,6 +28,7 @@ return new class extends Migration
             $table->foreignId('farm_id')->constrained()->restrictOnDelete();
             $table->foreignId('animal_category_id')->constrained()->restrictOnDelete();
             $table->foreignId('breed_id')->constrained()->restrictOnDelete();
+            $table->unique(['farm_id', 'ear_tag']);
             $table->timestamps();
         });
     }

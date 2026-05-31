@@ -10,19 +10,15 @@ class AnimalCategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'Levante',
-            'Ceba',
-            'Cría',
-            'Vientre',
-            'Reproductor',
-            'Lechero',
-            'Doble propósito',
+            'Bovino',
+            'Ovino',
+            'Caprino',
+            'Aviar',
+            'Porcino',
         ];
-
         foreach ($categories as $name) {
             AnimalCategory::firstOrCreate(['name' => $name]);
         }
-
         $this->command->info(count($categories) . ' categorías de animales creadas.');
     }
 }
