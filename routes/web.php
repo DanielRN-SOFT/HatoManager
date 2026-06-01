@@ -63,7 +63,15 @@
             ->where('action', 'accept|reject')
             ->middleware('role:veterinario');
 
+        Route::post('notifications/read-all', function () {
+            auth()->user()->unreadNotifications->markAsRead();
+            return response()->noContent();
+        })->name('notifications.readAll');
 
+        Route::post('notifications/{id}/read', function (string $id) {
+            auth()->user()->notifications()->findOrFail($id)->markAsRead();
+            return response()->noContent();
+        })->name('notifications.read');
 
         // ── SOLO DESARROLLO, PARA PROBAR EMAILS — eliminar antes de producción ──
         Route::get('/test-emails', function () {

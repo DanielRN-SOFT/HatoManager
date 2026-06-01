@@ -58,11 +58,32 @@ class HandleInertiaRequests extends Middleware
             'activeFarm' => $activeFarm,
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
-            'flash' => [
-                'success' => fn() => session('success'),
-                'info'    => fn() => session('info'),
-                'error'   => fn() => session('error'),
+            'flash'  => [
+                'success' => session('success'),
+                'info'    => session('info'),
+                'error'   => session('error'),
             ],
+            'notifications' => function () {
+                if (!auth()->check()) return ['unread_count' => 0, 'items' => []];
+
+                $notifications = auth()->user()
+                    ->unreadNotifications()
+                    ->latest()
+                    ->take(5)
+                    ->get()
+                    ->map(fn($n) => [
+                        'id'        => $n->id,
+                        'mensaje'   => $n->data['mensaje'] ?? 'Nueva notificación',
+                        'fincas'    => $n->data['total_fincas'] ?? 0,
+                        'alertas'   => $n->data['total_alertas'] ?? 0,
+                        'created_at' => $n->created_at->diffForHumans(),
+                    ]);
+
+                return [
+                    'unread_count' => auth()->user()->unreadNotifications()->count(),
+                    'items'        => $notifications,
+                ];
+            },
         ];
     }
 }

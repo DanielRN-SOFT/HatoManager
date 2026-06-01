@@ -1,7 +1,8 @@
+import NotificationBell from '@/Components/Shared/NotificationBell';
 import { router, usePage } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
-import UserDropdown from './UserDropDown';
 import { GiFarmTractor } from 'react-icons/gi';
+import UserDropdown from './UserDropDown';
 
 /* ══════════════════════════════════════════════════════════════
  |  FarmSelector — dropdown para cambiar finca activa
@@ -69,7 +70,7 @@ function FarmSelector() {
                 onClick={handleOpen}
                 className="group flex items-center gap-1.5 rounded-lg px-2 py-1 transition-colors hover:bg-surface-container"
             >
-                <span className=" text-[30px] text-primary">
+                <span className="text-[30px] text-primary">
                     <GiFarmTractor />
                 </span>
                 <h2 className="max-w-[180px] truncate text-base font-semibold text-on-surface">
@@ -187,12 +188,7 @@ const TopNavBar = ({ user, onMenuOpen, sidebarWidth }) => {
 
             {/* Right actions */}
             <div className="flex items-center gap-2">
-                <button className="relative rounded-full p-2 text-on-surface-variant transition-colors duration-150 hover:bg-surface-container">
-                    <span className="material-symbols-outlined">
-                        notifications
-                    </span>
-                    <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full border-2 border-surface bg-error" />
-                </button>
+                <NotificationBell />
                 <UserDropdown user={user} />
             </div>
         </header>
