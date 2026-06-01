@@ -14,6 +14,7 @@ export default function SanidadAnimal({
     selectedAnimal,
     records,
     alerts,
+    allAlerts,
     alertsTotal,
     flash,
 }) {
@@ -59,6 +60,7 @@ export default function SanidadAnimal({
                 {/* Alertas*/}
                 <HealthAlertPanel
                     alerts={alerts}
+                    allAlerts={allAlerts}
                     alertsTotal={alertsTotal}
                     onVerTodas={() => setShowAlertsModal(true)}
                 />
@@ -205,7 +207,7 @@ export default function SanidadAnimal({
             )}
             <HealthAlertsModal
                 show={showAlertsModal}
-                alerts={alerts}
+                alerts={allAlerts}
                 onClose={() => setShowAlertsModal(false)}
             />
         </AuthenticatedLayout>

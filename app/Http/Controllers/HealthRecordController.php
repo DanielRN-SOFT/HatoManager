@@ -44,8 +44,9 @@ class HealthRecordController extends Controller
             'animals'        => $animals,
             'selectedAnimal' => $animalId,
             'records'        => $records,
-            'alerts'         => $alerts,
-            'alertsTotal'    => $alertsTotal,
+            'alerts'      => $allAlerts->take(10),
+            'allAlerts'   => $allAlerts,
+            'alertsTotal' => $alertsTotal,
         ]);
     }
 
