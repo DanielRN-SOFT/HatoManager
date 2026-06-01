@@ -101,6 +101,9 @@
         Route::post('/mis-fincas/{farm}/activar', [FarmController::class, 'setActive'])->name('farms.setActive');
         Route::get('/mis-fincas/list', [FarmController::class, 'list'])->name('farms.list');
         Route::resource('sanidad', HealthRecordController::class)->parameters(['sanidad' => 'health'])->names('health');
+        Route::put('/animals/{animal}/restore', [AnimalController::class, 'restore'])
+            ->name('animals.restore')
+            ->withTrashed();
         Route::resource('/animals', AnimalController::class);
     });
 

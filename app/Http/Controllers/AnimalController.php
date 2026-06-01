@@ -145,7 +145,7 @@ class AnimalController extends Controller
      */
     public function destroy(Animal $animal)
     {
-        $animal->clearMediaCollection('animals');
+        // $animal->clearMediaCollection('animals');
         $animal->delete();
         $animal->update([
             'status' => 'Inactivo'
@@ -153,9 +153,12 @@ class AnimalController extends Controller
 
         return redirect()->route('animals.index')->with('success', "Animal eliminado exitosamente");
     }
-
-    public function pdf(Animal $animal)
+    public function restore($id)
     {
-        // tu lógica de dompdf aquí
+        $animal = Animal::withTrashed()->findOrFail($id);
+        $animal->restore();
+        $animal->update(['status' => 'Activo']);
+        return redirect()->route('animals.index')
+            ->with('success', "Animal restaurado exitosamente");
     }
 }

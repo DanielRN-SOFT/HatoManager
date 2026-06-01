@@ -111,6 +111,17 @@ const FilaTable = ({ animal, setShowModalEliminar }) => {
                             cls="hover:text-red-500"
                         />
                     )}
+
+                    {animal.status === 'Inactivo' && (
+                        <ActionBtn
+                            icon="restore_from_trash"
+                            label="Restaurar"
+                            onClick={() =>
+                                router.put(route('animals.restore', animal.id))
+                            }
+                            cls="hover:text-green-500"
+                        />
+                    )}
                 </div>
             </td>
         </tr>
