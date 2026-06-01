@@ -109,15 +109,7 @@ class AnimalController extends Controller
      */
     public function update(Request $request, Animal $animal)
     {
-        $validated = $request->validate([
-            'ear_tag'            => 'required|integer|unique:animals,ear_tag,' . $animal->id,
-            'breed'              => 'required|string|max:100',
-            'sex'                => 'required|in:M,H',
-            'birth_date'         => 'required|date',
-            'status'             => 'required|string|max:50',
-            'animal_category_id' => 'required|exists:animal_categories,id',
-            'photo'              => 'nullable|image|max:4096',
-        ]);
+        $validated = $request->validated();
 
         $animal->update($validated);
 
