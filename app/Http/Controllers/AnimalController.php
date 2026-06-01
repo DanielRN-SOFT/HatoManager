@@ -21,7 +21,11 @@ class AnimalController extends Controller
 
         $query = Animal::with(['animalCategory', 'breed', 'media'])
             ->where('farm_id', $farm_id)
-            ->when($request->ear_tag, fn($q, $v) => $q->where('ear_tag', 'like', $v . '%'))
+            ->when($request->ear_tag, fn($q, $v) => $q->where(
+                fn($q2) =>
+                $q2->where('ear_tag', 'like', $v . '%')
+                    ->orWhere('name', 'like', $v . "%")
+            ))
             ->when($request->breed_id, fn($q, $v) => $q->where('breed_id', $v))
             ->when($request->animal_category_id, fn($q, $v) => $q->where('animal_category_id', $v))
             ->when($request->status, fn($q, $v) => $q->where('status', $request->status, $v))

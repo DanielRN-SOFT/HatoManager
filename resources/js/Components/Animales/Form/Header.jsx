@@ -2,7 +2,7 @@ import { router } from '@inertiajs/react';
 
 const Header = ({ animal }) => {
     function handleCancel() {
-        router.visit(route('animales.index'));
+        router.visit(route('animals.index'));
     }
     return (
         <div className="mb-5 flex items-center gap-3 border-b border-outline-variant pb-4">
