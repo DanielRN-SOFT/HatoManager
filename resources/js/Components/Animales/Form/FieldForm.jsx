@@ -1,9 +1,9 @@
-import FieldError from "./FieldError";
+import FieldError from './FieldError';
 
 const FieldForm = ({ label, icon, error, children }) => (
     <div>
-        <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
-            <span className="material-symbols-outlined text-[14px]">
+        <label className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-gray-500">
+            <span className="material-symbols-outlined text-[14px] text-primary">
                 {icon}
             </span>
             {label}

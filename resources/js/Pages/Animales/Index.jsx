@@ -13,7 +13,7 @@ export default function Index({ animales, filters, finca, razas, categorias }) {
         <AuthenticatedLayout>
             <Head title="Inventario del hato" />
 
-            <div className="mb-6 flex items-center justify-between gap-4">
+            <div className="mb-6 flex items-center justify-between gap-4 p-2">
                 <div className="flex items-center gap-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
                         <SiSwisscows className="text-[24px] text-on-primary" />
@@ -22,7 +22,7 @@ export default function Index({ animales, filters, finca, razas, categorias }) {
                         <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
                             {finca.nombre}
                         </p>
-                        <h1 className="text-2xl font-semibold text-on-surface">
+                        <h1 className="text-2xl font-bold text-on-surface">
                             Inventario del hato
                         </h1>
                     </div>

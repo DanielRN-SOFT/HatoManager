@@ -1,10 +1,10 @@
-const AccionesForm = ({onCancel, processing, animal}) => {
+const AccionesForm = ({ onCancel, processing, animal }) => {
     return (
-        <div className="flex justify-end gap-3 border-t border-outline-variant pt-6">
+        <div className="flex justify-end gap-3 border-t border-gray-200 pt-6">
             <button
                 type="button"
                 onClick={onCancel}
-                className="flex items-center gap-2 rounded-xl border border-outline-variant px-6 py-2.5 text-sm font-medium text-on-surface transition-all duration-200 hover:bg-surface-container active:scale-95"
+                className="flex items-center gap-2 rounded-lg border border-gray-200 px-6 py-2.5 text-sm font-medium text-gray-600 transition-all duration-200 hover:bg-gray-50 active:scale-95"
             >
                 <span className="material-symbols-outlined text-[18px]">
                     close
@@ -14,7 +14,7 @@ const AccionesForm = ({onCancel, processing, animal}) => {
             <button
                 type="submit"
                 disabled={processing}
-                className="flex items-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-on-primary shadow-sm transition-all duration-200 hover:opacity-90 active:scale-95 disabled:opacity-50"
+                className="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-on-primary shadow-sm transition-all duration-200 hover:opacity-90 active:scale-95 disabled:opacity-50"
             >
                 {processing ? (
                     <>

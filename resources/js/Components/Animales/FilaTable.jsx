@@ -101,7 +101,7 @@ const FilaTable = ({ animal }) => {
                         onClick={() =>
                             router.visit(route('animals.edit', animal.id))
                         }
-                        cls="hover:text-green-600"
+                        cls="hover:text-secondary"
                     />
                     <ActionBtn
                         icon="picture_as_pdf"

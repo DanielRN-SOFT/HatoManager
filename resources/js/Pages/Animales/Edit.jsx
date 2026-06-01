@@ -12,21 +12,33 @@ export default function Edit({ animal, razas, categoriasAnimales }) {
             <Head title={`Editar animal · ${animal.ear_tag}`} />
 
             {/* Page header */}
-            <div className="mb-6 flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
-                    <SiSwisscows className="text-[24px] text-on-primary" />
+            <div className="mb-6 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
+                        <SiSwisscows className="text-[24px] text-on-primary" />
+                    </div>
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
+                            Inventario
+                        </p>
+                        <h1 className="text-2xl font-bold text-gray-800">
+                            Editar animal
+                        </h1>
+                    </div>
                 </div>
-                <div>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
-                        Inventario
-                    </p>
-                    <h1 className="text-2xl font-semibold text-on-surface">
-                        Editar animal
-                    </h1>
-                </div>
+
+                <button
+                    onClick={handleCancel}
+                    className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50"
+                >
+                    <span className="material-symbols-outlined text-[18px]">
+                        arrow_back
+                    </span>
+                    Volver
+                </button>
             </div>
 
-            <div className="rounded-2xl border border-outline-variant bg-surface p-6 shadow-sm">
+            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                 <AnimalForm
                     animal={animal}
                     razas={razas}
