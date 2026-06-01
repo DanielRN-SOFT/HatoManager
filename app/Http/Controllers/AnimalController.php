@@ -81,9 +81,11 @@ class AnimalController extends Controller
 
     public function edit(Animal $animal)
     {
-
         return Inertia::render('Animales/Edit', [
-            'animal' => $animal->load('breed', 'animalCategory'),
+            'animal' => [
+                ...$animal->load('breed', 'animalCategory')->toArray(),
+                'photo' => $animal->getFirstMediaUrl('animals'),
+            ],
             'razas' => Breed::all(),
             'categoriasAnimales' => AnimalCategory::all(),
         ]);
