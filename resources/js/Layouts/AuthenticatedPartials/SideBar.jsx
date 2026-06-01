@@ -19,7 +19,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
         {
             label: 'Animales',
             icon: <SiSwisscows />,
-            route: 'animales.index',
+            route: 'animals.index',
         },
         { label: 'Sanidad', icon: 'health_and_safety', route: 'health.index' },
         { label: 'Pesajes', icon: 'monitor_weight', route: 'login' },

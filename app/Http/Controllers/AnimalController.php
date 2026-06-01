@@ -18,6 +18,7 @@ class AnimalController extends Controller
     public function index(Request $request)
     {
         $farm_id = session('active_farm_id');
+
         $query = Animal::with(['animalCategory', 'breed', 'media'])
             ->where('farm_id', $farm_id)
             ->when($request->ear_tag, fn($q, $v) => $q->where('ear_tag', 'like', $v . '%'))
@@ -64,6 +65,7 @@ class AnimalController extends Controller
 
     public function edit(Animal $animal)
     {
+
         return Inertia::render('Animales/Edit', [
             'animal' => $animal->load('breed', 'animalCategory'),
             'razas' => Breed::all(),
@@ -102,12 +104,12 @@ class AnimalController extends Controller
                 ->toMediaCollection('animals');
         }
 
-        return redirect()->route('animales.index');
+        return redirect()->route('animals.index');
     }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Animal $animal)
+    public function update(Animal $animal, AnimalRequest $request)
     {
         $validated = $request->validated();
 
@@ -119,7 +121,7 @@ class AnimalController extends Controller
                 ->toMediaCollection('animals');
         }
 
-        return redirect()->route('animales.index');
+        return redirect()->route('animals.index');
     }
 
     /**
@@ -130,7 +132,7 @@ class AnimalController extends Controller
         $animal->clearMediaCollection('animals');
         $animal->delete();
 
-        return redirect()->route('animales.index');
+        return redirect()->route('animals.index');
     }
 
     public function pdf(Animal $animal)

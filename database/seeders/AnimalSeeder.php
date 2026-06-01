@@ -42,7 +42,7 @@ class AnimalSeeder extends Seeder
             'Diarrea bovina (recuperado)',
         ];
 
-        $statuses = ['disponible', 'vendido', 'en_tratamiento', 'reservado'];
+        $statuses = ['Activo', 'Inactivo', 'Vendido', 'Reservado', 'Muerto'];
 
         $maleNames = [
             'Tornado',

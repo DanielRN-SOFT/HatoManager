@@ -14,8 +14,11 @@ const STATUS_STYLES = {
     vencida: { icon: 'cancel', cls: 'bg-error-container/50 text-error' },
 };
 
-const FilaTable = ({ animal, onEdit }) => {
-    console.log(animal)
+const FilaTable = ({ animal }) => {
+    function handleEdit(animal) {
+        router.visit(route('animals.edit', animal.id));
+    }
+
     const sexInfo = SEX_LABELS[animal.sex] ?? {
         label: animal.sex,
         cls: 'bg-surface-container text-on-surface',
@@ -26,7 +29,7 @@ const FilaTable = ({ animal, onEdit }) => {
     };
 
     return (
-        <tr className="bg-white transition-colors duration-150 border-y border-gray-300 rounded-lg">
+        <tr className="rounded-lg border-y border-gray-300 bg-white transition-colors duration-150">
             {/* Foto */}
             <td className="px-5 py-3.5">
                 {animal.photo ? (
@@ -94,14 +97,16 @@ const FilaTable = ({ animal, onEdit }) => {
                         icon="visibility"
                         label="Ver detalle"
                         onClick={() =>
-                            router.visit(route('inventory.show', animal.id))
+                            router.visit(route('animals.show', animal.id))
                         }
                         hover="hover:bg-primary/10 hover:text-primary"
                     />
                     <ActionBtn
                         icon="edit"
                         label="Editar"
-                        onClick={() => onEdit(animal)}
+                        onClick={() => {
+                            handleEdit(animal);
+                        }}
                         hover="hover:bg-secondary/10 hover:text-secondary"
                     />
                     <ActionBtn

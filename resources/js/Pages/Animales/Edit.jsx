@@ -5,7 +5,7 @@ import { SiSwisscows } from 'react-icons/si';
 
 export default function Edit({ animal, razas, categoriasAnimales }) {
     function handleCancel() {
-        router.visit(route('animales.index'));
+        router.visit(route('animals.index'));
     }
     return (
         <AuthenticatedLayout>

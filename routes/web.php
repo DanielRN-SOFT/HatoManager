@@ -93,7 +93,7 @@
         Route::post('/mis-fincas/{farm}/activar', [FarmController::class, 'setActive'])->name('farms.setActive');
         Route::get('/mis-fincas/list', [FarmController::class, 'list'])->name('farms.list');
         Route::resource('sanidad', HealthRecordController::class)->parameters(['sanidad' => 'health'])->names('health');
-        Route::resource('/animales', AnimalController::class);
+        Route::resource('/animals', AnimalController::class);
     });
 
     require __DIR__ . '/auth.php';

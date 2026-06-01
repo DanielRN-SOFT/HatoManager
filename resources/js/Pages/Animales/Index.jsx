@@ -5,11 +5,8 @@ import { Head, router } from '@inertiajs/react';
 import { SiSwisscows } from 'react-icons/si';
 
 export default function Index({ animales, filters, finca, razas, categorias }) {
-    function handleEdit(animal) {
-        router.visit(route('animales.edit', animal.id));
-    }
     function handleNuevo() {
-        router.visit(route('animales.create'));
+        router.visit(route('animals.create'));
     }
     return (
         <AuthenticatedLayout>
@@ -49,7 +46,7 @@ export default function Index({ animales, filters, finca, razas, categorias }) {
                     />
                 </div>
                 <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                    <AnimalTable animales={animales} onEdit={handleEdit} />
+                    <AnimalTable animales={animales} />
                 </div>
             </div>
         </AuthenticatedLayout>

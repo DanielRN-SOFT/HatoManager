@@ -1,10 +1,10 @@
 import { router } from '@inertiajs/react';
 import FilaTable from './FilaTable';
 
-const AnimalTable = ({ animales, onEdit }) => {
+const AnimalTable = ({ animales }) => {
     function handlePageChange(page) {
         router.get(
-            route('animales.index'),
+            route('animals.index'),
             { page },
             { preserveState: true, replace: true },
         );
@@ -58,7 +58,7 @@ const AnimalTable = ({ animales, onEdit }) => {
                                 <FilaTable
                                     key={animal.id}
                                     animal={animal}
-                                    onEdit={onEdit}
+
                                 />
                             ))
                         )}

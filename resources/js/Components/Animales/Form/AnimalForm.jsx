@@ -11,6 +11,7 @@ import SectionForm from './SectionForm';
 
 const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
     const { data, setData, post, processing, errors } = useForm({
+        _method: animal ? 'PUT' : 'POST',
         photo: animal?.photo ?? '',
         name: animal?.name ?? '',
         ear_tag: animal?.ear_tag ?? '',
@@ -39,13 +40,15 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
     function handleSubmit(e) {
         e.preventDefault();
         if (animal) {
-            post(route('animales.update', animal.id), {
+            post(route('animals.update', animal.id), {
                 forceFormData: true,
-                _method: 'PUT',
+                data: {
+                    _method: 'PUT',
+                },
                 onSuccess: onCancel,
             });
         } else {
-            post(route('animales.store'), {
+            post(route('animals.store'), {
                 forceFormData: true,
                 onSuccess: onCancel,
             });
