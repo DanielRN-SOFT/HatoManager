@@ -27,24 +27,10 @@ class HealthRecordController extends Controller
             ->paginate(8)
             ->withQueryString();
 
-        return Inertia::render('Sanidad/Index', [
-            'animals'         => $animals,
-            'selectedAnimal'  => $animalId,
-            'records'         => $records,
-        ]);
-    }
-
-    public function create(Request $request)
-    {
-        $farmId = session('active_farm_id');
-
-        $animals = Animal::where('farm_id', $farmId)
-            ->orderBy('ear_tag')
-            ->get(['id', 'ear_tag', 'name']);
-
-        return Inertia::render('Sanidad/Create', [
-            'animals'         => $animals,
-            'selectedAnimal'  => $request->get('animal_id'),
+        return Inertia::render('Sanidad/SanidadAnimal', [
+            'animals'        => $animals,
+            'selectedAnimal' => $animalId,
+            'records'        => $records,
         ]);
     }
 
@@ -59,20 +45,6 @@ class HealthRecordController extends Controller
 
         return redirect()->route('health.index', ['animal_id' => $record->animal_id])
             ->with('success', 'Registro sanitario guardado correctamente.');
-    }
-
-    public function edit(HealthRecord $health)
-    {
-        $farmId = session('active_farm_id');
-
-        $animals = Animal::where('farm_id', $farmId)
-            ->orderBy('ear_tag')
-            ->get(['id', 'ear_tag', 'name']);
-
-        return Inertia::render('Sanidad/Edit', [
-            'record'  => $health->load('registeredBy:id,name'),
-            'animals' => $animals,
-        ]);
     }
 
     public function update(HealthRecordRequest $request, HealthRecord $health)

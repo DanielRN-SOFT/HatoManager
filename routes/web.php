@@ -92,7 +92,7 @@
         Route::delete('/mis-fincas/{farm}', [FarmController::class, 'destroy'])->name('farms.destroy');
         Route::post('/mis-fincas/{farm}/activar', [FarmController::class, 'setActive'])->name('farms.setActive');
         Route::get('/mis-fincas/list', [FarmController::class, 'list'])->name('farms.list');
-        Route::resource('sanidad', HealthRecordController::class)->parameters(['sanidad' => 'health'])->names('health')->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+        Route::resource('sanidad', HealthRecordController::class)->parameters(['sanidad' => 'health'])->names('health');
         Route::resource('/animales', AnimalController::class);
     });
 

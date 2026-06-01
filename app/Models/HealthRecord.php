@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class HealthRecord extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'animal_id',
         'registered_by',

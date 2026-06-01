@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('applied_at');
             $table->date('next_date')->nullable();
             $table->text('notes')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
