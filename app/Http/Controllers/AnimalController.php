@@ -20,6 +20,7 @@ class AnimalController extends Controller
         $farm_id = session('active_farm_id');
 
         $query = Animal::with(['animalCategory', 'breed', 'media'])
+            ->withTrashed()
             ->where('farm_id', $farm_id)
             ->when($request->ear_tag, fn($q, $v) => $q->where(
                 fn($q2) =>
@@ -30,7 +31,17 @@ class AnimalController extends Controller
             ->when($request->animal_category_id, fn($q, $v) => $q->where('animal_category_id', $v))
             ->when($request->status, fn($q, $v) => $q->where('status', $request->status, $v))
             ->when($request->birth_from, fn($q, $v) => $q->where('birth_date', '>=', $v))
-            ->when($request->birth_to,   fn($q, $v) => $q->where('birth_date', '<=', $v));
+            ->when($request->birth_to,   fn($q, $v) => $q->where('birth_date', '<=', $v))
+            ->orderByRaw('
+        CASE status
+            WHEN "Activo"    THEN 1
+            WHEN "Reservado" THEN 2
+            WHEN "Vendido"   THEN 3
+            WHEN "Muerto"    THEN 4
+            WHEN "Inactivo"  THEN 5
+            ELSE 6
+        END ASC
+    ');
 
         $razas = Breed::all();
         $categorias = AnimalCategory::all();
@@ -136,8 +147,11 @@ class AnimalController extends Controller
     {
         $animal->clearMediaCollection('animals');
         $animal->delete();
+        $animal->update([
+            'status' => 'Inactivo'
+        ]);
 
-        return redirect()->route('animals.index');
+        return redirect()->route('animals.index')->with('success', "Animal eliminado exitosamente");
     }
 
     public function pdf(Animal $animal)

@@ -9,11 +9,11 @@ const STATUS_STYLES = {
     Activo: { cls: 'bg-green-50 text-green-700' },
     Inactivo: { cls: 'bg-amber-50 text-amber-700' },
     Muerto: { cls: 'bg-red-50 text-red-600' },
-    Reservado: {cls: 'bg-blue-50 text-blue-600'},
-    Vendido: {cls: "bg-purple-50 text-purple-600"}
+    Reservado: { cls: 'bg-blue-50 text-blue-600' },
+    Vendido: { cls: 'bg-purple-50 text-purple-600' },
 };
 
-const FilaTable = ({ animal }) => {
+const FilaTable = ({ animal, setShowModalEliminar }) => {
     const sexInfo = SEX_LABELS[animal.sex] ?? {
         label: animal.sex,
         cls: 'bg-gray-100 text-gray-600',
@@ -23,7 +23,7 @@ const FilaTable = ({ animal }) => {
     };
 
     return (
-        <tr className="border-b border-gray-100 transition-colors hover:bg-gray-50 bg-">
+        <tr className="bg- border-b border-gray-100 transition-colors hover:bg-gray-50">
             {/* Foto */}
             <td className="px-4 py-3">
                 {animal.photo ? (
@@ -103,17 +103,14 @@ const FilaTable = ({ animal }) => {
                         }
                         cls="hover:text-secondary"
                     />
-                    <ActionBtn
-                        icon="picture_as_pdf"
-                        label="Exportar PDF"
-                        onClick={() =>
-                            window.open(
-                                route('inventory.pdf', animal.id),
-                                '_blank',
-                            )
-                        }
-                        cls="hover:text-red-500"
-                    />
+                    {animal.status === 'Activo' && (
+                        <ActionBtn
+                            icon="delete"
+                            label="Eliminar"
+                            onClick={() => setShowModalEliminar(animal)}
+                            cls="hover:text-red-500"
+                        />
+                    )}
                 </div>
             </td>
         </tr>

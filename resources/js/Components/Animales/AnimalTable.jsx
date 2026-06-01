@@ -1,7 +1,11 @@
 import { router } from '@inertiajs/react';
+import { useState } from 'react';
+import Modal from '../Modal';
 import FilaTable from './FilaTable';
+import ModalEliminar from './ModalEliminar';
 
 const AnimalTable = ({ animales }) => {
+    const [showModalEliminar, setShowModalEliminar] = useState(null); // null = cerrado, animal = abierto
     function handlePageChange(page) {
         router.get(
             route('animals.index'),
@@ -16,6 +20,17 @@ const AnimalTable = ({ animales }) => {
 
     return (
         <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+            <Modal
+                show={showModalEliminar}
+                onClose={() => setShowModalEliminar(null)}
+                closeable={true}
+                maxWidth="sm"
+            >
+                <ModalEliminar
+                    animal={showModalEliminar}
+                    onClose={() => setShowModalEliminar(null)}
+                />
+            </Modal>
             <div className="overflow-x-auto">
                 <table className="w-full text-left">
                     <thead>
@@ -54,13 +69,16 @@ const AnimalTable = ({ animales }) => {
                             </tr>
                         ) : (
                             data.map((animal) => (
-                                <FilaTable key={animal.id} animal={animal} />
+                                <FilaTable
+                                    key={animal.id}
+                                    animal={animal}
+                                    setShowModalEliminar={setShowModalEliminar}
+                                />
                             ))
                         )}
                     </tbody>
                 </table>
             </div>
-
             {last_page > 1 && (
                 <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
                     <span className="text-xs text-gray-500">
@@ -88,14 +106,14 @@ const AnimalTable = ({ animales }) => {
                             .map((p, i) =>
                                 p === '...' ? (
                                     <span
-                                        key={i}
+                                        key={`dots-${i}`}
                                         className="px-1 text-xs text-gray-400"
                                     >
                                         …
                                     </span>
                                 ) : (
                                     <button
-                                        key={p}
+                                        key={`page-${p}`}
                                         onClick={() => handlePageChange(p)}
                                         className={`rounded px-3 py-1 text-xs transition ${
                                             p === current_page
