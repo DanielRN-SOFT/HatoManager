@@ -1,0 +1,104 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\HealthRecordRequest;
+use App\Models\Animal;
+use App\Models\HealthAlert;
+use App\Models\HealthRecord;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+
+class HealthRecordController extends Controller
+{
+    public function index(Request $request)
+    {
+        $farmId = session('active_farm_id');
+
+        $animals = Animal::where('farm_id', $farmId)
+            ->orderBy('ear_tag')
+            ->get(['id', 'ear_tag', 'name']);
+
+        $animalId = $request->get('animal_id', $animals->first()?->id);
+
+        $records = HealthRecord::with('registeredBy:id,name')
+            ->where('animal_id', $animalId)
+            ->latest()
+            ->paginate(8)
+            ->withQueryString();
+
+        $allAlerts = HealthAlert::with([
+            'healthRecord' => fn($q) => $q->select('id', 'product'),
+            'animal'       => fn($q) => $q->select('id', 'ear_tag', 'name'),
+        ])
+            ->whereHas('healthRecord')
+            ->whereHas('animal', fn($q) => $q->where('farm_id', $farmId))
+            ->where('status', 'pendiente')
+            ->orderBy('alert_date')
+            ->get();
+
+        $alerts      = $allAlerts->take(10);
+        $alertsTotal = $allAlerts->count();
+
+        return Inertia::render('Sanidad/SanidadAnimal', [
+            'animals'        => $animals,
+            'selectedAnimal' => $animalId,
+            'records'        => $records,
+            'alerts'      => $allAlerts->take(10),
+            'allAlerts'   => $allAlerts,
+            'alertsTotal' => $alertsTotal,
+        ]);
+    }
+
+    public function store(HealthRecordRequest $request)
+    {
+        $data = $request->validated();
+        $data['registered_by'] = auth()->id();
+
+        $record = HealthRecord::create($data);
+
+        $this->syncAlert($record);
+
+        return redirect()->route('health.index', ['animal_id' => $record->animal_id])
+            ->with('success', 'Registro sanitario guardado correctamente.');
+    }
+
+    public function update(HealthRecordRequest $request, HealthRecord $health)
+    {
+        $health->update($request->validated());
+
+        $this->syncAlert($health);
+
+        return redirect()->route('health.index', ['animal_id' => $health->animal_id])
+            ->with('success', 'Registro sanitario actualizado correctamente.');
+    }
+
+    public function destroy(HealthRecord $health)
+    {
+        $animalId = $health->animal_id;
+        $health->alert()->delete();
+        $health->delete();
+
+        return redirect()->route('health.index', ['animal_id' => $animalId])
+            ->with('success', 'Registro eliminado correctamente.');
+    }
+
+    // ── helpers ──────────────────────────────────────────────────────────────
+
+    private function syncAlert(HealthRecord $record): void
+    {
+        if ($record->next_date) {
+            HealthAlert::updateOrCreate(
+                ['health_record_id' => $record->id],
+                [
+                    'animal_id'  => $record->animal_id,
+                    'type'       => $record->type,
+                    'alert_date' => $record->next_date,
+                    'status'     => 'pendiente',
+                ]
+            );
+        } else {
+            $record->alert()->delete();
+        }
+    }
+}

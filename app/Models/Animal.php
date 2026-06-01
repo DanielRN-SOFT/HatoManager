@@ -46,6 +46,11 @@ class Animal extends Model implements HasMedia
         return $this->belongsTo(Breed::class);
     }
 
+    public function healthRecords()
+    {
+        return $this->hasMany(HealthRecord::class)->latest();
+    }
+
     protected $casts = [
         'birth_date' => 'date',   // or 'datetime'
     ];

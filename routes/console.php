@@ -2,6 +2,11 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use App\Jobs\CheckVacunasVencidas;
+use Illuminate\Support\Facades\Schedule;
+
+
+Schedule::job(new CheckVacunasVencidas)->dailyAt('07:00');
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());

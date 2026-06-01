@@ -5,6 +5,7 @@
     use App\Http\Controllers\SelectFarmController;
     use App\Http\Controllers\VeterinarianController;
     use App\Http\Controllers\FarmController;
+    use App\Http\Controllers\HealthRecordController;
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\TwoFactorController;
@@ -91,7 +92,7 @@
         Route::delete('/mis-fincas/{farm}', [FarmController::class, 'destroy'])->name('farms.destroy');
         Route::post('/mis-fincas/{farm}/activar', [FarmController::class, 'setActive'])->name('farms.setActive');
         Route::get('/mis-fincas/list', [FarmController::class, 'list'])->name('farms.list');
-
+        Route::resource('sanidad', HealthRecordController::class)->parameters(['sanidad' => 'health'])->names('health');
         Route::resource('/animales', AnimalController::class);
     });
 
