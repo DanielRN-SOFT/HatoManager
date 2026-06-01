@@ -103,7 +103,7 @@ const FilaTable = ({ animal }) => {
                         onClick={() =>
                             router.visit(route('animals.show', animal.id))
                         }
-                        hover="hover:bg-primary/10 hover:text-primary"
+                        hover="hover:text-blue-500"
                     />
                     <ActionBtn
                         icon="edit"
@@ -111,7 +111,7 @@ const FilaTable = ({ animal }) => {
                         onClick={() => {
                             handleEdit(animal);
                         }}
-                        hover="hover:bg-secondary/10 hover:text-secondary"
+                        hover="hover:text-primary-container"
                     />
                     <ActionBtn
                         icon="picture_as_pdf"
@@ -122,7 +122,7 @@ const FilaTable = ({ animal }) => {
                                 '_blank',
                             )
                         }
-                        hover="hover:bg-error-container/50 hover:text-error"
+                        hover="hover:text-error"
                     />
                 </div>
             </td>
@@ -134,9 +134,9 @@ const ActionBtn = ({ icon, label, onClick, hover }) => (
     <button
         onClick={onClick}
         title={label}
-        className={`rounded-xl p-1.5 text-on-surface-variant/50 transition-all duration-150 active:scale-90 ${hover}`}
+        className={`rounded-xl p-1.5 text-on-surface-variant/50 transition-all duration-150 active:scale-90`}
     >
-        <span className="material-symbols-outlined text-[20px]">{icon}</span>
+        <span className={`material-symbols-outlined text-[20px] ${hover}`}>{icon}</span>
     </button>
 );
 

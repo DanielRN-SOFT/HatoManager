@@ -27,16 +27,21 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
         const empty = {
             ear_tag: '',
             status: '',
-            breed: '',
-            category: '',
+            breed_id: '',
+            animal_category_id: '',
             birth_from: '',
             birth_to: '',
         };
         setForm(empty);
-        router.get(route('animales.index'), empty, {
-            preserveState: true,
-            replace: true,
-        });
+        router.get(
+            route('animals.index'),
+            {},
+            {
+                // ← objeto vacío {}
+                preserveState: true,
+                replace: true,
+            },
+        );
     }
 
     return (
@@ -78,7 +83,9 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                     <TextInput
                         type="text"
                         value={form.ear_tag}
-                        onChange={(e) => handleChange('ear_tag', e.target.value)}
+                        onChange={(e) =>
+                            handleChange('ear_tag', e.target.value)
+                        }
                         placeholder="Ej. 4502"
                     />
                     {form.ear_tag && (
