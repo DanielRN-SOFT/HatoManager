@@ -104,7 +104,7 @@ class AnimalController extends Controller
                 ->toMediaCollection('animals');
         }
 
-        return redirect()->route('animals.index');
+        return redirect()->route('animals.index')->with('success', 'Animal creado exitosamente');
     }
     /**
      * Update the specified resource in storage.
@@ -121,7 +121,7 @@ class AnimalController extends Controller
                 ->toMediaCollection('animals');
         }
 
-        return redirect()->route('animals.index');
+        return redirect()->route('animals.index')->with('success', 'Animal editado exitosamente');
     }
 
     /**

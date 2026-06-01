@@ -1,5 +1,6 @@
 import AnimalFilterBar from '@/Components/Animales/AnimalFilterBar';
 import AnimalTable from '@/Components/Animales/AnimalTable';
+import Flash from '@/Components/Shared/Flash';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
 import { SiSwisscows } from 'react-icons/si';
@@ -36,6 +37,8 @@ export default function Index({ animales, filters, finca, razas, categorias }) {
                     Registrar animal
                 </button>
             </div>
+
+            <Flash />
 
             <div className="space-y-4">
                 <div>

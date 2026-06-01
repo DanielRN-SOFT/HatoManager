@@ -42,15 +42,10 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
         if (animal) {
             post(route('animals.update', animal.id), {
                 forceFormData: true,
-                data: {
-                    _method: 'PUT',
-                },
-                onSuccess: onCancel,
             });
         } else {
             post(route('animals.store'), {
                 forceFormData: true,
-                onSuccess: onCancel,
             });
         }
     }
