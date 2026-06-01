@@ -12,7 +12,7 @@ import SectionForm from './SectionForm';
 const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
     const { data, setData, post, processing, errors } = useForm({
         _method: animal ? 'PUT' : 'POST',
-        photo: animal?.photo ?? '',
+        photo: '',
         name: animal?.name ?? '',
         ear_tag: animal?.ear_tag ?? '',
         sex: animal?.sex ?? '',
@@ -142,8 +142,9 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
                                 placeholder="Ej. Activo"
                                 className={`field-input ${animal ? 'cursor-pointer' : 'cursor-not-allowed opacity-40'}`}
                             >
-                                <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
+                                <option value="">Seleccionar</option>
+                                <option value="Vendido">Vendido</option>
+                                <option value="Muerto">Muerto</option>
                             </select>
                         </FieldForm>
                     </div>
@@ -209,10 +210,10 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
                         >
                             <input
                                 type="date"
-                                value={data.birth_date}
-                                onChange={(e) =>
-                                    setData('birth_date', e.target.value)
-                                }
+                                value={data.birth_date?.split('T')[0]}
+                                onChange={(e) => {
+                                    setData('birth_date', e.target.value);
+                                }}
                                 className="field-input"
                             />
                         </FieldForm>

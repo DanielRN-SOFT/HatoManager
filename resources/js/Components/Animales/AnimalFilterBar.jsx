@@ -57,7 +57,7 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                     </span>
                     {hasActiveFilters && (
                         <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-on-primary">
-                            activos
+                            Activos
                         </span>
                     )}
                 </div>
