@@ -1,6 +1,5 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
-import TextInput from '../Auth/TextInput';
 
 const AnimalFilterBar = ({ filters, razas, categorias }) => {
     const [form, setForm] = useState({
@@ -76,13 +75,14 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                     <span className="material-symbols-outlined text-[16px] text-gray-400">
                         search
                     </span>
-                    <TextInput
+                    <input
                         type="text"
                         value={form.ear_tag}
                         onChange={(e) =>
                             handleChange('ear_tag', e.target.value)
                         }
                         placeholder="Ej. 4502"
+                        className="field-input"
                     />
                     {form.ear_tag && (
                         <button
@@ -100,7 +100,7 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                     <select
                         value={form.status}
                         onChange={(e) => handleChange('status', e.target.value)}
-                        className="w-full rounded-md border-gray-200 bg-transparent text-sm text-gray-700 outline-none focus:border-primary focus:ring-2 focus:ring-secondary/20"
+                        className="field-input"
                     >
                         <option value="">Todos</option>
                         <option value="Activo">Activo</option>
@@ -117,7 +117,7 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                         onChange={(e) =>
                             handleChange('breed_id', e.target.value)
                         }
-                        className="w-full rounded-md border-gray-200 bg-transparent text-sm text-gray-700 outline-none focus:border-primary focus:ring-2 focus:ring-secondary/20"
+                        className="field-input"
                     >
                         <option value="">Todas</option>
                         {razas.map((raza) => (
@@ -134,7 +134,7 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                         onChange={(e) =>
                             handleChange('animal_category_id', e.target.value)
                         }
-                        className="w-full rounded-md border-gray-200 bg-transparent text-sm text-gray-700 outline-none focus:border-primary focus:ring-2 focus:ring-secondary/20"
+                        className="field-input"
                     >
                         <option value="">Todas</option>
                         {categorias.map((cat) => (
@@ -149,22 +149,24 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
             {/* Fila inferior */}
             <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <FilterField label="Nacimiento" icon="cake">
-                    <TextInput
+                    <input
                         type="date"
                         value={form.birth_from}
                         onChange={(e) =>
                             handleChange('birth_from', e.target.value)
                         }
                         title="Desde"
+                        className="field-input"
                     />
                     <span className="shrink-0 text-xs text-gray-400">—</span>
-                    <TextInput
+                    <input
                         type="date"
                         value={form.birth_to}
                         onChange={(e) =>
                             handleChange('birth_to', e.target.value)
                         }
                         title="Hasta"
+                        className="field-input"
                     />
                 </FilterField>
             </div>

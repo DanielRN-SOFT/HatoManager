@@ -78,6 +78,12 @@ class AnimalRequest extends FormRequest
                 'image',
                 'max:4096',
                 'mimes:png,jpg,webp'
+            ],
+            "reason_to_death" => [
+                'nullable'
+            ],
+            'status' => [
+                'nullable'
             ]
         ];
     }

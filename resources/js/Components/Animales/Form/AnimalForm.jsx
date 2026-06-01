@@ -26,12 +26,13 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
         publication_date: animal?.publication_date ?? '',
         animal_category_id: animal?.animal_category?.id ?? '',
         breed_id: animal?.breed?.id ?? '',
-        reason_to_eliminate: animal?.reason_to_eliminate ?? '',
+        reason_to_death:
+            animal.status === 'Muerto' ? animal?.reason_to_death : null,
     });
 
     const [preview, setPreview] = useState(animal?.photo ?? null);
     const [showReason, setShowReason] = useState(
-        data.reason_to_eliminate ? false : true,
+        data.status === 'Muerto' ? true : false,
     );
 
     function handlePhoto(e) {
@@ -131,39 +132,48 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
                             </select>
                         </FieldForm>
 
-                        <FieldForm
-                            label="Estado"
-                            icon="info"
-                            error={errors.status}
-                        >
-                            <select
-                                disabled={animal ? false : true}
-                                type="text"
-                                value={data.status}
-                                onChange={(e) => {
-                                    setData('status', e.target.value);
-                                    setShowReason(
-                                        e.target.value ? true : false,
-                                    );
-                                }}
-                                placeholder="Ej. Activo"
-                                className={`field-input ${animal ? 'cursor-pointer' : 'cursor-not-allowed opacity-40'}`}
+                        {(data.status === 'Activo' ||
+                            data.status === 'Muerto') && (
+                            <FieldForm
+                                label="Estado"
+                                icon="info"
+                                error={errors.status}
                             >
-                                <option value="">Seleccionar</option>
-                                <option value="Vendido">Vendido</option>
-                                <option value="Muerto">Muerto</option>
-                            </select>
-                        </FieldForm>
+                                <select
+                                    disabled={!animal}
+                                    value={data.status}
+                                    onChange={(e) => {
+                                        setData('status', e.target.value);
+                                        setShowReason(
+                                            e.target.value === 'Muerto'
+                                                ? true
+                                                : false,
+                                        );
+                                    }}
+                                    placeholder="Ej. Activo"
+                                    className={`field-input ${animal ? 'cursor-pointer' : 'cursor-not-allowed opacity-40'}`}
+                                >
+                                    <option disabled value="">
+                                        Seleccionar
+                                    </option>
+                                    <option value="Activo">Activo</option>
+                                    <option value="Muerto">Muerto</option>
+                                </select>
+                            </FieldForm>
+                        )}
                     </div>
 
                     {showReason && (
-                        <FieldForm label="Motivo de eliminacion" icon={'info'}>
+                        <FieldForm
+                            label="Motivo de Fallecimiento"
+                            icon={'info'}
+                        >
                             <textarea
-                                value={data.previous_diseases}
+                                value={data.reason_to_death}
                                 onChange={(e) =>
-                                    setData('previous_diseases', e.target.value)
+                                    setData('reason_to_death', e.target.value)
                                 }
-                                placeholder="Describe enfermedades o tratamientos anteriores..."
+                                placeholder="Describe la causa de fallecimiento del animal"
                                 rows={4}
                                 className="field-input resize-none"
                             />

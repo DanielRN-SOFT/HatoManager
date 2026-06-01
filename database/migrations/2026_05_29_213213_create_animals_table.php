@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('sex', ['M', 'H']);
             $table->text('photo')->nullable();
             $table->date('birth_date');
-            $table->string('status')->default('Activo');
+            $table->enum('status', ['Activo', 'Inactivo', 'Muerto', 'Reservado', 'Vendido'])->default('Activo');
             $table->text('description')->nullable();
             $table->text('previous_diseases')->nullable();
             $table->decimal('price', 15, 4);
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->foreignId('animal_category_id')->constrained()->restrictOnDelete();
             $table->foreignId('breed_id')->constrained()->restrictOnDelete();
             $table->unique(['farm_id', 'ear_tag']);
-            $table->string('reason_to_eliminate')->nullable();
+            $table->string('reason_to_death')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

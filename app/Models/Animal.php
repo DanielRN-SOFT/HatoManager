@@ -27,7 +27,7 @@ class Animal extends Model implements HasMedia
         'publication_date',
         'farm_id',
         'animal_category_id',
-        'reason_to_eliminate'
+        'reason_to_death'
     ];
 
 
