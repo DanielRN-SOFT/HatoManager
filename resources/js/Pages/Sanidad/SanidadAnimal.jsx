@@ -1,5 +1,7 @@
 import AnimalSelector from '@/Components/Sanidad/AnimalSelector';
 import ConfirmDeleteRecord from '@/Components/Sanidad/ConfirmDeleteRecord';
+import HealthAlertPanel from '@/Components/Sanidad/HealthAlertPanel';
+import HealthAlertsModal from '@/Components/Sanidad/HealthAlertsModal';
 import HealthRecordModal from '@/Components/Sanidad/HealthRecordModal';
 import HealthRecordRow from '@/Components/Sanidad/HealthRecordRow';
 import Flash from '@/Components/Shared/Flash';
@@ -11,6 +13,8 @@ export default function SanidadAnimal({
     animals,
     selectedAnimal,
     records,
+    alerts,
+    alertsTotal,
     flash,
 }) {
     const [modal, setModal] = useState({
@@ -19,6 +23,7 @@ export default function SanidadAnimal({
         record: null,
     });
     const [toDelete, setToDelete] = useState(null);
+    const [showAlertsModal, setShowAlertsModal] = useState(false);
 
     function openCreate() {
         setModal({ show: true, mode: 'create', record: null });
@@ -50,6 +55,13 @@ export default function SanidadAnimal({
             <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                 {/* Flash */}
                 <Flash flash={flash} />
+
+                {/* Alertas*/}
+                <HealthAlertPanel
+                    alerts={alerts}
+                    alertsTotal={alertsTotal}
+                    onVerTodas={() => setShowAlertsModal(true)}
+                />
 
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between">
@@ -191,6 +203,11 @@ export default function SanidadAnimal({
                     onCancel={() => setToDelete(null)}
                 />
             )}
+            <HealthAlertsModal
+                show={showAlertsModal}
+                alerts={alerts}
+                onClose={() => setShowAlertsModal(false)}
+            />
         </AuthenticatedLayout>
     );
 }

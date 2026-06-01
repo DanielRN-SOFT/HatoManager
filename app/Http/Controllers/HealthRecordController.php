@@ -27,10 +27,25 @@ class HealthRecordController extends Controller
             ->paginate(8)
             ->withQueryString();
 
+        $allAlerts = HealthAlert::with([
+            'healthRecord' => fn($q) => $q->select('id', 'product'),
+            'animal'       => fn($q) => $q->select('id', 'ear_tag', 'name'),
+        ])
+            ->whereHas('healthRecord')
+            ->whereHas('animal', fn($q) => $q->where('farm_id', $farmId))
+            ->where('status', 'pendiente')
+            ->orderBy('alert_date')
+            ->get();
+
+        $alerts      = $allAlerts->take(10);
+        $alertsTotal = $allAlerts->count();
+
         return Inertia::render('Sanidad/SanidadAnimal', [
             'animals'        => $animals,
             'selectedAnimal' => $animalId,
             'records'        => $records,
+            'alerts'         => $alerts,
+            'alertsTotal'    => $alertsTotal,
         ]);
     }
 
