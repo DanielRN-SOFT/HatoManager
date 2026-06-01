@@ -35,6 +35,7 @@ class AnimalController extends Controller
         $animales = $query->latest()->paginate(8)->withQueryString()
             ->through(fn($animal) => [
                 'id'                 => $animal->id,
+                'name'               => $animal->name,
                 'ear_tag'            => $animal->ear_tag,
                 'breed_id'              => $animal->breed_id,
                 'sex'                => $animal->sex,

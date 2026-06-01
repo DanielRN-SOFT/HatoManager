@@ -17,11 +17,12 @@ const AnimalTable = ({ animales }) => {
     return (
         <div className="overflow-hidden rounded">
             <div className="overflow-x-auto">
-                <table className="w-full text-left rounded-full">
-                    <thead className='rounded-full'>
+                <table className="w-full rounded-full text-left">
+                    <thead className="rounded-full">
                         <tr className="bg-surface-container-low">
                             {[
                                 'Foto',
+                                'Nombre',
                                 'Arete #',
                                 'Raza',
                                 'Sexo',
@@ -55,11 +56,7 @@ const AnimalTable = ({ animales }) => {
                             </tr>
                         ) : (
                             data.map((animal) => (
-                                <FilaTable
-                                    key={animal.id}
-                                    animal={animal}
-
-                                />
+                                <FilaTable key={animal.id} animal={animal} />
                             ))
                         )}
                     </tbody>

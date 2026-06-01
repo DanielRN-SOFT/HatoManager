@@ -7,7 +7,6 @@ const SEX_LABELS = {
 
 const STATUS_STYLES = {
     al_dia: {
-        icon: 'check_circle',
         cls: 'bg-secondary-container/50 text-secondary',
     },
     proxima_a_vencer: { icon: 'warning', cls: 'bg-amber-50 text-amber-700' },
@@ -15,6 +14,7 @@ const STATUS_STYLES = {
 };
 
 const FilaTable = ({ animal }) => {
+    console.log(animal);
     function handleEdit(animal) {
         router.visit(route('animals.edit', animal.id));
     }
@@ -25,7 +25,7 @@ const FilaTable = ({ animal }) => {
     };
     const statusInfo = STATUS_STYLES[animal.status] ?? {
         icon: 'help',
-        cls: 'bg-surface-container text-on-surface-variant',
+        cls: 'text-on-primary',
     };
 
     return (
@@ -45,6 +45,13 @@ const FilaTable = ({ animal }) => {
                         </span>
                     </div>
                 )}
+            </td>
+
+            {/* Nombre */}
+            <td className="px-5 py-3.5">
+                <span className="px-5 py-3.5 text-sm text-on-surface">
+                    {animal.name}
+                </span>
             </td>
 
             {/* Arete */}
@@ -76,11 +83,8 @@ const FilaTable = ({ animal }) => {
             {/* Estado */}
             <td className="px-5 py-3.5">
                 <span
-                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusInfo.cls}`}
+                    className={`inline-flex bg-primary-container items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusInfo.cls}`}
                 >
-                    <span className="material-symbols-outlined text-[13px]">
-                        {statusInfo.icon}
-                    </span>
                     {animal.status?.replace(/_/g, ' ')}
                 </span>
             </td>

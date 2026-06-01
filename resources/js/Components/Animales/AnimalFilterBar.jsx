@@ -17,7 +17,7 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
     function handleChange(key, value) {
         const next = { ...form, [key]: value };
         setForm(next);
-        router.get(route('animales.index'), next, {
+        router.get(route('animals.index'), next, {
             preserveState: true,
             replace: true,
         });

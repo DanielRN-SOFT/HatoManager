@@ -37,7 +37,7 @@ export default function Flash() {
         ? {
               icon: 'check_circle',
               bar: 'bg-primary',
-              bg: 'bg-primary-container/40',
+              bg: 'bg-primary-container/10',
               border: 'border-primary/20',
               text: 'text-on-surface',
               accent: 'text-primary',
