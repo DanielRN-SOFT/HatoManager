@@ -23,10 +23,11 @@ export default forwardRef(function TextInput(
             type={type}
             ref={input}
             className={
-                'w-full rounded-lg border bg-white px-4 py-3 text-sm text-on-surface placeholder-on-surface-variant/40 outline-none transition-all ' +
+                'w-full rounded-lg border bg-white px-4 py-2 text-sm text-gray-700 placeholder-gray-400 outline-none transition-all ' +
                 (hasError
-                    ? 'border-error focus:border-error focus:ring-2 focus:ring-error/30'
-                    : 'border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20') +
+                    ? 'border-error focus:border-red-400 focus:ring-2 focus:ring-error/20'
+                    : 'border-gray-200 focus:border-primary focus:ring-2 focus:ring-secondary/20') +
+                ' ' +
                 className
             }
         />

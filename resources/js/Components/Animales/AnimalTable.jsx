@@ -15,11 +15,11 @@ const AnimalTable = ({ animales }) => {
     const to = Math.min(current_page * per_page, total);
 
     return (
-        <div className="overflow-hidden rounded">
+        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
             <div className="overflow-x-auto">
-                <table className="w-full rounded-full text-left">
-                    <thead className="rounded-full">
-                        <tr className="bg-surface-container-low">
+                <table className="w-full text-left">
+                    <thead>
+                        <tr className="border-b border-gray-100 bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
                             {[
                                 'Foto',
                                 'Nombre',
@@ -31,10 +31,7 @@ const AnimalTable = ({ animales }) => {
                                 'Categoría',
                                 'Acciones',
                             ].map((h) => (
-                                <th
-                                    key={h}
-                                    className="px-5 py-3.5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant/60"
-                                >
+                                <th key={h} className="px-4 py-3">
                                     {h}
                                 </th>
                             ))}
@@ -43,15 +40,16 @@ const AnimalTable = ({ animales }) => {
                     <tbody>
                         {data.length === 0 ? (
                             <tr>
-                                <td
-                                    colSpan={8}
-                                    className="py-16 text-center text-sm text-on-surface-variant"
-                                >
-                                    <span className="material-symbols-outlined mb-2 block text-[40px] opacity-20">
-                                        search_off
-                                    </span>
-                                    No hay animales que coincidan con los
-                                    filtros.
+                                <td colSpan={9} className="py-16 text-center">
+                                    <div className="flex flex-col items-center gap-3 text-gray-400">
+                                        <span className="material-symbols-outlined text-5xl">
+                                            search_off
+                                        </span>
+                                        <p className="text-sm">
+                                            No hay animales que coincidan con
+                                            los filtros.
+                                        </p>
+                                    </div>
                                 </td>
                             </tr>
                         ) : (
@@ -63,69 +61,71 @@ const AnimalTable = ({ animales }) => {
                 </table>
             </div>
 
-            <div className="flex items-center justify-between bg-surface-container-low/50 px-5 py-3">
-                <span className="text-xs text-on-surface-variant">
-                    {from}–{to} de{' '}
-                    <span className="font-semibold text-on-surface">
-                        {total}
-                    </span>{' '}
-                    animales
-                </span>
-                <div className="flex items-center gap-1">
-                    <PagBtn
-                        onClick={() => handlePageChange(current_page - 1)}
-                        disabled={current_page === 1}
-                        icon="chevron_left"
-                    />
-                    {Array.from({ length: last_page }, (_, i) => i + 1)
-                        .filter(
-                            (p) =>
-                                p === 1 ||
-                                p === last_page ||
-                                Math.abs(p - current_page) <= 1,
-                        )
-                        .reduce((acc, p, i, arr) => {
-                            if (i > 0 && p - arr[i - 1] > 1) acc.push('...');
-                            acc.push(p);
-                            return acc;
-                        }, [])
-                        .map((p, i) =>
-                            p === '...' ? (
-                                <span
-                                    key={i}
-                                    className="px-1 text-xs text-on-surface-variant"
-                                >
-                                    …
-                                </span>
-                            ) : (
-                                <button
-                                    key={p}
-                                    onClick={() => handlePageChange(p)}
-                                    className={`flex h-8 w-8 items-center justify-center rounded-xl text-xs font-semibold transition-all duration-150 ${p === current_page ? 'bg-primary text-on-primary shadow-sm shadow-primary/40' : 'text-on-surface hover:bg-primary/10 hover:text-primary'}`}
-                                >
-                                    {p}
-                                </button>
-                            ),
-                        )}
-                    <PagBtn
-                        onClick={() => handlePageChange(current_page + 1)}
-                        disabled={current_page === last_page}
-                        icon="chevron_right"
-                    />
+            {last_page > 1 && (
+                <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
+                    <span className="text-xs text-gray-500">
+                        {from}–{to} de {total} animales
+                    </span>
+                    <div className="flex gap-2">
+                        <PagBtn
+                            onClick={() => handlePageChange(current_page - 1)}
+                            disabled={current_page === 1}
+                            label="&laquo;"
+                        />
+                        {Array.from({ length: last_page }, (_, i) => i + 1)
+                            .filter(
+                                (p) =>
+                                    p === 1 ||
+                                    p === last_page ||
+                                    Math.abs(p - current_page) <= 1,
+                            )
+                            .reduce((acc, p, i, arr) => {
+                                if (i > 0 && p - arr[i - 1] > 1)
+                                    acc.push('...');
+                                acc.push(p);
+                                return acc;
+                            }, [])
+                            .map((p, i) =>
+                                p === '...' ? (
+                                    <span
+                                        key={i}
+                                        className="px-1 text-xs text-gray-400"
+                                    >
+                                        …
+                                    </span>
+                                ) : (
+                                    <button
+                                        key={p}
+                                        onClick={() => handlePageChange(p)}
+                                        className={`rounded px-3 py-1 text-xs transition ${
+                                            p === current_page
+                                                ? 'bg-primary text-white'
+                                                : 'text-gray-500 hover:bg-gray-100'
+                                        }`}
+                                    >
+                                        {p}
+                                    </button>
+                                ),
+                            )}
+                        <PagBtn
+                            onClick={() => handlePageChange(current_page + 1)}
+                            disabled={current_page === last_page}
+                            label="&raquo;"
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
 
-const PagBtn = ({ onClick, disabled, icon }) => (
+const PagBtn = ({ onClick, disabled, label }) => (
     <button
         onClick={onClick}
         disabled={disabled}
-        className="flex h-8 w-8 items-center justify-center rounded-xl text-on-surface-variant transition-all hover:bg-primary/10 hover:text-primary disabled:opacity-25"
-    >
-        <span className="material-symbols-outlined text-[20px]">{icon}</span>
-    </button>
+        className="rounded px-3 py-1 text-xs text-gray-500 transition hover:bg-gray-100 disabled:opacity-40"
+        dangerouslySetInnerHTML={{ __html: label }}
+    />
 );
 
 export default AnimalTable;

@@ -6,41 +6,35 @@ const SEX_LABELS = {
 };
 
 const STATUS_STYLES = {
-    al_dia: {
-        cls: 'bg-secondary-container/50 text-secondary',
-    },
-    proxima_a_vencer: { icon: 'warning', cls: 'bg-amber-50 text-amber-700' },
-    vencida: { icon: 'cancel', cls: 'bg-error-container/50 text-error' },
+    Activo: { cls: 'bg-green-50 text-green-700' },
+    Inactivo: { cls: 'bg-amber-50 text-amber-700' },
+    Muerto: { cls: 'bg-red-50 text-red-600' },
+    Reservado: {cls: 'bg-blue-50 text-blue-600'},
+    Vendido: {cls: "bg-purple-50 text-purple-600"}
 };
 
 const FilaTable = ({ animal }) => {
-    console.log(animal);
-    function handleEdit(animal) {
-        router.visit(route('animals.edit', animal.id));
-    }
-
     const sexInfo = SEX_LABELS[animal.sex] ?? {
         label: animal.sex,
-        cls: 'bg-surface-container text-on-surface',
+        cls: 'bg-gray-100 text-gray-600',
     };
     const statusInfo = STATUS_STYLES[animal.status] ?? {
-        icon: 'help',
-        cls: 'text-on-primary',
+        cls: 'bg-gray-100 text-gray-600',
     };
 
     return (
-        <tr className="rounded-lg border-y border-gray-300 bg-white transition-colors duration-150">
+        <tr className="border-b border-gray-100 transition-colors hover:bg-gray-50 bg-">
             {/* Foto */}
-            <td className="px-5 py-3.5">
+            <td className="px-4 py-3">
                 {animal.photo ? (
                     <img
                         src={animal.photo}
                         alt={animal.ear_tag}
-                        className="h-10 w-10 rounded-xl object-cover shadow-sm"
+                        className="h-10 w-10 rounded-lg object-cover"
                     />
                 ) : (
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-container-low">
-                        <span className="material-symbols-outlined text-[20px] text-on-surface-variant/30">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100">
+                        <span className="material-symbols-outlined text-[20px] text-gray-300">
                             photo_camera
                         </span>
                     </div>
@@ -48,26 +42,22 @@ const FilaTable = ({ animal }) => {
             </td>
 
             {/* Nombre */}
-            <td className="px-5 py-3.5">
-                <span className="px-5 py-3.5 text-sm text-on-surface">
-                    {animal.name}
-                </span>
+            <td className="px-4 py-3 text-sm font-medium text-gray-800">
+                {animal.name}
             </td>
 
             {/* Arete */}
-            <td className="px-5 py-3.5">
-                <span className="rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+            <td className="px-4 py-3">
+                <span className="rounded bg-green-50 px-2 py-0.5 text-xs font-bold text-green-700">
                     {animal.ear_tag}
                 </span>
             </td>
 
             {/* Raza */}
-            <td className="px-5 py-3.5 text-sm text-on-surface">
-                {animal.breed}
-            </td>
+            <td className="px-4 py-3 text-sm text-gray-600">{animal.breed}</td>
 
             {/* Sexo */}
-            <td className="px-5 py-3.5">
+            <td className="px-4 py-3">
                 <span
                     className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${sexInfo.cls}`}
                 >
@@ -76,42 +66,42 @@ const FilaTable = ({ animal }) => {
             </td>
 
             {/* Nacimiento */}
-            <td className="px-5 py-3.5 text-sm tabular-nums text-on-surface-variant">
+            <td className="px-4 py-3 text-sm tabular-nums text-gray-500">
                 {animal.birth_date}
             </td>
 
             {/* Estado */}
-            <td className="px-5 py-3.5">
+            <td className="px-4 py-3">
                 <span
-                    className={`inline-flex bg-primary-container items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusInfo.cls}`}
+                    className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusInfo.cls}`}
                 >
                     {animal.status?.replace(/_/g, ' ')}
                 </span>
             </td>
 
             {/* Categoría */}
-            <td className="px-5 py-3.5 text-sm text-on-surface-variant">
+            <td className="px-4 py-3 text-sm text-gray-500">
                 {animal?.animal_category ?? '—'}
             </td>
 
             {/* Acciones */}
-            <td className="px-5 py-3.5">
-                <div className="flex items-center justify-center gap-1">
+            <td className="px-4 py-3">
+                <div className="flex items-center gap-1">
                     <ActionBtn
                         icon="visibility"
                         label="Ver detalle"
                         onClick={() =>
                             router.visit(route('animals.show', animal.id))
                         }
-                        hover="hover:text-blue-500"
+                        cls="hover:text-blue-500"
                     />
                     <ActionBtn
                         icon="edit"
                         label="Editar"
-                        onClick={() => {
-                            handleEdit(animal);
-                        }}
-                        hover="hover:text-primary-container"
+                        onClick={() =>
+                            router.visit(route('animals.edit', animal.id))
+                        }
+                        cls="hover:text-green-600"
                     />
                     <ActionBtn
                         icon="picture_as_pdf"
@@ -122,7 +112,7 @@ const FilaTable = ({ animal }) => {
                                 '_blank',
                             )
                         }
-                        hover="hover:text-error"
+                        cls="hover:text-red-500"
                     />
                 </div>
             </td>
@@ -130,13 +120,15 @@ const FilaTable = ({ animal }) => {
     );
 };
 
-const ActionBtn = ({ icon, label, onClick, hover }) => (
+const ActionBtn = ({ icon, label, onClick, cls }) => (
     <button
         onClick={onClick}
         title={label}
-        className={`rounded-xl p-1.5 text-on-surface-variant/50 transition-all duration-150 active:scale-90`}
+        className="rounded p-1.5 text-gray-400 transition-all active:scale-90"
     >
-        <span className={`material-symbols-outlined text-[20px] ${hover}`}>{icon}</span>
+        <span className={`material-symbols-outlined text-[18px] ${cls}`}>
+            {icon}
+        </span>
     </button>
 );
 

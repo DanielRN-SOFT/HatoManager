@@ -48,9 +48,8 @@ export default function Index({ animales, filters, finca, razas, categorias }) {
                         filters={filters}
                     />
                 </div>
-                <div className="rounded-2xl border bg-white p-5 shadow-sm">
-                    <AnimalTable animales={animales} />
-                </div>
+
+                <AnimalTable animales={animales} />
             </div>
         </AuthenticatedLayout>
     );

@@ -26,9 +26,13 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
         publication_date: animal?.publication_date ?? '',
         animal_category_id: animal?.animal_category?.id ?? '',
         breed_id: animal?.breed?.id ?? '',
+        reason_to_eliminate: animal?.reason_to_eliminate ?? '',
     });
 
     const [preview, setPreview] = useState(animal?.photo ?? null);
+    const [showReason, setShowReason] = useState(
+        data.reason_to_eliminate ? false : true,
+    );
 
     function handlePhoto(e) {
         const file = e.target.files[0];
@@ -136,9 +140,12 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
                                 disabled={animal ? false : true}
                                 type="text"
                                 value={data.status}
-                                onChange={(e) =>
-                                    setData('status', e.target.value)
-                                }
+                                onChange={(e) => {
+                                    setData('status', e.target.value);
+                                    setShowReason(
+                                        e.target.value ? true : false,
+                                    );
+                                }}
                                 placeholder="Ej. Activo"
                                 className={`field-input ${animal ? 'cursor-pointer' : 'cursor-not-allowed opacity-40'}`}
                             >
@@ -148,6 +155,20 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
                             </select>
                         </FieldForm>
                     </div>
+
+                    {showReason && (
+                        <FieldForm label="Motivo de eliminacion" icon={'info'}>
+                            <textarea
+                                value={data.previous_diseases}
+                                onChange={(e) =>
+                                    setData('previous_diseases', e.target.value)
+                                }
+                                placeholder="Describe enfermedades o tratamientos anteriores..."
+                                rows={4}
+                                className="field-input resize-none"
+                            />
+                        </FieldForm>
+                    )}
                 </SectionForm>
 
                 {/* Clasificación */}

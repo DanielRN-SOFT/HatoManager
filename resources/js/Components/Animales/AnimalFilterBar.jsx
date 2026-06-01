@@ -36,27 +36,23 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
         router.get(
             route('animals.index'),
             {},
-            {
-                // ← objeto vacío {}
-                preserveState: true,
-                replace: true,
-            },
+            { preserveState: true, replace: true },
         );
     }
 
     return (
-        <div className="rounded-2xl border bg-white p-5 shadow">
+        <div className="rounded-xl border border-gray-200 bg-white px-4 py-4 shadow-sm">
             {/* Header */}
-            <div className="mb-4 flex items-center justify-between">
+            <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-[16px] text-primary">
+                    <span className="material-symbols-outlined text-[16px] text-secondary">
                         tune
                     </span>
-                    <span className="text-[11px] font-semibold uppercase tracking-widest text-on-surface-variant">
+                    <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-500">
                         Filtros
                     </span>
                     {hasActiveFilters && (
-                        <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-on-primary">
+                        <span className="rounded-full bg-green-600 px-2 py-0.5 text-[10px] font-semibold text-white">
                             Activos
                         </span>
                     )}
@@ -64,7 +60,7 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                 {hasActiveFilters && (
                     <button
                         onClick={handleClear}
-                        className="flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium text-error transition-colors hover:bg-error-container/40"
+                        className="flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-medium text-red-500 transition-colors hover:bg-red-50"
                     >
                         <span className="material-symbols-outlined text-[14px]">
                             close
@@ -74,10 +70,10 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                 )}
             </div>
 
-            {/* Fila superior: 3 columnas */}
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                <FilterField label="ear_tag" icon="sell">
-                    <span className="material-symbols-outlined text-[16px] text-on-surface-variant/50">
+            {/* Fila superior: 4 columnas */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+                <FilterField label="Nombre o Arete" icon="sell">
+                    <span className="material-symbols-outlined text-[16px] text-gray-400">
                         search
                     </span>
                     <TextInput
@@ -91,7 +87,7 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                     {form.ear_tag && (
                         <button
                             onClick={() => handleChange('ear_tag', '')}
-                            className="shrink-0 text-on-surface-variant/40 hover:text-error"
+                            className="shrink-0 text-gray-300 hover:text-red-400"
                         >
                             <span className="material-symbols-outlined text-[14px]">
                                 close
@@ -104,7 +100,7 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                     <select
                         value={form.status}
                         onChange={(e) => handleChange('status', e.target.value)}
-                        className="w-full rounded-lg border border-outline-variant bg-white px-4 py-3 text-sm text-on-surface placeholder-on-surface-variant/40 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        className="w-full rounded-md border-gray-200 bg-transparent text-sm text-gray-700 outline-none focus:border-primary focus:ring-2 focus:ring-secondary/20"
                     >
                         <option value="">Todos</option>
                         <option value="Activo">Activo</option>
@@ -118,45 +114,40 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                 <FilterField label="Raza" icon="pets">
                     <select
                         value={form.breed_id}
-                        onChange={(e) => {
-                            handleChange('breed_id', e.target.value);
-                        }}
-                        className="w-full rounded-lg border border-outline-variant bg-white px-4 py-3 text-sm text-on-surface placeholder-on-surface-variant/40 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        onChange={(e) =>
+                            handleChange('breed_id', e.target.value)
+                        }
+                        className="w-full rounded-md border-gray-200 bg-transparent text-sm text-gray-700 outline-none focus:border-primary focus:ring-2 focus:ring-secondary/20"
                     >
                         <option value="">Todas</option>
-                        {razas.map((raza) => {
-                            return (
-                                <option key={raza.id} value={raza.id}>
-                                    {' '}
-                                    {raza.name}{' '}
-                                </option>
-                            );
-                        })}
+                        {razas.map((raza) => (
+                            <option key={raza.id} value={raza.id}>
+                                {raza.name}
+                            </option>
+                        ))}
                     </select>
                 </FilterField>
-            </div>
 
-            {/* Fila inferior: 2 columnas */}
-            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <FilterField label="Categoría" icon="category">
                     <select
                         value={form.animal_category_id}
                         onChange={(e) =>
                             handleChange('animal_category_id', e.target.value)
                         }
-                        className="w-full rounded-lg border border-outline-variant bg-white px-4 py-3 text-sm text-on-surface placeholder-on-surface-variant/40 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20"
+                        className="w-full rounded-md border-gray-200 bg-transparent text-sm text-gray-700 outline-none focus:border-primary focus:ring-2 focus:ring-secondary/20"
                     >
                         <option value="">Todas</option>
-                        {categorias.map((cat) => {
-                            return (
-                                <option key={cat.id} value={cat.id}>
-                                    {cat.name}
-                                </option>
-                            );
-                        })}
+                        {categorias.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                                {cat.name}
+                            </option>
+                        ))}
                     </select>
                 </FilterField>
+            </div>
 
+            {/* Fila inferior */}
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <FilterField label="Nacimiento" icon="cake">
                     <TextInput
                         type="date"
@@ -166,16 +157,13 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                         }
                         title="Desde"
                     />
-                    <span className="shrink-0 text-xs text-on-surface-variant">
-                        —
-                    </span>
+                    <span className="shrink-0 text-xs text-gray-400">—</span>
                     <TextInput
                         type="date"
                         value={form.birth_to}
                         onChange={(e) =>
                             handleChange('birth_to', e.target.value)
                         }
-                        className="p-"
                         title="Hasta"
                     />
                 </FilterField>
@@ -186,13 +174,13 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
 
 const FilterField = ({ label, icon, children }) => (
     <div>
-        <label className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-on-surface-variant">
+        <label className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-gray-500">
             <span className="material-symbols-outlined text-[13px] text-primary">
                 {icon}
             </span>
             {label}
         </label>
-        <div className="flex items-center gap-2 rounded-xl border border-outline-variant bg-surface-container-low px-3 py-2">
+        <div className="flex items-center gap-2 rounded-xl px-3 py-2">
             {children}
         </div>
     </div>
