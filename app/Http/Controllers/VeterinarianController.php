@@ -228,7 +228,8 @@ class VeterinarianController extends Controller
 
         $vet->notify(new VeterinarianUnlinkedFromFarm($farm));
 
-        return back()->with('success', "{$vet->name} fue desvinculado de la finca {$farm->name}.");
+        return redirect()->route('veterinarians.index')
+            ->with('success', "{$vet->name} fue desvinculado de la finca {$farm->name}.");
     }
 
     /* ══════════════════════════════════════════════════════════
@@ -245,6 +246,7 @@ class VeterinarianController extends Controller
 
         $invitation->update(['status' => 'expired']);
 
-        return back()->with('success', "Invitación a {$invitation->email} cancelada.");
+        return redirect()->route('veterinarians.index')
+            ->with('success', "Invitación a {$invitation->email} cancelada.");
     }
 }
