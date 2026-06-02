@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('productive_stages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('lactation_days')->nullable();
+            $table->integer('number_of_births')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
