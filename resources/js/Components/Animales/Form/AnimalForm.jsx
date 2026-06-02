@@ -27,7 +27,7 @@ const AnimalForm = ({ animal, onCancel, categoriasAnimal, razas }) => {
         animal_category_id: animal?.animal_category?.id ?? '',
         breed_id: animal?.breed?.id ?? '',
         reason_to_death:
-            animal.status === 'Muerto' ? animal?.reason_to_death : null,
+            animal?.status === 'Muerto' ? animal?.reason_to_death : null,
     });
 
     const [preview, setPreview] = useState(animal?.photo ?? null);

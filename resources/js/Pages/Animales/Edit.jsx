@@ -38,7 +38,7 @@ export default function Edit({ animal, razas, categoriasAnimales }) {
                 </button>
             </div>
 
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="rounded-xl border-t-4 border-primary bg-white p-6 shadow">
                 <AnimalForm
                     animal={animal}
                     razas={razas}

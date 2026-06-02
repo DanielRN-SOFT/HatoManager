@@ -40,7 +40,7 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
     }
 
     return (
-        <div className="rounded-xl border border-gray-200 bg-white px-4 py-4 shadow-sm">
+        <div className="rounded-xl border-t-4 border-primary bg-white px-4 py-4 shadow-sm">
             {/* Header */}
             <div className="mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">

@@ -38,7 +38,7 @@ export default function Create({ razas, categoriasAnimales }) {
                 </button>
             </div>
 
-            <div className="rounded-2xl border border-outline-variant bg-white p-6 shadow-sm">
+            <div className="rounded-xl border-t-4 border-primary bg-white p-6 shadow">
                 <AnimalForm
                     razas={razas}
                     categoriasAnimal={categoriasAnimales}

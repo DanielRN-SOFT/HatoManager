@@ -30,7 +30,7 @@ const ModalEliminar = ({ animal, onClose }) => {
                 </span>
                 ).
             </p>
-            <p className="mb-6 text-center text-xs text-gray-400">
+            <p className="mb-6 text-center text-xs text-gray-600">
                 El registro no se borrará permanentemente y podrás reactivarlo
                 luego.
             </p>
@@ -39,7 +39,7 @@ const ModalEliminar = ({ animal, onClose }) => {
             <div className="flex gap-3">
                 <button
                     onClick={onClose}
-                    className="flex-1 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50"
+                    className="flex-1 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100"
                 >
                     Cancelar
                 </button>
