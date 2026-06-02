@@ -6,15 +6,16 @@ use App\Models\Animal;
 use App\Models\AnimalCategory;
 use App\Models\Breed;
 use App\Models\Farm;
+use App\Models\Paddock;
 use Illuminate\Database\Seeder;
 
 class AnimalSeeder extends Seeder
 {
     public function run(): void
     {
-        $farms = Farm::all();
+        $farms      = Farm::all();
         $categories = AnimalCategory::all();
-        $breeds = Breed::all();
+        $breeds     = Breed::all();
 
         if ($farms->isEmpty()) {
             $this->command->error('No hay fincas. Ejecuta FarmSeeder primero.');
@@ -93,20 +94,30 @@ class AnimalSeeder extends Seeder
         $totalAnimals = 0;
 
         foreach ($farms as $farm) {
+            // Paddocks de esta finca específica
+            $paddocks = Paddock::where('farm_id', $farm->id)->get();
+
+            if($paddocks->isEmpty()) {
+                $this->command->warn("  ⚠ {$farm->name} no tiene lotes. Omitiendo animales.");
+                continue;
+            }
+
             $count = rand(20, 28);
 
             for ($i = 0; $i < $count; $i++) {
-                $sex = $i % 3 === 0 ? 'M' : 'H';
-
+                $sex  = $i % 3 === 0 ? 'M' : 'H';
                 $name = $sex === 'M'
                     ? $maleNames[array_rand($maleNames)]
                     : $femaleNames[array_rand($femaleNames)];
 
-                $birthDate = now()->subDays(rand(365, 365 * 5));
+                $birthDate   = now()->subDays(rand(365, 365 * 5));
                 $ageInMonths = $birthDate->diffInMonths(now());
 
                 $baseWeight = min(100 + ($ageInMonths * 8), 550);
-                $weight = $baseWeight + rand(-30, 30);
+                $weight     = $baseWeight + rand(-30, 30);
+
+                // Paddock aleatorio de la finca
+                $paddock = $paddocks->random();
 
                 Animal::create([
                     'name'               => $name,
@@ -124,6 +135,7 @@ class AnimalSeeder extends Seeder
                     'publication_date'   => now()->subDays(rand(0, 60))->toDateString(),
                     'farm_id'            => $farm->id,
                     'animal_category_id' => $categories->random()->id,
+                    'paddock_id'         => $paddock->id,
                 ]);
             }
 

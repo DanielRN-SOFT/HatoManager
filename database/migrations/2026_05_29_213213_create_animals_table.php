@@ -28,6 +28,7 @@ return new class extends Migration
             $table->foreignId('farm_id')->constrained()->restrictOnDelete();
             $table->foreignId('animal_category_id')->constrained()->restrictOnDelete();
             $table->foreignId('breed_id')->constrained()->restrictOnDelete();
+            $table->foreignId('paddock_id')->constrained()->restrictOnDelete();
             $table->unique(['farm_id', 'ear_tag']);
             $table->string('reason_to_death')->nullable();
             $table->softDeletes();

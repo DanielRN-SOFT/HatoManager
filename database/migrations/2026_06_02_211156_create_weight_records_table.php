@@ -22,9 +22,9 @@ return new class extends Migration
             $table->foreignId('weight_methods_id')->constrained()->restrictOnDelete();
             $table->boolean('previous_fast');
             $table->enum('pregnancy', ['Vacia', 'Seca', 'Lactante', 'Gestante']);
-            $table->integer('lactation days');
-            $table->integer('number_of_births');
-            $table->decimal('room_temperature', 10, 5);
+            $table->integer('lactation_days')->nullable();
+            $table->integer('number_of_births')->nullable();
+            $table->decimal('room_temperature', 10, 5)->nullable();
             $table->timestamps();
         });
     }

@@ -27,7 +27,8 @@ class Animal extends Model implements HasMedia
         'publication_date',
         'farm_id',
         'animal_category_id',
-        'reason_to_death'
+        'reason_to_death',
+        'paddock_id'
     ];
 
 
@@ -50,6 +51,11 @@ class Animal extends Model implements HasMedia
     public function healthRecords()
     {
         return $this->hasMany(HealthRecord::class)->latest();
+    }
+
+    public function paddock()
+    {
+        return $this->belongsTo(Paddock::class);
     }
 
     protected $casts = [
