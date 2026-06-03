@@ -53,7 +53,7 @@ export default function SanidadAnimal({
         <AuthenticatedLayout>
             <Head title="Sanidad Animal" />
 
-            <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+            <div>
                 {/* Flash */}
                 <Flash flash={flash} />
 
@@ -66,31 +66,37 @@ export default function SanidadAnimal({
                 />
 
                 {/* Header */}
-                <div className="mb-6 flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-800">
-                            Sanidad Animal
-                        </h1>
-                        <p className="mt-0.5 text-sm text-gray-500">
-                            Vacunas, desparasitaciones y tratamientos
-                        </p>
+                <div className="mb-6 flex items-center justify-between gap-4 p-2">
+                    <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
+                            <span className="material-symbols-outlined text-[24px] text-on-primary">
+                                vaccines
+                            </span>
+                        </div>
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
+                                {selectedAnimal
+                                    ? selectedAnimal.ear_tag
+                                    : 'Finca'}
+                            </p>
+                            <h1 className="text-2xl font-bold text-on-surface">
+                                Sanidad Animal
+                            </h1>
+                        </div>
                     </div>
                     <button
                         onClick={openCreate}
-                        className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700"
+                        className="flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
                     >
-                        <span
-                            className="material-symbols-outlined"
-                            style={{ fontSize: '18px' }}
-                        >
-                            add
+                        <span className="material-symbols-outlined text-[20px]">
+                            add_circle
                         </span>
                         Nuevo registro
                     </button>
                 </div>
 
                 {/* Selector de animal */}
-                <div className="mb-4 flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3">
+                <div className="mb-4 flex items-center justify-between rounded-xl border-t-4 border-primary bg-white px-4 py-3 shadow-sm">
                     <AnimalSelector
                         animals={animals}
                         selectedAnimal={selectedAnimal}
@@ -103,7 +109,7 @@ export default function SanidadAnimal({
 
                 {/* Tabla */}
                 {records.data.length === 0 ? (
-                    <div className="flex flex-col items-center gap-3 rounded-xl border border-gray-200 bg-white py-16 text-gray-400">
+                    <div className="flex flex-col items-center gap-3 rounded-xl border-t-4 border-primary bg-white py-16 text-gray-400 shadow-sm">
                         <span className="material-symbols-outlined text-5xl">
                             vaccines
                         </span>
@@ -118,11 +124,11 @@ export default function SanidadAnimal({
                         </button>
                     </div>
                 ) : (
-                    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                    <div className="overflow-hidden rounded-xl bg-white shadow-sm">
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead>
-                                    <tr className="border-b border-gray-100 bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                    <tr className="border-b border-gray-100 bg-secondary text-xs font-semibold uppercase tracking-wide text-white">
                                         <th className="px-4 py-3">Tipo</th>
                                         <th className="px-4 py-3">Producto</th>
                                         <th className="px-4 py-3">Dosis</th>
@@ -137,6 +143,7 @@ export default function SanidadAnimal({
                                         <th className="px-4 py-3"></th>
                                     </tr>
                                 </thead>
+
                                 <tbody>
                                     {records.data.map((record) => (
                                         <HealthRecordRow

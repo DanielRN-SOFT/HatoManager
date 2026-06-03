@@ -38,27 +38,34 @@ export default function MisFincas({ farms }) {
         <AuthenticatedLayout>
             <Head title="Mis Fincas" />
 
-            <div className="mx-auto max-w-4xl px-4 py-8">
+            <div>
                 {/* Título */}
-                <div className="mb-6 flex items-center justify-between">
-                    <div>
-                        <h1 className="text-xl font-bold text-on-surface">
-                            Mis Fincas
-                        </h1>
-                        <p className="text-sm text-on-surface-variant">
-                            {activeFarms.length} activa
-                            {activeFarms.length !== 1 ? 's' : ''}
-                            {inactiveFarms.length > 0 &&
-                                ` · ${inactiveFarms.length} inactiva${inactiveFarms.length !== 1 ? 's' : ''}`}
-                        </p>
+                <div className="mb-6 flex items-center justify-between gap-4 p-2">
+                    <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
+                            <span className="material-symbols-outlined text-[24px] text-on-primary">
+                                forest
+                            </span>
+                        </div>
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
+                                {activeFarms.length} activa
+                                {activeFarms.length !== 1 ? 's' : ''}
+                                {inactiveFarms.length > 0 &&
+                                    ` · ${inactiveFarms.length} inactiva${inactiveFarms.length !== 1 ? 's' : ''}`}
+                            </p>
+                            <h1 className="text-2xl font-bold text-on-surface">
+                                Mis Fincas
+                            </h1>
+                        </div>
                     </div>
                     {!showForm && !editingFarm && (
                         <button
                             onClick={() => setShowForm(true)}
-                            className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-on-primary transition-opacity hover:opacity-90"
+                            className="flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
                         >
-                            <span className="material-symbols-outlined text-[18px]">
-                                add
+                            <span className="material-symbols-outlined text-[20px]">
+                                add_circle
                             </span>
                             Nueva Finca
                         </button>
