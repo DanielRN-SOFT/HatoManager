@@ -24,7 +24,11 @@ class DatabaseSeeder extends Seeder
             VeterinarianSeeder::class,
             BreedSeeder::class,
             AnimalCategorySeeder::class,
-            AnimalSeeder::class
+            PaddockSeeder::class,
+            AnimalSeeder::class,
+            ProductiveStageSeeder::class,
+            WeightMethodSeeder::class,
+            WeightRecordSeeder::class
         ]);
     }
 }
