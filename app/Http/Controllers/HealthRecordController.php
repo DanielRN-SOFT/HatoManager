@@ -6,7 +6,9 @@ use App\Http\Requests\HealthRecordRequest;
 use App\Models\Animal;
 use App\Models\HealthAlert;
 use App\Models\HealthRecord;
+use App\Models\Farm;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Inertia\Inertia;
 
 class HealthRecordController extends Controller
@@ -81,6 +83,68 @@ class HealthRecordController extends Controller
 
         return redirect()->route('health.index', ['animal_id' => $animalId])
             ->with('success', 'Registro eliminado correctamente.');
+    }
+    public function certificadoIndividual(Animal $animal, Request $request)
+    {
+        $farmId = session('active_farm_id');
+        abort_if($animal->farm_id !== $farmId, 403);
+
+        $animal->load([
+            'farm',
+            'breed',
+            'animalCategory',
+            'healthRecords' => fn($q) => $q->with('registeredBy:id,name')->latest(),
+        ]);
+
+        $ganadero = auth()->user()->hasRole('ganadero')
+            ? auth()->user()
+            : $animal->farm->users()->whereHas('roles', fn($q) => $q->where('name', 'ganadero'))->first();
+
+        $veterinario = $animal->farm->veterinarios()->first();
+        $modo = $request->get('modo', 'color'); // 'color' | 'byn'
+        $vista = $modo === 'byn' ? 'pdf.certificado-individual-byn' : 'pdf.certificado-individual';
+
+        $pdf = Pdf::loadView($vista, [
+            'animal'      => $animal,
+            'ganadero'    => $ganadero,
+            'veterinario' => $veterinario,
+            'fecha'       => now()->format('d/m/Y'),
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download("certificado-{$animal->ear_tag}.pdf");
+    }
+
+    public function certificadoLote(Farm $farm, Request $request)
+    {
+        abort_if($farm->id !== session('active_farm_id'), 403);
+
+        $animals = Animal::where('farm_id', $farm->id)
+            ->where('status', 'activo')
+            ->with([
+                'breed',
+                'animalCategory',
+                'healthRecords' => fn($q) => $q->with('registeredBy:id,name')->latest(),
+            ])
+            ->orderBy('ear_tag')
+            ->get();
+
+        $ganadero = auth()->user()->hasRole('ganadero')
+            ? auth()->user()
+            : $farm->users()->whereHas('roles', fn($q) => $q->where('name', 'ganadero'))->first();
+
+        $veterinario = $farm->veterinarios()->first();
+        $modo = $request->get('modo', 'color');
+        $vista = $modo === 'byn' ? 'pdf.certificado-lote-byn' : 'pdf.certificado-lote';
+
+        $pdf = Pdf::loadView($vista, [
+            'farm'        => $farm,
+            'animals'     => $animals,
+            'ganadero'    => $ganadero,
+            'veterinario' => $veterinario,
+            'fecha'       => now()->format('d/m/Y'),
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download("certificado-lote-{$farm->name}.pdf");
     }
 
     // ── helpers ──────────────────────────────────────────────────────────────

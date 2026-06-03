@@ -105,6 +105,10 @@
             ->name('animals.restore')
             ->withTrashed();
         Route::resource('/animals', AnimalController::class);
+        Route::get('/animals/{animal}/certificado', [HealthRecordController::class, 'certificadoIndividual'])
+            ->name('health.certificado.individual');
+        Route::get('/fincas/{farm}/certificado-lote', [HealthRecordController::class, 'certificadoLote'])
+            ->name('health.certificado.lote');
     });
 
     require __DIR__ . '/auth.php';
