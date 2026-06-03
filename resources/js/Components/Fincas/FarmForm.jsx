@@ -1,7 +1,7 @@
 import { useForm } from '@inertiajs/react';
 import FarmField from './FarmField';
 
-export default function FarmForm({ farm = null, onCancel }) {
+export default function FarmForm({ farm = null, onCancel, hideTitle = false }) {
     const isEditing = !!farm;
 
     const { data, setData, post, put, processing, errors, reset } = useForm({
@@ -40,6 +40,11 @@ export default function FarmForm({ farm = null, onCancel }) {
             onSubmit={submit}
             className="rounded-xl border border-outline-variant bg-surface-container-low p-5"
         >
+            {!hideTitle && (
+                <p className="mb-4 text-sm font-semibold text-on-surface">
+                    {isEditing ? `Editando: ${farm.name}` : 'Nueva Finca'}
+                </p>
+            )}
             <p className="mb-4 text-sm font-semibold text-on-surface">
                 {isEditing ? `Editando: ${farm.name}` : 'Nueva Finca'}
             </p>
