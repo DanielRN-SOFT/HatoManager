@@ -58,6 +58,11 @@ class Animal extends Model implements HasMedia
         return $this->belongsTo(Paddock::class);
     }
 
+    public function weightRecords()
+    {
+        return $this->hasMany(WeightRecord::class);
+    }
+
     protected $casts = [
         'birth_date' => 'date',   // or 'datetime'
     ];

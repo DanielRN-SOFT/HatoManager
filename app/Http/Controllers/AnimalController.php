@@ -96,9 +96,15 @@ class AnimalController extends Controller
      */
     public function show(Animal $animal)
     {
-        return Inertia::render('Animales/Index', [
+        return Inertia::render('Animales/Show', [
             'animal' => [
-                ...$animal->load('animalCategory')->toArray(),
+                ...$animal->load([
+                    'animalCategory',
+                    'breed',
+                    'healthRecords',
+                    'paddock',
+                    'weightRecords'
+                ])->toArray(),
                 'photo' => $animal->getFirstMediaUrl('animals'),
             ]
         ]);

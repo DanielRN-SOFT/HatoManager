@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('weight', 7,2);
             $table->enum('body_condition_score', ['1', '2', '3', '4', '5']);
             $table->text('observations');
-            $table->foreignId('animals_id')->constrained()->restrictOnDelete();
+            $table->foreignId('animal_id')->constrained()->restrictOnDelete();
             $table->foreignId('productive_stages_id')->constrained()->restrictOnDelete();
             $table->foreignId('weight_methods_id')->constrained()->restrictOnDelete();
             $table->boolean('previous_fast');

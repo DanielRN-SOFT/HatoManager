@@ -65,7 +65,7 @@ class WeightRecordSeeder extends Seeder
                     'weight'               => $currentWeight,
                     'body_condition_score' => $bodyScores[array_rand($bodyScores)],
                     'observations'         => $this->randomObservation($currentWeight, $dailyGain),
-                    'animals_id'           => $animal->id,
+                    'animal_id'           => $animal->id,
                     'productive_stages_id' => $stage->id,
                     'weight_methods_id'    => $methods->random()->id,
                     'previous_fast'        => (bool) rand(0, 1),

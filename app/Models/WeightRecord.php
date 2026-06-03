@@ -11,7 +11,7 @@ class WeightRecord extends Model
         'weight',
         'body_condition_score',
         'observations',
-        'animals_id',
+        'animal_id',
         'productive_stages_id',
         'weight_methods_id',
         'previous_fast',
@@ -29,5 +29,10 @@ class WeightRecord extends Model
     public function productiveStage()
     {
         return $this->belongsTo(ProductiveStage::class);
+    }
+
+    public function animal()
+    {
+        return $this->belongsTo(Animal::class, 'animals_id');
     }
 }
