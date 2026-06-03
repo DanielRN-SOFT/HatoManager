@@ -1,11 +1,10 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm } from '@inertiajs/react';
-import { useState } from 'react';
-
 import ConfirmDialog from '@/Components/Fincas/ConfirmDialog';
 import FarmCard from '@/Components/Fincas/FarmCard';
 import FarmForm from '@/Components/Fincas/FarmForm';
 import Flash from '@/Components/Shared/Flash';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Head, router, useForm } from '@inertiajs/react';
+import { useState } from 'react';
 
 export default function MisFincas({ farms }) {
     const [showForm, setShowForm] = useState(false);
@@ -17,6 +16,11 @@ export default function MisFincas({ farms }) {
     function handleEdit(farm) {
         setEditingFarm(farm);
         setShowForm(false);
+    }
+
+    function handleRestore(farm) {
+        console.log('restaurando', farm.id);
+        router.put(route('farms.restore', farm.id));
     }
 
     function handleDeactivate(farm) {
@@ -118,6 +122,7 @@ export default function MisFincas({ farms }) {
                                 farm={farm}
                                 onEdit={handleEdit}
                                 onDeactivate={handleDeactivate}
+                                onRestore={handleRestore}
                             />
                         ))}
                     </div>
@@ -136,6 +141,7 @@ export default function MisFincas({ farms }) {
                                     farm={farm}
                                     onEdit={handleEdit}
                                     onDeactivate={handleDeactivate}
+                                    onRestore={handleRestore}
                                 />
                             ))}
                         </div>
