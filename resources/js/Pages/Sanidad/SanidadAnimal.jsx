@@ -1,3 +1,4 @@
+import Modal from '@/Components/Modal';
 import AnimalSelector from '@/Components/Sanidad/AnimalSelector';
 import ConfirmDeleteRecord from '@/Components/Sanidad/ConfirmDeleteRecord';
 import HealthAlertPanel from '@/Components/Sanidad/HealthAlertPanel';
@@ -205,13 +206,17 @@ export default function SanidadAnimal({
             />
 
             {/* Confirm delete */}
-            {toDelete && (
+            <Modal
+                show={!!toDelete}
+                maxWidth="sm"
+                onClose={() => setToDelete(null)}
+            >
                 <ConfirmDeleteRecord
                     record={toDelete}
                     onConfirm={confirmDelete}
                     onCancel={() => setToDelete(null)}
                 />
-            )}
+            </Modal>
             <HealthAlertsModal
                 show={showAlertsModal}
                 alerts={allAlerts}

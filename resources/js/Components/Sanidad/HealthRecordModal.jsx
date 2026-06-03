@@ -1,3 +1,4 @@
+import Modal from '@/Components/Modal';
 import HealthRecordForm from '@/Components/Sanidad/HealthRecordForm';
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
@@ -23,6 +24,7 @@ export default function HealthRecordModal({
         next_date: record?.next_date ? record.next_date.substring(0, 10) : '',
         notes: record?.notes ?? '',
     });
+
     useEffect(() => {
         if (show && record) {
             setData({
@@ -46,7 +48,6 @@ export default function HealthRecordModal({
 
     function handleSubmit(e) {
         e.preventDefault();
-
         if (isEdit) {
             put(route('health.update', record.id), {
                 preserveScroll: true,
@@ -66,73 +67,73 @@ export default function HealthRecordModal({
         }
     }
 
-    if (!show) return null;
-
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-            {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-
-            {/* Modal */}
-            <div className="relative mx-4 max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white shadow-xl">
-                {/* Header */}
-                <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
-                    <div className="flex items-center gap-2">
-                        <span className="material-symbols-outlined text-green-600">
+        <Modal show={show} maxWidth="lg" onClose={onClose}>
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+                <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-container">
+                        <span className="material-symbols-outlined text-[18px] text-on-primary">
                             {isEdit ? 'edit' : 'vaccines'}
                         </span>
-                        <h2 className="text-base font-semibold text-gray-800">
+                    </div>
+                    <div>
+                        <h2 className="text-sm font-semibold text-on-surface">
                             {isEdit
                                 ? 'Editar registro sanitario'
                                 : 'Nuevo registro sanitario'}
                         </h2>
+                        <p className="text-xs text-on-surface-variant">
+                            {isEdit
+                                ? 'Modifica los datos del registro'
+                                : 'Completa los datos del tratamiento'}
+                        </p>
                     </div>
-                    <button
-                        onClick={onClose}
-                        className="text-gray-400 transition hover:text-gray-600"
-                    >
-                        <span className="material-symbols-outlined">close</span>
-                    </button>
+                </div>
+                <button
+                    onClick={onClose}
+                    className="rounded-lg p-1.5 text-on-surface-variant transition-colors hover:bg-surface-container"
+                >
+                    <span className="material-symbols-outlined text-[20px]">
+                        close
+                    </span>
+                </button>
+            </div>
+
+            {/* Body */}
+            <form onSubmit={handleSubmit}>
+                <div className="px-6 py-4">
+                    <HealthRecordForm
+                        data={data}
+                        setData={setData}
+                        errors={errors}
+                        animals={animals}
+                        processing={processing}
+                    />
                 </div>
 
-                {/* Body */}
-                <form onSubmit={handleSubmit}>
-                    <div className="px-6 py-4">
-                        <HealthRecordForm
-                            data={data}
-                            setData={setData}
-                            errors={errors}
-                            animals={animals}
-                            processing={processing}
-                        />
-                    </div>
-
-                    {/* Footer */}
-                    <div className="flex items-center justify-end gap-3 border-t border-gray-100 px-6 py-4">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 text-sm text-gray-600 transition hover:text-gray-800"
-                            disabled={processing}
-                        >
-                            Cancelar
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={processing}
-                            className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700 disabled:opacity-50"
-                        >
-                            <span
-                                className="material-symbols-outlined"
-                                style={{ fontSize: '18px' }}
-                            >
-                                {isEdit ? 'save' : 'add'}
-                            </span>
-                            {isEdit ? 'Guardar cambios' : 'Registrar'}
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                {/* Footer */}
+                <div className="flex items-center justify-end gap-3 border-t border-gray-100 px-6 py-4">
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="rounded-lg border border-outline-variant px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-container"
+                        disabled={processing}
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        type="submit"
+                        disabled={processing}
+                        className="flex items-center gap-2 rounded-2xl bg-primary px-4 py-2 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all hover:shadow-lg active:scale-95 disabled:opacity-50"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">
+                            {isEdit ? 'save' : 'add_circle'}
+                        </span>
+                        {isEdit ? 'Guardar cambios' : 'Registrar'}
+                    </button>
+                </div>
+            </form>
+        </Modal>
     );
 }
