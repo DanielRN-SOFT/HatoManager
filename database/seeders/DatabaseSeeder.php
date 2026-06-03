@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             AnimalSeeder::class,
             ProductiveStageSeeder::class,
             WeightMethodSeeder::class,
-            WeightRecordSeeder::class
+            WeightRecordSeeder::class,
+            HealthRecordSeeder::class,
         ]);
     }
 }
