@@ -44,6 +44,11 @@ class Farm extends Model
         return $this->hasMany(VeterinarianInvitation::class);
     }
 
+    public function animals()
+    {
+        return $this->hasMany(Animal::class);
+    }
+
     /* ─── Helpers ────────────────────────────────────────────── */
 
     public function isActive(): bool

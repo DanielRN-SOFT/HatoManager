@@ -1,4 +1,4 @@
-const CardFarm = ({ farm, selected, onSelect }) => {
+const CardFarm = ({ farm, selected, onSelect, animals }) => {
     const { name, city, department } = farm;
 
     return (
@@ -23,7 +23,7 @@ const CardFarm = ({ farm, selected, onSelect }) => {
             </div>
             <div className="flex items-center gap-4">
                 <span className="rounded-full bg-[#EAF3DE] px-3 py-1 text-xs font-semibold text-primary">
-                    150 animales
+                    {animals} animales
                 </span>
                 <div
                     className={`flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors ${selected ? 'border-primary bg-primary' : 'border-outline-variant group-hover:border-primary/50'}`}

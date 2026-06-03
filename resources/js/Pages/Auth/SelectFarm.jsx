@@ -60,6 +60,7 @@ const SelectFarm = ({ farms }) => {
                             key={farm.id}
                             farm={farm}
                             selected={selectedFarm === farm.id}
+                            animals={farm.animals_count}
                             onSelect={() => {
                                 setSelectedFarm(farm.id);
                                 setData('farm_id', farm.id);

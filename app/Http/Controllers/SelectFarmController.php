@@ -14,7 +14,8 @@ class SelectFarmController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $farms = $user->farms;
+        $farms = $user->farms()->withCount('animals')->get();
+
 
         if ($farms->count() > 1) {
             return Inertia::render('Auth/SelectFarm', [
