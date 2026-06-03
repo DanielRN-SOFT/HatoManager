@@ -96,8 +96,9 @@
         }
 
         .table-records th {
-            background: #000;
-            color: #fff;
+            background: #fff;
+            color: #000;
+            border-bottom: 2px solid #000;
             padding: 6px 8px;
             text-align: left;
             font-size: 9px;
