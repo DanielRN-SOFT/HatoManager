@@ -9,6 +9,7 @@
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\TwoFactorController;
+    use App\Http\Controllers\WeightRecordController;
     use Inertia\Inertia;
 
     Route::get('/', function () {
@@ -106,6 +107,8 @@
         Route::get('/animals/{animal}/certificado', [HealthRecordController::class, 'certificadoIndividual'])->name('health.certificado.individual');
         Route::get('/fincas/{farm}/certificado-lote', [HealthRecordController::class, 'certificadoLote'])->name('health.certificado.lote');
         Route::put('/farms/{id}/restore', [FarmController::class, 'restore'])->name('farms.restore');
+
+        Route::resource('/weight-records', WeightRecordController::class);
     });
 
     require __DIR__ . '/auth.php';

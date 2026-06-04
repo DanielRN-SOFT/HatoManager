@@ -15,9 +15,6 @@ class WeightRecord extends Model
         'productive_stages_id',
         'weight_methods_id',
         'previous_fast',
-        'pregnancy',
-        'lactation_days',
-        'number_of_births',
         'room_temperature'
     ];
 

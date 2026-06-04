@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class ProductiveStage extends Model
 {
     protected $fillable = [
-        'name'
+        'name',
+        'lactation_days',
+        'number_of_births'
     ];
 }

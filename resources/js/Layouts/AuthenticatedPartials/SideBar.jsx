@@ -22,7 +22,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
             route: 'animals.index',
         },
         { label: 'Sanidad', icon: 'health_and_safety', route: 'health.index' },
-        { label: 'Pesajes', icon: 'monitor_weight', route: 'login' },
+        { label: 'Pesajes', icon: 'balance', route: 'weight-records.index' },
         { label: 'Ventas', icon: 'sell', route: 'login' },
         { label: 'Subastas', icon: 'gavel', route: 'login' },
         // Solo visible para ganaderos
