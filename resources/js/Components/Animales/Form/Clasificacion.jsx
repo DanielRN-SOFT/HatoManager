@@ -8,7 +8,9 @@ const Clasificacion = ({
     razas,
     setData,
     categoriasAnimal,
+    lotes,
 }) => {
+    console.log(data)
     return (
         <SectionCard icon="category" title="Clasificación">
             <div className="grid grid-cols-2 gap-4">
@@ -48,6 +50,28 @@ const Clasificacion = ({
                     </select>
                 </Field>
             </div>
+
+            <Field
+                className="mt-5"
+                label="Lote"
+                icon={'location_on'}
+                error={errors.paddock_id}
+            >
+                <select
+                    value={data.paddock_id}
+                    onChange={(e) => setData('paddock_id', e.target.value)}
+                    className={`${selectCls} w-full`}
+                >
+                    <option value="">Seleccionar</option>
+                    {lotes.map((lote) => {
+                        return (
+                            <option key={lote.id} value={lote.id}>
+                                {lote.name}
+                            </option>
+                        );
+                    })}
+                </select>
+            </Field>
         </SectionCard>
     );
 };

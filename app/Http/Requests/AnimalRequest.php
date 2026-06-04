@@ -82,6 +82,10 @@ class AnimalRequest extends FormRequest
             "reason_to_death" => [
                 'nullable'
             ],
+            'paddock_id' => [
+                'required',
+                'exists:paddocks,id'
+            ],
             'status' => [
                 'nullable'
             ]
@@ -95,7 +99,9 @@ class AnimalRequest extends FormRequest
             'ear_tag' => "No. de Arete",
             'sex' => "genero",
             'status' => 'estado',
-            'animal_category_id' => "categoria de animal",
+            'animal_category_id' => "categoria del animal",
+            'breed_id' => 'raza del animal',
+            'paddock_id' => "lote del animal",
             'birth_date' => "fecha de nacimiento",
             'target_weight' => "peso objectivo",
             'price_weight' => "precio por peso"

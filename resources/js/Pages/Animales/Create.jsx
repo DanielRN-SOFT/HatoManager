@@ -2,7 +2,7 @@ import AnimalForm from '@/Components/Animales/Form/AnimalForm';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
-export default function Create({ razas, categoriasAnimales }) {
+export default function Create({ razas, categoriasAnimales, lotes }) {
     return (
         <AuthenticatedLayout>
             <Head title="Registrar animal" />
@@ -10,6 +10,7 @@ export default function Create({ razas, categoriasAnimales }) {
                 <AnimalForm
                     razas={razas}
                     categoriasAnimal={categoriasAnimales}
+                    lotes={lotes}
                 />
             </div>
         </AuthenticatedLayout>

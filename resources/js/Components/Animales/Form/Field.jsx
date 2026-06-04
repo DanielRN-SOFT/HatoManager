@@ -1,6 +1,6 @@
 const Field = ({ label, icon, error, children }) => (
     <div>
-        <label className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-gray-500">
+        <label className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-gray-500 mt-3">
             <span className="material-symbols-outlined text-[12px] text-primary">
                 {icon}
             </span>

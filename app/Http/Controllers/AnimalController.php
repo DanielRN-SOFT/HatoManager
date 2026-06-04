@@ -6,6 +6,7 @@ use App\Http\Requests\AnimalRequest;
 use App\Models\Animal;
 use App\Models\AnimalCategory;
 use App\Models\Breed;
+use App\Models\Paddock;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -79,6 +80,7 @@ class AnimalController extends Controller
         return Inertia::render('Animales/Create', [
             'razas' => Breed::all(),
             'categoriasAnimales' => AnimalCategory::all(),
+            'lotes' => Paddock::all()
         ]);
     }
 
@@ -91,6 +93,7 @@ class AnimalController extends Controller
             ],
             'razas' => Breed::all(),
             'categoriasAnimales' => AnimalCategory::all(),
+            'lotes' => Paddock::all()
         ]);
     }
 

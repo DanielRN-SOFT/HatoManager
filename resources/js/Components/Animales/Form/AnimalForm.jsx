@@ -1,25 +1,22 @@
 // resources/js/Components/Animales/AnimalForm.jsx
 import { router, useForm } from '@inertiajs/react';
+import Acciones from './Acciones';
 import Clasificacion from './Clasificacion';
 import Fechas from './Fechas';
-import Field from './Field';
 import Header from './Header';
-import InformacionBasica from './InformacionBasica';
-import SectionCard from './SectionCard';
-import PreciosPeso from './PreciosPeso';
 import InformacionAdicional from './InformacionAdicional';
-import Acciones from './Acciones';
+import InformacionBasica from './InformacionBasica';
+import PreciosPeso from './PreciosPeso';
 
 const inputCls =
     'w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 outline-none transition-all focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10';
 const selectCls =
     'w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-800 outline-none transition-all focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10 cursor-pointer';
 
-
 /* ─────────────────────────────────────────────
    Main Form
 ───────────────────────────────────────────── */
-const AnimalForm = ({ animal, categoriasAnimal, razas }) => {
+const AnimalForm = ({ animal, categoriasAnimal, razas, lotes }) => {
     const { data, setData, post, processing, errors } = useForm({
         _method: animal ? 'PUT' : 'POST',
         photo: '',
@@ -36,6 +33,7 @@ const AnimalForm = ({ animal, categoriasAnimal, razas }) => {
         publication_date: animal?.publication_date ?? '',
         animal_category_id: animal?.animal_category?.id ?? '',
         breed_id: animal?.breed?.id ?? '',
+        paddock_id: animal?.paddock_id ?? '',
         reason_to_death:
             animal?.status === 'Muerto' ? animal?.reason_to_death : null,
     });
@@ -46,7 +44,6 @@ const AnimalForm = ({ animal, categoriasAnimal, razas }) => {
             ? post(route('animals.update', animal.id), { forceFormData: true })
             : post(route('animals.store'), { forceFormData: true });
     }
-
 
     function handleCancel() {
         router.visit(route('animals.index'));
@@ -82,6 +79,7 @@ const AnimalForm = ({ animal, categoriasAnimal, razas }) => {
                         selectCls={selectCls}
                         razas={razas}
                         categoriasAnimal={categoriasAnimal}
+                        lotes={lotes}
                     />
 
                     {/* Fechas */}
@@ -96,15 +94,28 @@ const AnimalForm = ({ animal, categoriasAnimal, razas }) => {
                 {/* ════════════════════════════════════════
                     ROW 3 — Precios y peso (full width)
                 ════════════════════════════════════════ */}
-                <PreciosPeso errors={errors} data={data} setData={setData} inputCls={inputCls}/>
+                <PreciosPeso
+                    errors={errors}
+                    data={data}
+                    setData={setData}
+                    inputCls={inputCls}
+                />
 
                 {/* ════════════════════════════════════════
                     ROW 4 — Info adicional (full width, 2 col internas)
                 ════════════════════════════════════════ */}
-                <InformacionAdicional errors={errors} data={data} setData={setData}/>
+                <InformacionAdicional
+                    errors={errors}
+                    data={data}
+                    setData={setData}
+                />
 
                 {/* ── Acciones ── */}
-              <Acciones handleCancel={handleCancel} processing={processing} animal={animal}/>
+                <Acciones
+                    handleCancel={handleCancel}
+                    processing={processing}
+                    animal={animal}
+                />
             </form>
         </div>
     );
