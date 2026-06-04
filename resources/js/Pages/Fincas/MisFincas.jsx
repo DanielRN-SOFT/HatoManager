@@ -1,11 +1,11 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm } from '@inertiajs/react';
-import { useState } from 'react';
-
 import ConfirmDialog from '@/Components/Fincas/ConfirmDialog';
 import FarmCard from '@/Components/Fincas/FarmCard';
 import FarmForm from '@/Components/Fincas/FarmForm';
+import Modal from '@/Components/Modal';
 import Flash from '@/Components/Shared/Flash';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { Head, router, useForm } from '@inertiajs/react';
+import { useState } from 'react';
 
 export default function MisFincas({ farms }) {
     const [showForm, setShowForm] = useState(false);
@@ -16,7 +16,10 @@ export default function MisFincas({ farms }) {
 
     function handleEdit(farm) {
         setEditingFarm(farm);
-        setShowForm(false);
+    }
+
+    function handleRestore(farm) {
+        router.put(route('farms.restore', farm.id));
     }
 
     function handleDeactivate(farm) {
@@ -38,54 +41,42 @@ export default function MisFincas({ farms }) {
         <AuthenticatedLayout>
             <Head title="Mis Fincas" />
 
-            <div className="mx-auto max-w-4xl px-4 py-8">
+            <div>
                 {/* Título */}
-                <div className="mb-6 flex items-center justify-between">
-                    <div>
-                        <h1 className="text-xl font-bold text-on-surface">
-                            Mis Fincas
-                        </h1>
-                        <p className="text-sm text-on-surface-variant">
-                            {activeFarms.length} activa
-                            {activeFarms.length !== 1 ? 's' : ''}
-                            {inactiveFarms.length > 0 &&
-                                ` · ${inactiveFarms.length} inactiva${inactiveFarms.length !== 1 ? 's' : ''}`}
-                        </p>
-                    </div>
-                    {!showForm && !editingFarm && (
-                        <button
-                            onClick={() => setShowForm(true)}
-                            className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-on-primary transition-opacity hover:opacity-90"
-                        >
-                            <span className="material-symbols-outlined text-[18px]">
-                                add
+                <div className="mb-6 flex items-center justify-between gap-4 p-2">
+                    <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
+                            <span className="material-symbols-outlined text-[24px] text-on-primary">
+                                forest
                             </span>
-                            Nueva Finca
-                        </button>
-                    )}
+                        </div>
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
+                                {activeFarms.length} activa
+                                {activeFarms.length !== 1 ? 's' : ''}
+                                {inactiveFarms.length > 0 &&
+                                    ` · ${inactiveFarms.length} inactiva${inactiveFarms.length !== 1 ? 's' : ''}`}
+                            </p>
+                            <h1 className="text-2xl font-bold text-on-surface">
+                                Mis Fincas
+                            </h1>
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => setShowForm(true)}
+                        className="flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
+                    >
+                        <span className="material-symbols-outlined text-[20px]">
+                            add_circle
+                        </span>
+                        Nueva Finca
+                    </button>
                 </div>
 
                 <Flash />
 
-                {/* Formulario crear */}
-                {showForm && (
-                    <div className="mb-6">
-                        <FarmForm onCancel={() => setShowForm(false)} />
-                    </div>
-                )}
-
-                {/* Formulario editar */}
-                {editingFarm && (
-                    <div className="mb-6">
-                        <FarmForm
-                            farm={editingFarm}
-                            onCancel={() => setEditingFarm(null)}
-                        />
-                    </div>
-                )}
-
                 {/* Sin fincas */}
-                {farms.length === 0 && !showForm && (
+                {farms.length === 0 && (
                     <div className="rounded-xl border border-dashed border-outline-variant py-16 text-center">
                         <span className="material-symbols-outlined mb-2 text-[40px] text-on-surface-variant/40">
                             forest
@@ -111,6 +102,7 @@ export default function MisFincas({ farms }) {
                                 farm={farm}
                                 onEdit={handleEdit}
                                 onDeactivate={handleDeactivate}
+                                onRestore={handleRestore}
                             />
                         ))}
                     </div>
@@ -129,6 +121,7 @@ export default function MisFincas({ farms }) {
                                     farm={farm}
                                     onEdit={handleEdit}
                                     onDeactivate={handleDeactivate}
+                                    onRestore={handleRestore}
                                 />
                             ))}
                         </div>
@@ -136,14 +129,58 @@ export default function MisFincas({ farms }) {
                 )}
             </div>
 
-            {/* Modal confirmación */}
-            {confirmFarm && (
+            {/* Modal crear/editar */}
+            <Modal
+                show={showForm || !!editingFarm}
+                maxWidth="2xl"
+                onClose={() => {
+                    setShowForm(false);
+                    setEditingFarm(null);
+                }}
+            >
+                <div className="p-6">
+                    <div className="mb-5 flex items-center gap-3">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-container">
+                            <span className="material-symbols-outlined text-[18px] text-on-primary">
+                                forest
+                            </span>
+                        </div>
+                        <div>
+                            <h2 className="text-sm font-semibold text-on-surface">
+                                {editingFarm
+                                    ? `Editando: ${editingFarm.name}`
+                                    : 'Nueva Finca'}
+                            </h2>
+                            <p className="text-xs text-on-surface-variant">
+                                {editingFarm
+                                    ? 'Modifica los datos de la finca'
+                                    : 'Completa los datos para crear la finca'}
+                            </p>
+                        </div>
+                    </div>
+                    <FarmForm
+                        farm={editingFarm}
+                        hideTitle
+                        onCancel={() => {
+                            setShowForm(false);
+                            setEditingFarm(null);
+                        }}
+                    />
+                </div>
+            </Modal>
+
+            {/* Modal confirmar desactivar */}
+            <Modal
+                show={!!confirmFarm}
+                maxWidth="sm"
+                onClose={() => setConfirmFarm(null)}
+            >
                 <ConfirmDialog
                     farm={confirmFarm}
                     onConfirm={confirmDeactivate}
                     onCancel={() => setConfirmFarm(null)}
                 />
-            )}
+            </Modal>
         </AuthenticatedLayout>
     );
 }

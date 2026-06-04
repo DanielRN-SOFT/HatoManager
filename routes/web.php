@@ -101,10 +101,11 @@
         Route::post('/mis-fincas/{farm}/activar', [FarmController::class, 'setActive'])->name('farms.setActive');
         Route::get('/mis-fincas/list', [FarmController::class, 'list'])->name('farms.list');
         Route::resource('sanidad', HealthRecordController::class)->parameters(['sanidad' => 'health'])->names('health');
-        Route::put('/animals/{animal}/restore', [AnimalController::class, 'restore'])
-            ->name('animals.restore')
-            ->withTrashed();
+        Route::put('/animals/{animal}/restore', [AnimalController::class, 'restore'])->name('animals.restore')->withTrashed();
         Route::resource('/animals', AnimalController::class);
+        Route::get('/animals/{animal}/certificado', [HealthRecordController::class, 'certificadoIndividual'])->name('health.certificado.individual');
+        Route::get('/fincas/{farm}/certificado-lote', [HealthRecordController::class, 'certificadoLote'])->name('health.certificado.lote');
+        Route::put('/farms/{id}/restore', [FarmController::class, 'restore'])->name('farms.restore');
     });
 
     require __DIR__ . '/auth.php';

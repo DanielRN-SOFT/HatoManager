@@ -1,12 +1,12 @@
-export default function FarmCard({ farm, onEdit, onDeactivate }) {
+export default function FarmCard({ farm, onEdit, onDeactivate, onRestore }) {
     const isActive = !farm.deleted_at;
 
     return (
         <div
             className={[
-                'rounded-xl border p-4 transition-all',
+                'rounded-xl border-t-4 p-4 shadow-sm transition-all',
                 isActive
-                    ? 'border-outline-variant bg-surface-container-low'
+                    ? 'border-primary bg-white'
                     : 'border-outline-variant/40 bg-surface-container-lowest opacity-60',
             ].join(' ')}
         >
@@ -77,9 +77,17 @@ export default function FarmCard({ farm, onEdit, onDeactivate }) {
                     </button>
                 </div>
             ) : (
-                <p className="text-center text-[11px] italic text-on-surface-variant/60">
-                    Solo lectura
-                </p>
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => onRestore(farm)}
+                        className="flex flex-1 items-center justify-center gap-1 rounded-lg border border-primary/30 px-3 py-1.5 text-xs text-primary transition-colors hover:bg-primary/5"
+                    >
+                        <span className="material-symbols-outlined text-[14px]">
+                            restore
+                        </span>
+                        Restaurar
+                    </button>
+                </div>
             )}
         </div>
     );

@@ -63,10 +63,13 @@ class AnimalController extends Controller
             ]);
 
         return Inertia::render('Animales/Index', [
-            'animales' => $animales,
-            'filters'  => $request->only(['status', 'breed', 'category']),
-            'finca'    => ['nombre' => auth()->user()->farm?->name ?? 'Mi finca'],
-            'razas'     => $razas,
+            'animales'   => $animales,
+            'filters'    => $request->only(['status', 'breed', 'category']),
+            'finca'      => [
+                'id'     => $farm_id,
+                'nombre' => auth()->user()->farm?->name ?? 'Mi finca',
+            ],
+            'razas'      => $razas,
             'categorias' => $categorias
         ]);
     }

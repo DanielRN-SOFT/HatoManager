@@ -165,4 +165,20 @@ class FarmController extends Controller
 
         return response()->json($farms);
     }
+    public function restore(int $id)
+    {
+        $ganadero = Auth::user();
+
+        $farm = Farm::withTrashed()->findOrFail($id);
+
+        abort_unless(
+            $ganadero->farms()->withTrashed()->where('farm_id', $farm->id)->exists(),
+            403,
+            'No tienes acceso a esta finca.'
+        );
+
+        $farm->restore();
+
+        return back()->with('success', "Finca \"{$farm->name}\" restaurada correctamente.");
+    }
 }

@@ -103,6 +103,55 @@ const FilaTable = ({ animal, setShowModalEliminar }) => {
                         }
                         cls="hover:text-secondary"
                     />
+
+                    {/* Certificado sanitario */}
+                    <div className="group relative">
+                        <button
+                            title="Certificado sanitario"
+                            className="rounded p-1.5 text-gray-400 transition-all active:scale-90"
+                        >
+                            <span className="material-symbols-outlined text-[18px] hover:text-green-600">
+                                verified
+                            </span>
+                        </button>
+                        <div className="absolute right-0 z-20 hidden w-44 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg group-hover:block">
+                            <button
+                                onClick={() =>
+                                    window.open(
+                                        route('health.certificado.individual', {
+                                            animal: animal.id,
+                                            modo: 'color',
+                                        }),
+                                        '_blank',
+                                    )
+                                }
+                                className="flex w-full items-center gap-2 px-4 py-2.5 text-xs text-gray-700 hover:bg-green-50 hover:text-green-700"
+                            >
+                                <span className="material-symbols-outlined text-[15px]">
+                                    picture_as_pdf
+                                </span>
+                                Color
+                            </button>
+                            <button
+                                onClick={() =>
+                                    window.open(
+                                        route('health.certificado.individual', {
+                                            animal: animal.id,
+                                            modo: 'byn',
+                                        }),
+                                        '_blank',
+                                    )
+                                }
+                                className="flex w-full items-center gap-2 px-4 py-2.5 text-xs text-gray-700 hover:bg-gray-50"
+                            >
+                                <span className="material-symbols-outlined text-[15px]">
+                                    picture_as_pdf
+                                </span>
+                                Blanco y negro
+                            </button>
+                        </div>
+                    </div>
+
                     {animal.status === 'Activo' && (
                         <ActionBtn
                             icon="delete"
@@ -111,7 +160,6 @@ const FilaTable = ({ animal, setShowModalEliminar }) => {
                             cls="hover:text-red-500"
                         />
                     )}
-
                     {animal.status === 'Inactivo' && (
                         <ActionBtn
                             icon="restore_from_trash"
