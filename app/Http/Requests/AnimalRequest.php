@@ -96,7 +96,9 @@ class AnimalRequest extends FormRequest
             'sex' => "genero",
             'status' => 'estado',
             'animal_category_id' => "categoria de animal",
-            'birth_date' => "fecha de nacimiento"
+            'birth_date' => "fecha de nacimiento",
+            'target_weight' => "peso objectivo",
+            'price_weight' => "precio por peso"
         ];
     }
 }

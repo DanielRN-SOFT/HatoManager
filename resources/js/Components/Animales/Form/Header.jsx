@@ -1,21 +1,33 @@
-const Header = ({ animal }) => {
+const Header = ({ animal, handleCancel }) => {
+    
     return (
-        <div className="mb-5 flex items-center gap-3 border-b border-gray-200 pb-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container">
-                <span className="material-symbols-outlined text-[20px] text-on-primary">
-                    {animal ? 'edit' : 'add_circle'}
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
+                    <span className="material-symbols-outlined text-[24px] text-on-primary">
+                        {animal ? 'edit' : 'add_circle'}
+                    </span>
+                </div>
+                <div>
+                    <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
+                        {animal
+                            ? `Editando · #${animal.ear_tag}`
+                            : 'Nuevo registro'}
+                    </p>
+                    <h1 className="text-2xl font-bold text-on-surface">
+                        {animal ? animal.name : 'Registrar animal'}
+                    </h1>
+                </div>
+            </div>
+            <button
+                onClick={handleCancel}
+                className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-50"
+            >
+                <span className="material-symbols-outlined text-[18px]">
+                    arrow_back
                 </span>
-            </div>
-            <div className="flex-1">
-                <h2 className="text-base font-semibold text-gray-800">
-                    {animal ? 'Editar animal' : 'Nuevo animal'}
-                </h2>
-                <p className="text-xs text-gray-500">
-                    {animal
-                        ? 'Actualiza la información del animal en el sistema.'
-                        : 'Completa los datos para añadir un nuevo animal al hato.'}
-                </p>
-            </div>
+                Volver
+            </button>
         </div>
     );
 };
