@@ -1,17 +1,13 @@
+import HealthRow from '@/Components/Animales/Show/HealthRow';
+import InfoRow from '@/Components/Animales/Show/InfoRow';
+import SectionCard from '@/Components/Animales/Show/SectionCard';
+import StatBadge from '@/Components/Animales/Show/StatBadge';
+import WeightChart from '@/Components/Animales/Show/WeightChart';
+import WeightRow from '@/Components/Animales/Show/WeightRow';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { SiSwisscows } from 'react-icons/si';
-import {
-    CartesianGrid,
-    Line,
-    LineChart,
-    ReferenceLine,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from 'recharts';
 
 /* ─────────────────────────────────────────────
    Helpers
@@ -41,34 +37,6 @@ const STATUS_STYLES = {
     },
 };
 
-const HEALTH_TYPE_STYLES = {
-    vacuna: {
-        icon: 'vaccines',
-        cls: 'bg-blue-50 text-blue-600',
-        label: 'Vacuna',
-    },
-    desparasitacion: {
-        icon: 'bug_report',
-        cls: 'bg-amber-50 text-amber-600',
-        label: 'Desparasitación',
-    },
-    tratamiento: {
-        icon: 'medication',
-        cls: 'bg-red-50 text-red-600',
-        label: 'Tratamiento',
-    },
-    revision: {
-        icon: 'stethoscope',
-        cls: 'bg-green-50 text-green-600',
-        label: 'Revisión',
-    },
-    cirugia: {
-        icon: 'surgical',
-        cls: 'bg-purple-50 text-purple-600',
-        label: 'Cirugía',
-    },
-};
-
 function fmt(dateStr) {
     if (!dateStr) return '—';
     return new Date(dateStr).toLocaleDateString('es-CO', {
@@ -90,253 +58,6 @@ function age(dateStr) {
     const rem = months % 12;
     return rem > 0 ? `${years} a ${rem} m` : `${years} años`;
 }
-
-/* ─────────────────────────────────────────────
-   Weight Chart (Recharts)
-───────────────────────────────────────────── */
-const CustomTooltip = ({ active, payload, label }) => {
-    if (!active || !payload?.length) return null;
-    return (
-        <div className="rounded-xl border border-gray-100 bg-white px-3 py-2 shadow-lg">
-            <p className="mb-1 text-[11px] font-semibold text-gray-400">
-                {label}
-            </p>
-            {payload.map((p) => (
-                <p
-                    key={p.dataKey}
-                    className="text-sm font-bold"
-                    style={{ color: p.color }}
-                >
-                    {p.name}: {p.value} kg
-                </p>
-            ))}
-        </div>
-    );
-};
-
-const WeightChart = ({ records, targetWeight }) => {
-    if (!records?.length) {
-        return (
-            <div className="flex flex-col items-center justify-center gap-2 py-12 text-gray-400">
-                <span className="material-symbols-outlined text-4xl">
-                    monitor_weight
-                </span>
-                <p className="text-sm">Sin registros de peso aún</p>
-            </div>
-        );
-    }
-
-    const data = [...records]
-        .sort((a, b) => new Date(a.weight_date) - new Date(b.weight_date))
-        .map((r) => ({
-            fecha: fmt(r.weight_date),
-            peso: parseFloat(r.weight),
-        }));
-
-    return (
-        <div className="h-56 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-                <LineChart
-                    data={data}
-                    margin={{ top: 8, right: 16, bottom: 0, left: 0 }}
-                >
-                    <CartesianGrid
-                        strokeDasharray="3 3"
-                        stroke="rgba(0,0,0,0.05)"
-                    />
-                    <XAxis
-                        dataKey="fecha"
-                        tick={{ fontSize: 10, fill: '#9ca3af' }}
-                        tickLine={false}
-                        axisLine={false}
-                    />
-                    <YAxis
-                        tick={{ fontSize: 10, fill: '#9ca3af' }}
-                        tickLine={false}
-                        axisLine={false}
-                        tickFormatter={(v) => `${v} kg`}
-                        width={56}
-                    />
-                    <Tooltip content={<CustomTooltip />} />
-                    {targetWeight && (
-                        <ReferenceLine
-                            y={parseFloat(targetWeight)}
-                            stroke="rgba(251,146,60,0.8)"
-                            strokeDasharray="6 4"
-                            strokeWidth={2}
-                            label={{
-                                value: `Objetivo ${targetWeight} kg`,
-                                position: 'insideTopRight',
-                                fontSize: 10,
-                                fill: '#f97316',
-                            }}
-                        />
-                    )}
-                    <Line
-                        type="monotone"
-                        dataKey="peso"
-                        name="Peso"
-                        stroke="rgb(34,107,66)"
-                        strokeWidth={2.5}
-                        dot={{ r: 5, fill: 'rgb(34,107,66)', strokeWidth: 0 }}
-                        activeDot={{ r: 7 }}
-                    />
-                </LineChart>
-            </ResponsiveContainer>
-        </div>
-    );
-};
-
-/* ─────────────────────────────────────────────
-   Section Card wrapper
-───────────────────────────────────────────── */
-const SectionCard = ({
-    icon,
-    title,
-    accent = 'border-primary',
-    children,
-    action,
-}) => (
-    <div
-        className={`overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm`}
-    >
-        <div
-            className={`flex items-center justify-between border-t-4 ${accent} px-5 py-3`}
-        >
-            <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[18px] text-secondary">
-                    {icon}
-                </span>
-                <h3 className="text-[11px] font-semibold uppercase tracking-widest text-gray-500">
-                    {title}
-                </h3>
-            </div>
-            {action}
-        </div>
-        <div className="px-5 pb-5 pt-2">{children}</div>
-    </div>
-);
-
-/* ─────────────────────────────────────────────
-   Info row
-───────────────────────────────────────────── */
-const InfoRow = ({ icon, label, value }) => (
-    <div className="flex items-start gap-3 border-b border-gray-50 py-2.5 last:border-0">
-        <span className="material-symbols-outlined mt-0.5 text-[16px] text-primary">
-            {icon}
-        </span>
-        <span className="w-32 shrink-0 text-xs text-gray-400">{label}</span>
-        <span className="text-sm font-medium text-gray-800">
-            {value ?? '—'}
-        </span>
-    </div>
-);
-
-/* ─────────────────────────────────────────────
-   Health Record Row
-───────────────────────────────────────────── */
-const HealthRow = ({ record }) => {
-    const [open, setOpen] = useState(false);
-    const type = HEALTH_TYPE_STYLES[record.type] ?? {
-        icon: 'medical_services',
-        cls: 'bg-gray-50 text-gray-600',
-        label: record.type,
-    };
-
-    return (
-        <div className="rounded-xl border border-gray-100 bg-gray-50 p-3 transition hover:border-gray-200 hover:bg-white">
-            <div
-                className="flex cursor-pointer items-center justify-between gap-3"
-                onClick={() => setOpen((o) => !o)}
-            >
-                <div className="flex items-center gap-3">
-                    <span
-                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${type.cls}`}
-                    >
-                        <span className="material-symbols-outlined text-[16px]">
-                            {type.icon}
-                        </span>
-                    </span>
-                    <div>
-                        <p className="text-sm font-semibold text-gray-800">
-                            {record.product}
-                        </p>
-                        <p className="text-[11px] text-gray-400">
-                            {type.label} · {fmt(record.applied_at)}
-                        </p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2">
-                    {record.dose && (
-                        <span className="rounded bg-gray-100 px-2 py-0.5 text-[11px] font-medium text-gray-600">
-                            {record.dose}
-                        </span>
-                    )}
-                    {record.next_date && (
-                        <span className="rounded bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-600">
-                            Próx: {fmt(record.next_date)}
-                        </span>
-                    )}
-                    <span className="material-symbols-outlined text-[16px] text-gray-400">
-                        {open ? 'expand_less' : 'expand_more'}
-                    </span>
-                </div>
-            </div>
-            {open && record.notes && (
-                <p className="mt-2 border-t border-gray-100 pt-2 text-xs text-gray-500">
-                    {record.notes}
-                </p>
-            )}
-        </div>
-    );
-};
-
-/* ─────────────────────────────────────────────
-   Weight Record Row
-───────────────────────────────────────────── */
-const WeightRow = ({ record, isLast }) => (
-    <div
-        className={`flex items-center gap-4 py-2.5 ${!isLast ? 'border-b border-gray-50' : ''}`}
-    >
-        <span className="material-symbols-outlined text-[16px] text-primary">
-            scale
-        </span>
-        <span className="w-28 shrink-0 text-xs text-gray-400">
-            {fmt(record.weight_date)}
-        </span>
-        <span className="text-sm font-bold text-gray-800">
-            {parseFloat(record.weight).toFixed(1)} kg
-        </span>
-        {record.body_condition_score && (
-            <span className="rounded bg-green-50 px-2 py-0.5 text-[11px] font-medium text-green-700">
-                BCS {record.body_condition_score}
-            </span>
-        )}
-        {record.room_temperature && (
-            <span className="ml-auto text-xs text-gray-400">
-                {parseFloat(record.room_temperature).toFixed(1)} °C
-            </span>
-        )}
-    </div>
-);
-
-/* ─────────────────────────────────────────────
-   Stat Badge
-───────────────────────────────────────────── */
-const StatBadge = ({ icon, label, value, sub }) => (
-    <div className="flex flex-col gap-1 rounded-xl border border-gray-100 bg-gray-50 p-4">
-        <div className="flex items-center gap-1.5">
-            <span className="material-symbols-outlined text-[15px] text-secondary">
-                {icon}
-            </span>
-            <span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">
-                {label}
-            </span>
-        </div>
-        <p className="text-xl font-bold text-gray-800">{value}</p>
-        {sub && <p className="text-[11px] text-gray-400">{sub}</p>}
-    </div>
-);
 
 /* ─────────────────────────────────────────────
    Main Show Page
@@ -648,6 +369,7 @@ export default function Show({ animal }) {
                     }
                 >
                     <WeightChart
+                        fmt={fmt}
                         records={animal.weight_records}
                         targetWeight={animal.target_weight}
                     />
@@ -662,6 +384,7 @@ export default function Show({ animal }) {
                         <div className="divide-y divide-gray-50">
                             {sortedWeights.map((r, i) => (
                                 <WeightRow
+                                    fmt={fmt}
                                     key={r.id}
                                     record={r}
                                     isLast={i === sortedWeights.length - 1}
@@ -724,7 +447,7 @@ export default function Show({ animal }) {
                                         new Date(a.applied_at),
                                 )
                                 .map((r) => (
-                                    <HealthRow key={r.id} record={r} />
+                                    <HealthRow fmt={fmt} key={r.id} record={r} />
                                 ))}
                         </div>
                     )}
