@@ -2,14 +2,24 @@ import Input from './Form/Input';
 import Label from './Form/Label';
 import Select from './Form/Select';
 
-const WeightRecordForm = ({ data, setData, errors, animals, processing }) => {
+const WeightRecordForm = ({
+    data,
+    setData,
+    errors,
+    animals,
+    processing,
+    productiveStages,
+    weightMethods,
+}) => {
     return (
         <div className="grid grid-cols-1 gap-4">
-            {/* Animal */}
-            <div className="grid grid-cols-2">
+            <div className="grid grid-cols-2 gap-5">
+                {/* Animal */}
                 <div>
                     <Label label={'Animal'} />
                     <Select
+                        data={data}
+                        campo={'animal_id'}
                         value={data.animal_id}
                         setData={setData}
                         processing={processing}
@@ -29,6 +39,7 @@ const WeightRecordForm = ({ data, setData, errors, animals, processing }) => {
                     )}
                 </div>
 
+                {/* Fecha del pesaje */}
                 <div>
                     <Label label={'Fecha de pesaje'} />
                     <Input
@@ -38,127 +49,186 @@ const WeightRecordForm = ({ data, setData, errors, animals, processing }) => {
                         processing={processing}
                         campo={'weight_date'}
                     />
+                    {errors.weigth_date && (
+                        <p className="mt-1 text-xs text-red-500">
+                            {errors.weigth_date}
+                        </p>
+                    )}
                 </div>
             </div>
 
-            {/* Tipo */}
+            {/* Etapa productiva del animal */}
             <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                    Tipo
-                </label>
-                <select
-                    value={data.type}
-                    onChange={(e) => setData('type', e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                    disabled={processing}
+                <Label label={'Etapa Productiva'} />
+                <Select
+                    data={data}
+                    campo={'body_condition_score'}
+                    setData={setData}
+                    processing={processing}
                 >
-                    <option value="">Selecciona un tipo</option>
-                    <option value="vacuna">Vacuna</option>
-                    <option value="desparasitacion">Desparasitación</option>
-                    <option value="tratamiento">Tratamiento</option>
-                </select>
-                {errors.type && (
-                    <p className="mt-1 text-xs text-red-500">{errors.type}</p>
-                )}
-            </div>
-
-            {/* Producto */}
-            <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                    Producto
-                </label>
-                <input
-                    type="text"
-                    value={data.product}
-                    onChange={(e) => setData('product', e.target.value)}
-                    placeholder="Ej: Ivermectina"
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                    disabled={processing}
-                />
-                {errors.product && (
+                    <option value="">Selecciona una etapa</option>
+                    {productiveStages.map((productiveStage) => (
+                        <option
+                            key={productiveStage.id}
+                            value={productiveStage.id}
+                        >
+                            {productiveStage.name}
+                        </option>
+                    ))}
+                </Select>
+                {errors.body_condition_score && (
                     <p className="mt-1 text-xs text-red-500">
-                        {errors.product}
+                        {errors.body_condition_score}
                     </p>
                 )}
             </div>
 
-            {/* Dosis */}
-            <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                    Dosis
-                </label>
-                <input
-                    type="text"
-                    value={data.dose}
-                    onChange={(e) => setData('dose', e.target.value)}
-                    placeholder="Ej: 5ml"
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                    disabled={processing}
-                />
-                {errors.dose && (
-                    <p className="mt-1 text-xs text-red-500">{errors.dose}</p>
-                )}
-            </div>
-
-            {/* Fechas */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-5">
+                {/* PESO */}
                 <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Fecha de aplicación
-                    </label>
-                    <input
-                        type="date"
-                        value={data.applied_at}
-                        onChange={(e) => setData('applied_at', e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                        disabled={processing}
+                    <Label label={'Peso (KG)'} />
+                    <Input
+                        campo={'weight'}
+                        placeholder={'Ej: 50'}
+                        type={'number'}
+                        setData={setData}
+                        data={data}
+                        processing={processing}
                     />
-                    {errors.applied_at && (
+                    {errors.type && (
                         <p className="mt-1 text-xs text-red-500">
-                            {errors.applied_at}
+                            {errors.type}
                         </p>
                     )}
                 </div>
+
+                {/* Condicion corporal */}
                 <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Próxima fecha
-                        <span className="ml-1 font-normal text-gray-400">
-                            (opcional)
-                        </span>
-                    </label>
-                    <input
-                        type="date"
-                        value={data.next_date}
-                        onChange={(e) => setData('next_date', e.target.value)}
-                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                        disabled={processing}
-                    />
-                    {errors.next_date && (
+                    <Label label={'Condicion Corporal'} />
+                    <Select
+                        data={data}
+                        campo={'body_condition_score'}
+                        setData={setData}
+                        processing={processing}
+                    >
+                        <option value="">Selecciona un puntaje</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </Select>
+                    {errors.body_condition_score && (
                         <p className="mt-1 text-xs text-red-500">
-                            {errors.next_date}
+                            {errors.body_condition_score}
                         </p>
                     )}
+                </div>
+            </div>
+
+            {/* Metodo de Pesaje */}
+            <div>
+                <Label label={'Metodo de Pesaje'} />
+                <Select
+                    data={data}
+                    campo={'body_condition_score'}
+                    setData={setData}
+                    processing={processing}
+                >
+                    <option value="">Selecciona una etapa</option>
+                    {weightMethods.map((weightMethod) => (
+                        <option key={weightMethod.id} value={weightMethod.id}>
+                            {weightMethod.name}
+                        </option>
+                    ))}
+                </Select>
+                {errors.body_condition_score && (
+                    <p className="mt-1 text-xs text-red-500">
+                        {errors.body_condition_score}
+                    </p>
+                )}
+            </div>
+
+            {/* Temperatura ambiente */}
+            <div className="grid grid-cols-2 gap-5">
+                {/* Temperatura ambiente */}
+                <div>
+                    <Label label={'Temperatura ambiente (C)'} />
+                    <Input
+                        placeholder={'Ej: 10'}
+                        campo={'room_temperature'}
+                        type={'number'}
+                        setData={setData}
+                        data={data}
+                        processing={processing}
+                    />
+                    {errors.type && (
+                        <p className="mt-1 text-xs text-red-500">
+                            {errors.type}
+                        </p>
+                    )}
+                </div>
+
+                <div>
+                    <Label label={'¿Ayuno Previo?'} />
+                    <div className="flex gap-5">
+                        <div className="flex gap-5">
+                            {['Si', 'No'].map((option) => (
+                                <label
+                                    key={option}
+                                    className="group flex cursor-pointer items-center gap-2"
+                                >
+                                    <input
+                                        type="radio"
+                                        name="previous_fast"
+                                        value={option}
+                                        className="peer sr-only" // oculta el input nativo
+                                        checked={
+                                            (option == 'Si' &&
+                                                data.previous_fast === 1) ||
+                                            (option === 'No' &&
+                                                data.previous_fast === 0)
+                                        }
+                                        onChange={(e) =>
+                                            setData(
+                                                'previous_fast',
+                                                option === 'Si' ? 1 : 0,
+                                            )
+                                        }
+                                    />
+                                    {/* Círculo visual personalizado */}
+                                    <div className="h-4 w-4 rounded-full border-2 border-gray-300 transition-all peer-checked:border-secondary peer-checked:bg-primary" />
+                                    <span className="text-sm text-gray-700 peer-checked:text-green-600">
+                                        {option}
+                                    </span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {/* Notas */}
             <div>
-                <label className="mb-1 block text-sm font-medium text-gray-700">
-                    Notas
-                    <span className="ml-1 font-normal text-gray-400">
+                <div className="flex items-center">
+                    <Label label={'Observaciones'} />
+                    <span className="mx-2 mb-1 font-normal text-gray-400">
                         (opcional)
                     </span>
-                </label>
+                </div>
+
                 <textarea
-                    value={data.notes}
-                    onChange={(e) => setData('notes', e.target.value)}
+                    value={data.observations}
+                    onChange={(e) => setData('observations', e.target.value)}
                     rows={3}
                     placeholder="Observaciones adicionales..."
-                    className="w-full resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full cursor-pointer rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-800 outline-none transition-all focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10"
                     disabled={processing}
                 />
-                {errors.notes && (
-                    <p className="mt-1 text-xs text-red-500">{errors.notes}</p>
+                {errors.observations && (
+                    <p className="mt-1 text-xs text-red-500">
+                        {errors.observations}
+                    </p>
                 )}
             </div>
         </div>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Animal;
+use App\Models\ProductiveStage;
+use App\Models\WeightMethod;
 use App\Models\WeightRecord;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -27,10 +29,15 @@ class WeightRecordController extends Controller
             ->paginate(8)
             ->withQueryString();
 
+        $productiveStages = ProductiveStage::all();
+        $weightMethods = WeightMethod::all();
+
         return Inertia::render('HistorialPesos/Index', [
             'animals' => $animals,
             'selectedAnimal' => $animalId,
-            'weightRecords' => $weightRecords
+            'weightRecords' => $weightRecords,
+            'productiveStages' => $productiveStages,
+            'weightMethods' => $weightMethods
         ]);
     }
 

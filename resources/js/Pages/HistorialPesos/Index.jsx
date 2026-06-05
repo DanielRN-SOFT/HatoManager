@@ -13,7 +13,10 @@ export default function Index({
     selectedAnimal,
     weightRecords,
     flash,
+    productiveStages,
+    weightMethods,
 }) {
+    console.log(productiveStages)
     const [modal, setModal] = useState({
         show: false,
         mode: 'create',
@@ -120,9 +123,7 @@ export default function Index({
                                             Fecha de pesaje
                                         </th>
                                         <th className="px-4 py-3">Peso(kg)</th>
-                                        <th className="px-4 py-3">
-                                            Condicion
-                                        </th>
+                                        <th className="px-4 py-3">Condicion</th>
                                         <th className="px-4 py-3">
                                             Etapa Productiva
                                         </th>
@@ -192,6 +193,8 @@ export default function Index({
                 animals={animals}
                 selectedAnimal={selectedAnimal}
                 onClose={closeModal}
+                productiveStages={productiveStages}
+                weightMethods={weightMethods}
             />
 
             {/* Confirm delete */}

@@ -1,5 +1,4 @@
 import Modal from '@/Components/Modal';
-import HealthRecordForm from '@/Components/Sanidad/HealthRecordForm';
 import { useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 import WeightRecordForm from './WeightRecordForm';
@@ -11,6 +10,8 @@ export default function WeightRecordModal({
     animals,
     selectedAnimal,
     onClose,
+    weightMethods,
+    productiveStages,
 }) {
     const isEdit = mode === 'edit';
 
@@ -108,6 +109,8 @@ export default function WeightRecordModal({
                         errors={errors}
                         animals={animals}
                         processing={processing}
+                        productiveStages={productiveStages}
+                        weightMethods={weightMethods}
                     />
                 </div>
 

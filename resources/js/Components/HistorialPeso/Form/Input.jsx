@@ -1,11 +1,13 @@
-const Input = ({ type, data, setData, processing, campo }) => {
+const Input = ({ type, data, setData, processing, campo, placeholder }) => {
+    const inputCls =
+        'w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 outline-none transition-all focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10';
     return (
         <input
             type={type}
-            value={data.product}
+            value={data[campo]}
             onChange={(e) => setData(campo, e.target.value)}
-            placeholder="Ej: Ivermectina"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            placeholder={placeholder}
+            className={inputCls}
             disabled={processing}
         />
     );

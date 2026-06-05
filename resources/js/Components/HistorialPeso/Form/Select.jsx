@@ -1,9 +1,11 @@
-const Select = ({ value, setData, processing, children }) => {
+const Select = ({ data, setData, processing, children, campo }) => {
+    const selectCls =
+        'w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-800 outline-none transition-all focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10 cursor-pointer';
     return (
         <select
-            value={value}
-            onChange={(e) => setData('animal_id', e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+            value={data[campo]}
+            onChange={(e) => setData(campo, e.target.value)}
+            className={selectCls}
             disabled={processing}
         >
             {children}
