@@ -1,9 +1,8 @@
 import AnimalSelector from '@/Components/HistorialPeso/AnimalSelector';
+import WeightRecordModal from '@/Components/HistorialPeso/WeightRecordModal';
 import WeightRecordRow from '@/Components/HistorialPeso/WeightRecordRow';
 import Modal from '@/Components/Modal';
 import ConfirmDeleteRecord from '@/Components/Sanidad/ConfirmDeleteRecord';
-import HealthRecordModal from '@/Components/Sanidad/HealthRecordModal';
-import HealthRecordRow from '@/Components/Sanidad/HealthRecordRow';
 import Flash from '@/Components/Shared/Flash';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
@@ -186,7 +185,7 @@ export default function Index({
             </div>
 
             {/* Modal crear/editar */}
-            <HealthRecordModal
+            <WeightRecordModal
                 show={modal.show}
                 mode={modal.mode}
                 record={modal.record}
