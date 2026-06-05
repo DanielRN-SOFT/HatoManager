@@ -17,7 +17,7 @@ export default function WeightRecordModal({
 
     const { data, setData, post, put, processing, errors, reset } = useForm({
         animal_id: record?.animal_id ?? selectedAnimal ?? '',
-        weigth_date: record?.weigth_date ?? '',
+        weight_date: record?.weight_date ?? '',
         weight: record?.weight ?? '',
         body_condition_score: record?.body_condition_score ?? '',
         observations: record?.observations ?? '',
@@ -31,7 +31,7 @@ export default function WeightRecordModal({
         if (show && record) {
             setData({
                 animal_id: record?.animal_id ?? selectedAnimal ?? '',
-                weigth_date: record?.weigth_date ?? '',
+                weight_date: record?.weight_date ?? '',
                 weight: record?.weight ?? '',
                 body_condition_score: record?.body_condition_score ?? '',
                 observations: record?.observations ?? '',

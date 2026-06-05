@@ -4,7 +4,7 @@ const Input = ({ type, data, setData, processing, campo, placeholder }) => {
     return (
         <input
             type={type}
-            value={data[campo]}
+            value={type === "date" ? new Date(data[campo]).toLocaleString() : data[campo]}
             onChange={(e) => setData(campo, e.target.value)}
             placeholder={placeholder}
             className={inputCls}

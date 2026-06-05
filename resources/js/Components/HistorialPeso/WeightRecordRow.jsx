@@ -1,5 +1,4 @@
 const WeightRecordRow = ({ record, onEdit, onDelete }) => {
-    console.log(record);
     return (
         <tr className="border-b border-gray-100 transition hover:bg-gray-50">
             <td className="px-4 py-3 text-sm text-gray-600">

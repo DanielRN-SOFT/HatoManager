@@ -16,7 +16,7 @@ export default function Index({
     productiveStages,
     weightMethods,
 }) {
-    console.log(productiveStages)
+    console.log(weightRecords)
     const [modal, setModal] = useState({
         show: false,
         mode: 'create',

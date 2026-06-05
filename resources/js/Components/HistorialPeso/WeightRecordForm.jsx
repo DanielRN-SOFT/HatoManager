@@ -11,6 +11,7 @@ const WeightRecordForm = ({
     productiveStages,
     weightMethods,
 }) => {
+    console.log(data);
     return (
         <div className="grid grid-cols-1 gap-4">
             <div className="grid grid-cols-2 gap-5">
@@ -43,7 +44,7 @@ const WeightRecordForm = ({
                 <div>
                     <Label label={'Fecha de pesaje'} />
                     <Input
-                        type={'date'}
+                        type={'datetime-local'}
                         setData={setData}
                         data={data}
                         processing={processing}
@@ -62,7 +63,7 @@ const WeightRecordForm = ({
                 <Label label={'Etapa Productiva'} />
                 <Select
                     data={data}
-                    campo={'body_condition_score'}
+                    campo={'productive_stage_id'}
                     setData={setData}
                     processing={processing}
                 >
@@ -76,14 +77,14 @@ const WeightRecordForm = ({
                         </option>
                     ))}
                 </Select>
-                {errors.body_condition_score && (
+                {errors.productive_stage_id && (
                     <p className="mt-1 text-xs text-red-500">
-                        {errors.body_condition_score}
+                        {errors.productive_stage_id}
                     </p>
                 )}
             </div>
 
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-3 gap-5">
                 {/* PESO */}
                 <div>
                     <Label label={'Peso (KG)'} />
@@ -111,7 +112,7 @@ const WeightRecordForm = ({
                         setData={setData}
                         processing={processing}
                     >
-                        <option value="">Selecciona un puntaje</option>
+                        <option value="">Puntaje</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -124,29 +125,32 @@ const WeightRecordForm = ({
                         </p>
                     )}
                 </div>
-            </div>
 
-            {/* Metodo de Pesaje */}
-            <div>
-                <Label label={'Metodo de Pesaje'} />
-                <Select
-                    data={data}
-                    campo={'body_condition_score'}
-                    setData={setData}
-                    processing={processing}
-                >
-                    <option value="">Selecciona una etapa</option>
-                    {weightMethods.map((weightMethod) => (
-                        <option key={weightMethod.id} value={weightMethod.id}>
-                            {weightMethod.name}
-                        </option>
-                    ))}
-                </Select>
-                {errors.body_condition_score && (
-                    <p className="mt-1 text-xs text-red-500">
-                        {errors.body_condition_score}
-                    </p>
-                )}
+                {/* Metodo de Pesaje */}
+                <div>
+                    <Label label={'Metodo de Pesaje'} />
+                    <Select
+                        data={data}
+                        campo={'weight_method_id'}
+                        setData={setData}
+                        processing={processing}
+                    >
+                        <option value="">Etapa</option>
+                        {weightMethods.map((weightMethod) => (
+                            <option
+                                key={weightMethod.id}
+                                value={weightMethod.id}
+                            >
+                                {weightMethod.name}
+                            </option>
+                        ))}
+                    </Select>
+                    {errors.weight_method_id && (
+                        <p className="mt-1 text-xs text-red-500">
+                            {errors.weight_method_id}
+                        </p>
+                    )}
+                </div>
             </div>
 
             {/* Temperatura ambiente */}
