@@ -12,8 +12,8 @@ class WeightRecord extends Model
         'body_condition_score',
         'observations',
         'animal_id',
-        'productive_stages_id',
-        'weight_methods_id',
+        'productive_stage_id',
+        'weight_method_id',
         'previous_fast',
         'room_temperature'
     ];
