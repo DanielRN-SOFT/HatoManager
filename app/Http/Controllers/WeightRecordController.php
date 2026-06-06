@@ -19,7 +19,7 @@ class WeightRecordController extends Controller
     {
         $farmId = session('active_farm_id');
 
-        $animals = Animal::where('farm_id', $farmId)
+        $animals = Animal::with(['media', 'breed'])->where('farm_id', $farmId)
             ->orderBy('ear_tag')
             ->get(['id', 'name', 'ear_tag']);
 
