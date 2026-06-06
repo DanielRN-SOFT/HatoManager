@@ -47,7 +47,7 @@ class WeightRecordController extends Controller
      */
     public function store(WeightRecordRequest $request)
     {
-        dd($request);
+
         $validated = $request->validated();
 
         WeightRecord::create($validated);

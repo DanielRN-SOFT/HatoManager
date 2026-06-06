@@ -16,7 +16,7 @@ return new class extends Migration
             $table->dateTime('weight_date');
             $table->decimal('weight', 7,2);
             $table->enum('body_condition_score', ['1', '2', '3', '4', '5']);
-            $table->text('observations');
+            $table->text('observations')->nullable();
             $table->foreignId('animal_id')->constrained()->restrictOnDelete();
             $table->foreignId('productive_stage_id')->constrained()->restrictOnDelete();
             $table->foreignId('weight_method_id')->constrained()->restrictOnDelete();
