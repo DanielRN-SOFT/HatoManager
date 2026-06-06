@@ -30,6 +30,6 @@ class WeightRecord extends Model
 
     public function animal()
     {
-        return $this->belongsTo(Animal::class, 'animals_id');
+        return $this->belongsTo(Animal::class);
     }
 }
