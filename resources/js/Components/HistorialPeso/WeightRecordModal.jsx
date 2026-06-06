@@ -117,7 +117,7 @@ export default function WeightRecordModal({
                 {/* Footer */}
                 <div className="flex items-center justify-end gap-3 border-t border-gray-100 px-6 py-4">
                     <button
-                        weigth_date="button"
+                        type="button"
                         onClick={onClose}
                         className="rounded-lg border border-outline-variant px-4 py-2 text-sm text-on-surface-variant hover:bg-surface-container"
                         disabled={processing}
@@ -125,7 +125,7 @@ export default function WeightRecordModal({
                         Cancelar
                     </button>
                     <button
-                        weigth_date="submit"
+                        type="submit"
                         disabled={processing}
                         className="flex items-center gap-2 rounded-2xl bg-primary px-4 py-2 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all hover:shadow-lg active:scale-95 disabled:opacity-50"
                     >
