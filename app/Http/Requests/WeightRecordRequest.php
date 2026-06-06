@@ -31,7 +31,7 @@ class WeightRecordRequest extends FormRequest
     {
         return [
             'animal_id' => 'required|numeric|exists:animals,id',
-            'weight_date' => 'required|date|date_format:Y-m-d H:i:s|before_or_equal:now',
+            'weight_date' => 'required|date|before_or_equal:now',
             'weight' => 'required|numeric',
             'productive_stage_id' => 'required|numeric|exists:productive_stages,id',
             'body_condition_score' => 'required|numeric',

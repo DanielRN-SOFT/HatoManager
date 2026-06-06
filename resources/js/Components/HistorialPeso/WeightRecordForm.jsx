@@ -11,7 +11,22 @@ const WeightRecordForm = ({
     productiveStages,
     weightMethods,
 }) => {
-    console.log(data);
+    const obtenerFechaActualMax = () => {
+        const ahora = new Date();
+
+        // Obtenemos el año, mes, día, hora y minuto
+        const year = ahora.getFullYear();
+        // getMonth() devuelve de 0 a 11, por eso sumamos 1 y usamos padStart para los ceros
+        const month = String(ahora.getMonth() + 1).padStart(2, '0');
+        const day = String(ahora.getDate()).padStart(2, '0');
+        const hours = String(ahora.getHours()).padStart(2, '0');
+        const minutes = String(ahora.getMinutes()).padStart(2, '0');
+
+        // Combinamos la fecha y la hora separadas por una 'T'
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+
+
     return (
         <div className="grid grid-cols-1 gap-3">
             <div className="grid grid-cols-2 gap-5">
@@ -43,12 +58,15 @@ const WeightRecordForm = ({
                 {/* Fecha del pesaje */}
                 <div>
                     <Label label={'Fecha de pesaje'} />
-                    <Input
+                    <input
                         type={'datetime-local'}
-                        setData={setData}
-                        data={data}
-                        processing={processing}
-                        campo={'weight_date'}
+                        className={
+                            'w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-800 placeholder-gray-300 outline-none transition-all focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10'
+                        }
+                        onChange={(e) => setData('weight_date', e.target.value)}
+                        value={data.weight_date}
+                        disabled={processing}
+                        max={obtenerFechaActualMax()}
                     />
                     {errors.weight_date && (
                         <p className="mt-1 text-xs text-red-500">

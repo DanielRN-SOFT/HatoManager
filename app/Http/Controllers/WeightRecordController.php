@@ -50,9 +50,9 @@ class WeightRecordController extends Controller
 
         $validated = $request->validated();
 
-        WeightRecord::create($validated);
+        $record = WeightRecord::create($validated);
 
-        return redirect()->route('weight-records.index')->with('success', 'Registro de pesaje creado exitosamante');
+        return redirect()->route('weight-records.index', ['animal_id' => $record->animal_id])->with('success', 'Registro de pesaje creado exitosamante');
     }
 
     /**
@@ -64,26 +64,24 @@ class WeightRecordController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(WeightRecordRequest $request, WeightRecord $weightRecord)
     {
-        //
+        $validated = $request->validated();
+        $weightRecord->update($validated);
+
+        return redirect()->route('weight-records.index')
+            ->with('success', 'Registro de pesaje actualizado correctamente.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(WeightRecord $weightRecord)
     {
-        //
+        $animalId = $weightRecord->animal_id;
+        $weightRecord->delete();
+        return redirect()->route('weight-records.index', ['animal_id' => $animalId])->with('success', "Registro de pesaje eliminado correctamente");
     }
 }
