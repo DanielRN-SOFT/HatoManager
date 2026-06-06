@@ -13,7 +13,7 @@ const WeightRecordForm = ({
 }) => {
     console.log(data);
     return (
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-3">
             <div className="grid grid-cols-2 gap-5">
                 {/* Animal */}
                 <div>
@@ -50,9 +50,9 @@ const WeightRecordForm = ({
                         processing={processing}
                         campo={'weight_date'}
                     />
-                    {errors.weigth_date && (
+                    {errors.weight_date && (
                         <p className="mt-1 text-xs text-red-500">
-                            {errors.weigth_date}
+                            {errors.weight_date}
                         </p>
                     )}
                 </div>
@@ -96,9 +96,9 @@ const WeightRecordForm = ({
                         data={data}
                         processing={processing}
                     />
-                    {errors.type && (
+                    {errors.weight && (
                         <p className="mt-1 text-xs text-red-500">
-                            {errors.type}
+                            {errors.weight}
                         </p>
                     )}
                 </div>
@@ -166,9 +166,9 @@ const WeightRecordForm = ({
                         data={data}
                         processing={processing}
                     />
-                    {errors.type && (
+                    {errors.room_temperature && (
                         <p className="mt-1 text-xs text-red-500">
-                            {errors.type}
+                            {errors.room_temperature}
                         </p>
                     )}
                 </div>
@@ -207,6 +207,11 @@ const WeightRecordForm = ({
                                     </span>
                                 </label>
                             ))}
+                            {errors.previous_fast && (
+                                <p className="mt-1 text-xs text-red-500">
+                                    {errors.previous_fast}
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -224,7 +229,7 @@ const WeightRecordForm = ({
                 <textarea
                     value={data.observations}
                     onChange={(e) => setData('observations', e.target.value)}
-                    rows={3}
+                    rows={2}
                     placeholder="Observaciones adicionales..."
                     className="w-full cursor-pointer rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-800 outline-none transition-all focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10"
                     disabled={processing}

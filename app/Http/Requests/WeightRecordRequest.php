@@ -31,7 +31,7 @@ class WeightRecordRequest extends FormRequest
     {
         return [
             'animal_id' => 'required|numeric|exists:animals,id',
-            'weight_date' => 'required|date',
+            'weight_date' => 'required|date|date_format:Y-m-d H:i:s|before_or_equal:now',
             'weight' => 'required|numeric',
             'productive_stage_id' => 'required|numeric|exists:productive_stages,id',
             'body_condition_score' => 'required|numeric',
@@ -48,7 +48,13 @@ class WeightRecordRequest extends FormRequest
         return [
             'productive_stage_id' => "etapa productiva",
             'body_condition_score' => "condicion corporal",
-            'weight_method_id' => 'metodo de pesaje'
+            'weight_method_id' => 'metodo de pesaje',
+            'room_temperature' => "temperatura ambiente",
+            "previous_fast" => "ayuno previo",
+            'weight_date' => "fecha de pesaje",
+            'weight' => "peso",
+            'animal_id' => "animal"
+
         ];
     }
 }
