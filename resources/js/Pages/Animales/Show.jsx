@@ -3,6 +3,7 @@ import Header from '@/Components/Animales/Show/Header';
 import HeroCard from '@/Components/Animales/Show/HeroCard';
 import HistorialSanitario from '@/Components/Animales/Show/HistorialSanitario';
 import InformacionGeneral from '@/Components/Animales/Show/InformacionGeneral';
+import ProyeccionVenta from '@/Components/Animales/Show/ProyeccionVenta';
 import SectionCard from '@/Components/Animales/Show/SectionCard';
 import WeightChart from '@/Components/Animales/Show/WeightChart';
 import WeightRow from '@/Components/Animales/Show/WeightRow';
@@ -61,7 +62,6 @@ export default function Show({ animal }) {
         lastWeight && firstWeight
             ? (lastWeight - firstWeight).toFixed(1)
             : null;
-
 
     return (
         <AuthenticatedLayout>
@@ -132,10 +132,16 @@ export default function Show({ animal }) {
                 )}
 
                 {/* ── Historial sanitario ── */}
-                <HistorialSanitario animal={animal} fmt={fmt}/>
+                <HistorialSanitario animal={animal} fmt={fmt} />
+
+                <ProyeccionVenta proyeccion={animal.proyeccion} fmt={fmt} />
 
                 {/* ── Comercialización ── */}
-              <Comercializacion animal={animal} fmt={fmt} statusInfo={statusInfo}/>
+                <Comercializacion
+                    animal={animal}
+                    fmt={fmt}
+                    statusInfo={statusInfo}
+                />
             </div>
         </AuthenticatedLayout>
     );
