@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WeightRecord extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'weight_date',
         'weight',

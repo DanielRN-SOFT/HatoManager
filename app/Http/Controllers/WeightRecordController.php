@@ -25,8 +25,10 @@ class WeightRecordController extends Controller
 
         $animalId = $request->get('animal_id', $animals->first()?->id);
 
-        $weightRecords = WeightRecord::with(['weightMethod', 'productiveStage'])->where('animal_id', $animalId)
+        $weightRecords = WeightRecord::with(['animal', 'weightMethod', 'productiveStage'])
+            ->withTrashed()->where('animal_id', $animalId)
             ->latest()
+            ->orderBy('deleted_at', "asc")
             ->paginate(8)
             ->withQueryString();
 
@@ -83,5 +85,14 @@ class WeightRecordController extends Controller
         $animalId = $weightRecord->animal_id;
         $weightRecord->delete();
         return redirect()->route('weight-records.index', ['animal_id' => $animalId])->with('success', "Registro de pesaje eliminado correctamente");
+    }
+
+    public function restore(WeightRecord $weightRecord)
+    {
+        $weightRecord->restore();
+
+        return redirect()
+            ->route('weight-records.index', ['animal_id' => $weightRecord->animal_id])
+            ->with('success', 'Registro de pesaje restaurado correctamente');
     }
 }

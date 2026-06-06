@@ -107,7 +107,9 @@
         Route::get('/animals/{animal}/certificado', [HealthRecordController::class, 'certificadoIndividual'])->name('health.certificado.individual');
         Route::get('/fincas/{farm}/certificado-lote', [HealthRecordController::class, 'certificadoLote'])->name('health.certificado.lote');
         Route::put('/farms/{id}/restore', [FarmController::class, 'restore'])->name('farms.restore');
-
+        Route::put('/weight-records/{weightRecord}/restore', [WeightRecordController::class, 'restore'])
+            ->name('weight-records.restore')
+            ->withTrashed();
         Route::resource('/weight-records', WeightRecordController::class);
     });
 

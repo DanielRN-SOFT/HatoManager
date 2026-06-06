@@ -1,8 +1,8 @@
 import AnimalSelector from '@/Components/HistorialPeso/AnimalSelector';
+import ConfirmDeleteRecord from '@/Components/HistorialPeso/ConfirmDeleteRecord';
 import WeightRecordModal from '@/Components/HistorialPeso/WeightRecordModal';
 import WeightRecordRow from '@/Components/HistorialPeso/WeightRecordRow';
 import Modal from '@/Components/Modal';
-import ConfirmDeleteRecord from '@/Components/Sanidad/ConfirmDeleteRecord';
 import Flash from '@/Components/Shared/Flash';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
@@ -16,7 +16,7 @@ export default function Index({
     productiveStages,
     weightMethods,
 }) {
-    console.log(weightRecords)
+    console.log(weightRecords);
     const [modal, setModal] = useState({
         show: false,
         mode: 'create',
@@ -40,8 +40,13 @@ export default function Index({
         setToDelete(record);
     }
 
+    function confirmRestore(toRestore){
+        console.log(toRestore);
+        router.put(route('weight-records.restore', toRestore.id))
+    }
+
     function confirmDelete() {
-        router.delete(route('health.destroy', toDelete.id), {
+        router.delete(route('weight-records.destroy', toDelete.id), {
             preserveScroll: true,
             onSuccess: () => setToDelete(null),
         });
@@ -130,6 +135,7 @@ export default function Index({
                                         <th className="px-4 py-3">
                                             Metodo de Pesaje
                                         </th>
+                                        <th className="px-4 py-3">Estado</th>
 
                                         <th className="px-4 py-3">Acciones</th>
                                     </tr>
@@ -142,6 +148,7 @@ export default function Index({
                                             record={record}
                                             onEdit={openEdit}
                                             onDelete={handleDelete}
+                                            onRestore={confirmRestore}
                                         />
                                     ))}
                                 </tbody>

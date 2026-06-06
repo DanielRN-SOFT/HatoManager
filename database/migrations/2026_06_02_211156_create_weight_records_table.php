@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignId('weight_method_id')->constrained()->restrictOnDelete();
             $table->boolean('previous_fast');
             $table->decimal('room_temperature', 10, 5)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
