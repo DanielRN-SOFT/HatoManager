@@ -102,16 +102,15 @@ class AnimalController extends Controller
      */
     public function show(Animal $animal)
     {
+        $animal->load(['animalCategory', 'breed', 'healthRecords', 'paddock', 'weightRecords']);
+
+        $proyeccion = $this->calcularProyeccion($animal);
+
         return Inertia::render('Animales/Show', [
             'animal' => [
-                ...$animal->load([
-                    'animalCategory',
-                    'breed',
-                    'healthRecords',
-                    'paddock',
-                    'weightRecords'
-                ])->toArray(),
-                'photo' => $animal->getFirstMediaUrl('animals'),
+                ...$animal->toArray(),
+                'photo'      => $animal->getFirstMediaUrl('animals'),
+                'proyeccion' => $proyeccion,
             ]
         ]);
     }
@@ -174,5 +173,45 @@ class AnimalController extends Controller
         $animal->update(['status' => 'Activo']);
         return redirect()->route('animals.index')
             ->with('success', "Animal restaurado exitosamente");
+    }
+    private function calcularProyeccion(Animal $animal): ?array
+    {
+        $registros = $animal->weightRecords
+            ->sortBy('weight_date')
+            ->values();
+
+        if ($registros->count() < 2) return null;
+        if (!$animal->target_weight || !$animal->price_weight) return null;
+
+        $primero = $registros->first();
+        $ultimo  = $registros->last();
+
+        $diasTranscurridos = \Carbon\Carbon::parse($primero->weight_date)
+            ->diffInDays(\Carbon\Carbon::parse($ultimo->weight_date));
+
+        if ($diasTranscurridos === 0) return null;
+
+        $gdp = ($ultimo->weight - $primero->weight) / $diasTranscurridos; // kg/día
+
+        if ($gdp <= 0) return null;
+
+        $pesoActual   = (float) $ultimo->weight;
+        $pesoObjetivo = (float) $animal->target_weight;
+        $diasRestantes = ($pesoObjetivo - $pesoActual) / $gdp;
+
+        $fechaEstimada = \Carbon\Carbon::parse($ultimo->weight_date)
+            ->addDays((int) ceil($diasRestantes));
+
+        $utilidadEsperada = $pesoObjetivo * (float) $animal->price_weight;
+
+        return [
+            'gdp'              => round($gdp, 3),          // kg/día
+            'peso_actual'      => round($pesoActual, 1),
+            'peso_objetivo'    => $pesoObjetivo,
+            'dias_restantes'   => max(0, (int) ceil($diasRestantes)),
+            'fecha_estimada'   => $fechaEstimada->format('Y-m-d'),
+            'utilidad_esperada' => round($utilidadEsperada, 2),
+            'precio_por_kg'    => (float) $animal->price_weight,
+        ];
     }
 }
