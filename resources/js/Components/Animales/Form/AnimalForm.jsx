@@ -16,7 +16,13 @@ const selectCls =
 /* ─────────────────────────────────────────────
    Main Form
 ───────────────────────────────────────────── */
-const AnimalForm = ({ animal, categoriasAnimal, razas, lotes }) => {
+const AnimalForm = ({
+    animal,
+    categoriasAnimal,
+    razas,
+    lotes,
+    farmDefaults,
+}) => {
     const { data, setData, post, processing, errors } = useForm({
         _method: animal ? 'PUT' : 'POST',
         photo: '',
@@ -28,8 +34,9 @@ const AnimalForm = ({ animal, categoriasAnimal, razas, lotes }) => {
         description: animal?.description ?? '',
         previous_diseases: animal?.previous_diseases ?? '',
         price: animal?.price ?? '',
-        target_weight: animal?.target_weight ?? '',
-        price_weight: animal?.price_weight ?? '',
+        target_weight:
+            animal?.target_weight ?? farmDefaults?.target_weight ?? '',
+        price_weight: animal?.price_weight ?? farmDefaults?.price_weight ?? '',
         publication_date: animal?.publication_date ?? '',
         animal_category_id: animal?.animal_category?.id ?? '',
         breed_id: animal?.breed?.id ?? '',

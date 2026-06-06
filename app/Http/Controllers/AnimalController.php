@@ -7,6 +7,7 @@ use App\Models\Animal;
 use App\Models\AnimalCategory;
 use App\Models\Breed;
 use App\Models\Paddock;
+use App\Models\Farm;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -77,10 +78,15 @@ class AnimalController extends Controller
 
     public function create()
     {
+        $farm = Farm::find(session('active_farm_id'));
         return Inertia::render('Animales/Create', [
             'razas' => Breed::all(),
             'categoriasAnimales' => AnimalCategory::all(),
-            'lotes' => Paddock::all()
+            'lotes' => Paddock::all(),
+            'farmDefaults'       => [
+                'target_weight' => $farm?->target_weight,
+                'price_weight'  => $farm?->price_weight,
+            ],
         ]);
     }
 
