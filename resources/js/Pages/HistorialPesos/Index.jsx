@@ -106,7 +106,7 @@ export default function Index({
                 </div>
 
                 {/* Selector de animal */}
-                <div className="mb-4 flex items-center justify-between rounded-xl border-t-4 border-primary bg-white px-4 py-3 shadow-sm">
+                <div className="mb-4 flex items-center justify-between rounded-xl border-t-4 border-primary bg-white px-4 py-3 shadow-sm max-w-sm">
                     <AnimalSelector
                         animals={animals}
                         selectedAnimal={selectedAnimal}
@@ -214,7 +214,7 @@ export default function Index({
                 show={show.show}
                 onClose={closeShow}
                 record={show.record}
-                
+
             />
 
             {/* Modal crear/editar */}
