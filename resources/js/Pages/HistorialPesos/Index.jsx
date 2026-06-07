@@ -214,6 +214,7 @@ export default function Index({
                 show={show.show}
                 onClose={closeShow}
                 record={show.record}
+                
             />
 
             {/* Modal crear/editar */}

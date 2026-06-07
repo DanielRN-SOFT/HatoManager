@@ -25,7 +25,7 @@ class WeightRecordController extends Controller
 
         $animalId = $request->get('animal_id', $animals->first()?->id);
 
-        $weightRecords = WeightRecord::with(['animal', 'weightMethod', 'productiveStage'])
+        $weightRecords = WeightRecord::with(['animal.media', 'weightMethod', 'productiveStage'])
             ->withTrashed()->where('animal_id', $animalId)
             ->latest()
             ->orderBy('deleted_at', "asc")

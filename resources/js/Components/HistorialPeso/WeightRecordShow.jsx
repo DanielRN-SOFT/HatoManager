@@ -9,11 +9,17 @@ const WeightRecordShow = ({ show, onClose, record }) => {
             <div className="p-6">
                 {/* Header: Animal */}
                 <div className="mb-6 flex items-center gap-4">
-                    <img
-                        src={record?.photo}
-                        alt={animal?.name}
-                        className="h-16 w-16 rounded-full border border-gray-200 object-cover"
-                    />
+                    {animal?.photo ? (
+                        <img
+                            src={animal.photo}
+                            alt={animal.name}
+                            className="h-16 w-16 rounded-full border border-gray-200 object-cover"
+                        />
+                    ) : (
+                        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-gray-200 bg-gray-100 text-xl font-semibold text-gray-500">
+                            {animal?.name?.charAt(0).toUpperCase()}
+                        </div>
+                    )}
                     <div>
                         <h2 className="text-lg font-semibold text-gray-900">
                             {animal?.name}
@@ -79,7 +85,7 @@ const WeightRecordShow = ({ show, onClose, record }) => {
                             Condición corporal
                         </p>
                         <p className="text-sm font-medium text-gray-800">
-                            {record?.body_condition_score ?? '—'} / 9
+                            {record?.body_condition_score ?? '—'} / 5
                         </p>
                     </div>
                     <div className="rounded-lg bg-gray-50 p-3">
