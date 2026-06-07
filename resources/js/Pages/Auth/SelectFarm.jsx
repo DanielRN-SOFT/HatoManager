@@ -20,7 +20,7 @@ const SelectFarm = ({ farms }) => {
 
     return (
         <main className="mx-auto flex w-full max-w-2xl flex-grow flex-col items-center justify-start px-4 pb-32 pt-4">
-            <Head title='Seleccione una finca'></Head>
+            <Head title="Seleccione una finca"></Head>
             {/* Logo section */}
             <div className="flex flex-col items-center gap-1 pt-3">
                 <img
@@ -77,8 +77,8 @@ const SelectFarm = ({ farms }) => {
             <div className="fixed bottom-0 left-0 z-40 flex w-full justify-center border-t border-outline-variant/30 bg-surface p-6">
                 <button
                     onClick={handleContinue}
-                    disabled={!selectedFarm || processing}
-                    className="flex w-full max-w-md items-center justify-center gap-2 rounded-xl bg-primary py-4 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-secondary active:scale-95"
+                    disabled={processing}
+                    className={`flex w-full max-w-md items-center justify-center gap-2 rounded-xl bg-primary py-4 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:bg-secondary active:scale-95 ${!selectedFarm ? 'opacity-50 cursor-not-allowed' : 'opacity-100 cursor-pointer'}`}
                 >
                     {processing ? 'Cargando...' : 'Continuar'}
                     <span className="material-symbols-outlined">
