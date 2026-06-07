@@ -16,6 +16,9 @@ const WeightRecordRow = ({ record, onEdit, onDelete, onRestore }) => {
                         day: '2-digit',
                         month: 'short',
                         year: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric',
                     })}
                 </span>
             </td>
@@ -33,7 +36,7 @@ const WeightRecordRow = ({ record, onEdit, onDelete, onRestore }) => {
             </td>
 
             {/* Condición corporal */}
-            <td className="px-4 py-3">
+            <td className="px-4 py-3 text-center">
                 <span
                     className={`inline-flex items-center rounded-lg border px-2.5 py-0.5 text-xs font-medium ${
                         isDeleted
@@ -41,7 +44,15 @@ const WeightRecordRow = ({ record, onEdit, onDelete, onRestore }) => {
                             : 'border-blue-100 bg-blue-50 text-blue-700'
                     }`}
                 >
-                    {record.body_condition_score}
+                    {record.body_condition_score == 1
+                        ? `${record.body_condition_score} - Extremadamente flaco`
+                        : record.body_condition_score == 2
+                          ? `${record.body_condition_score} - Flaco`
+                          : record.body_condition_score == 3
+                            ? `${record.body_condition_score} - Moderado / Promedio`
+                            : record.body_condition_score == 4
+                              ? `${record.body_condition_score} - Obseso / Gordo`
+                              : `${record.body_condition_score} - Extremadamente Gordo`}
                 </span>
             </td>
 

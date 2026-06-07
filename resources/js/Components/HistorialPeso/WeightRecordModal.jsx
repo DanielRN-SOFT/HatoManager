@@ -15,7 +15,7 @@ export default function WeightRecordModal({
 }) {
     const isEdit = mode === 'edit';
 
-    const { data, setData, post, put, processing, errors, reset } = useForm({
+    const { data, setData, post, put, processing, errors, reset, clearErrors } = useForm({
         animal_id: record?.animal_id ?? selectedAnimal ?? '',
         weight_date: record?.weight_date ?? '',
         weight: record?.weight ?? '',
@@ -29,6 +29,7 @@ export default function WeightRecordModal({
 
     useEffect(() => {
         if (show && record) {
+            clearErrors();
             setData({
                 animal_id: record?.animal_id ?? selectedAnimal ?? '',
                 weight_date: record?.weight_date ?? '',
@@ -40,7 +41,9 @@ export default function WeightRecordModal({
                 previous_fast: record?.previous_fast ?? '',
                 room_temperature: record?.room_temperature ?? '',
             });
+
         } else if (show && !record) {
+            clearErrors();
             reset();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

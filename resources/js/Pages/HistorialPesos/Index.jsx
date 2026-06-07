@@ -40,9 +40,9 @@ export default function Index({
         setToDelete(record);
     }
 
-    function confirmRestore(toRestore){
+    function confirmRestore(toRestore) {
         console.log(toRestore);
-        router.put(route('weight-records.restore', toRestore.id))
+        router.put(route('weight-records.restore', toRestore.id));
     }
 
     function confirmDelete() {
@@ -128,7 +128,9 @@ export default function Index({
                                             Fecha de pesaje
                                         </th>
                                         <th className="px-4 py-3">Peso(kg)</th>
-                                        <th className="px-4 py-3">Condicion</th>
+                                        <th className="px-4 py-3">
+                                            Condicion Corporal
+                                        </th>
                                         <th className="px-4 py-3">
                                             Etapa Productiva
                                         </th>

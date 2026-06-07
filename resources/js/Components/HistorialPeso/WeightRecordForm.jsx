@@ -26,7 +26,6 @@ const WeightRecordForm = ({
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
 
-
     return (
         <div className="grid grid-cols-1 gap-3">
             <div className="grid grid-cols-2 gap-5">
@@ -130,12 +129,12 @@ const WeightRecordForm = ({
                         setData={setData}
                         processing={processing}
                     >
-                        <option value="">Puntaje</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
+                        <option value="">Selec.. un puntaje</option>
+                        <option value="1">1 - Extremadamente flaco</option>
+                        <option value="2">2 - Flaco</option>
+                        <option value="3">3 - Moderado / Promedio </option>
+                        <option value="4">4 - Obeso / Gordo</option>
+                        <option value="5">5 - Excesivamente gordo </option>
                     </Select>
                     {errors.body_condition_score && (
                         <p className="mt-1 text-xs text-red-500">
@@ -153,7 +152,7 @@ const WeightRecordForm = ({
                         setData={setData}
                         processing={processing}
                     >
-                        <option value="">Etapa</option>
+                        <option value="">Selec... una Etapa</option>
                         {weightMethods.map((weightMethod) => (
                             <option
                                 key={weightMethod.id}
