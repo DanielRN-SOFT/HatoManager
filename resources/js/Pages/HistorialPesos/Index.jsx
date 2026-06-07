@@ -2,6 +2,7 @@ import AnimalSelector from '@/Components/HistorialPeso/AnimalSelector';
 import ConfirmDeleteRecord from '@/Components/HistorialPeso/ConfirmDeleteRecord';
 import WeightRecordModal from '@/Components/HistorialPeso/WeightRecordModal';
 import WeightRecordRow from '@/Components/HistorialPeso/WeightRecordRow';
+import WeightRecordShow from '@/Components/HistorialPeso/WeightRecordShow';
 import Modal from '@/Components/Modal';
 import Flash from '@/Components/Shared/Flash';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -22,6 +23,12 @@ export default function Index({
         mode: 'create',
         record: null,
     });
+
+    const [show, setShow] = useState({
+        show: false,
+        record: null,
+    });
+
     const [toDelete, setToDelete] = useState(null);
 
     function openCreate() {
@@ -30,6 +37,14 @@ export default function Index({
 
     function openEdit(record) {
         setModal({ show: true, mode: 'edit', record });
+    }
+
+    function openShow(record) {
+        setShow({ show: true, record });
+    }
+
+    function closeShow() {
+        setShow({ show: false, record: null });
     }
 
     function closeModal() {
@@ -151,6 +166,7 @@ export default function Index({
                                             onEdit={openEdit}
                                             onDelete={handleDelete}
                                             onRestore={confirmRestore}
+                                            onShow={openShow}
                                         />
                                     ))}
                                 </tbody>
@@ -193,6 +209,12 @@ export default function Index({
                     </div>
                 )}
             </div>
+
+            <WeightRecordShow
+                show={show.show}
+                onClose={closeShow}
+                record={show.record}
+            />
 
             {/* Modal crear/editar */}
             <WeightRecordModal

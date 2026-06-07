@@ -1,4 +1,4 @@
-const WeightRecordRow = ({ record, onEdit, onDelete, onRestore }) => {
+const WeightRecordRow = ({ record, onEdit, onDelete, onRestore, onShow }) => {
     const isDeleted = !!record.deleted_at;
 
     return (
@@ -104,15 +104,27 @@ const WeightRecordRow = ({ record, onEdit, onDelete, onRestore }) => {
                     </button>
 
                     {!isDeleted ? (
-                        <button
-                            onClick={() => onDelete(record)}
-                            title="Eliminar"
-                            className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500"
-                        >
-                            <span className="material-symbols-outlined text-[18px]">
-                                delete
-                            </span>
-                        </button>
+                        <>
+                            <button
+                                onClick={() => onDelete(record)}
+                                title="Eliminar"
+                                className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                            >
+                                <span className="material-symbols-outlined text-[18px]">
+                                    delete
+                                </span>
+                            </button>
+
+                            <button
+                                onClick={() => onShow(record)}
+                                title="Eliminar"
+                                className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-500"
+                            >
+                                <span className="material-symbols-outlined text-[18px]">
+                                    visibility
+                                </span>
+                            </button>
+                        </>
                     ) : (
                         <button
                             onClick={() => onRestore(record)}
