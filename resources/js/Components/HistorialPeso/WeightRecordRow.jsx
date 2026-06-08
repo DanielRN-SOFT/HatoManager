@@ -94,6 +94,15 @@ const WeightRecordRow = ({ record, onEdit, onDelete, onRestore, onShow }) => {
             <td className="px-4 py-3">
                 <div className="flex items-center gap-1">
                     <button
+                        onClick={() => onShow(record)}
+                        title="Eliminar"
+                        className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-500"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">
+                            visibility
+                        </span>
+                    </button>
+                    <button
                         onClick={() => onEdit(record)}
                         title="Editar"
                         className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-green-50 hover:text-green-600"
@@ -112,16 +121,6 @@ const WeightRecordRow = ({ record, onEdit, onDelete, onRestore, onShow }) => {
                             >
                                 <span className="material-symbols-outlined text-[18px]">
                                     delete
-                                </span>
-                            </button>
-
-                            <button
-                                onClick={() => onShow(record)}
-                                title="Eliminar"
-                                className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-blue-50 hover:text-blue-500"
-                            >
-                                <span className="material-symbols-outlined text-[18px]">
-                                    visibility
                                 </span>
                             </button>
                         </>

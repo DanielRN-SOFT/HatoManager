@@ -1,50 +1,78 @@
-// resources/js/Layouts/AuthenticatedPartials/SideBar.jsx
-import { Link, usePage } from '@inertiajs/react';
+import { useRole } from '@/hooks/useRole';
+import { Link } from '@inertiajs/react';
+import { FaScaleBalanced } from 'react-icons/fa6';
 import { GiFarmTractor } from 'react-icons/gi';
-import { MdOutlineDashboardCustomize } from 'react-icons/md';
+import {
+    MdGavel,
+    MdOutlineDashboardCustomize,
+    MdOutlineHealthAndSafety,
+    MdOutlineMedicalServices,
+    MdOutlineSell,
+} from 'react-icons/md';
 import { PiCowFill } from 'react-icons/pi';
 import { SiSwisscows } from 'react-icons/si';
 
+const NAV_ITEMS = [
+    {
+        label: 'Dashboard',
+        icon: <MdOutlineDashboardCustomize />,
+        route: 'dashboard',
+        // sin permission = visible para todos
+    },
+    {
+        label: 'Animales',
+        icon: <SiSwisscows />,
+        route: 'animals.index',
+        permission: 'gestionar animales',
+    },
+    {
+        label: 'Sanidad',
+        icon: <MdOutlineHealthAndSafety />,
+        route: 'health.index',
+        permission: 'gestionar sanidad',
+    },
+    {
+        label: 'Pesajes',
+        icon: <FaScaleBalanced />,
+        route: 'weight-records.index',
+        permission: 'gestionar pesos',
+    },
+    {
+        label: 'Ventas',
+        icon: <MdOutlineSell />,
+        route: 'login',
+        permission: 'gestionar ventas',
+    },
+    {
+        label: 'Subastas',
+        icon: <MdGavel />,
+        route: 'login',
+        permission: 'gestionar subastas',
+    },
+    {
+        label: 'Mis Fincas',
+        icon: <GiFarmTractor />,
+        route: 'farms.index',
+        permission: 'gestionar fincas',
+    },
+    {
+        label: 'Mis Veterinarios',
+        icon: <MdOutlineMedicalServices />,
+        route: 'veterinarians.index',
+        permission: 'gestionar veterinarios',
+    },
+];
+
+const NAV_BOTTOM = [
+    { label: 'Configuración', icon: 'settings', route: 'login' },
+];
+
 const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
-    const { auth } = usePage().props;
-    const role = auth.user?.roles?.[0]?.name ?? null;
+    const { can } = useRole();
 
-    // Ítems base (disponibles para todos los roles autenticados)
-    const NAV_ITEMS = [
-        {
-            label: 'Dashboard',
-            icon: <MdOutlineDashboardCustomize />,
-            route: 'dashboard',
-        },
-        {
-            label: 'Animales',
-            icon: <SiSwisscows />,
-            route: 'animals.index',
-        },
-        { label: 'Sanidad', icon: 'health_and_safety', route: 'health.index' },
-        { label: 'Pesajes', icon: 'balance', route: 'weight-records.index' },
-        { label: 'Ventas', icon: 'sell', route: 'login' },
-        { label: 'Subastas', icon: 'gavel', route: 'login' },
-        // Solo visible para ganaderos
-        ...(role === 'ganadero'
-            ? [
-                  {
-                      label: 'Mis Fincas',
-                      icon: <GiFarmTractor />,
-                      route: 'farms.index',
-                  },
-                  {
-                      label: 'Mis Veterinarios',
-                      icon: 'medical_services',
-                      route: 'veterinarians.index',
-                  },
-              ]
-            : []),
-    ];
-
-    const NAV_BOTTOM = [
-        { label: 'Configuración', icon: 'settings', route: 'login' },
-    ];
+    const visibleItems = NAV_ITEMS.filter(
+        (item) => !item.permission || can(item.permission),
+    );
 
     return (
         <>
@@ -96,7 +124,7 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
 
                 {/* Navigation */}
                 <nav className="custom-scrollbar flex-1 space-y-1 overflow-y-auto overflow-x-hidden">
-                    {NAV_ITEMS.map((item) => (
+                    {visibleItems.map((item) => (
                         <SidebarNavItem
                             key={item.route + item.label}
                             item={item}

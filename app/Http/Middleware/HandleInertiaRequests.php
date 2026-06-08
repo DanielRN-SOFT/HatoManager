@@ -32,7 +32,6 @@ class HandleInertiaRequests extends Middleware
     {
         $user = $request->user();
 
-        // Finca activa desde sesión
         $activeFarm = null;
         if ($user) {
             $farmId = session('active_farm_id');
@@ -42,9 +41,7 @@ class HandleInertiaRequests extends Middleware
                     ->whereNull('farms.deleted_at')
                     ->first(['farms.id', 'farms.name', 'farms.city', 'farms.department']);
             }
-
-            // Si la finca en sesión ya no es válida, limpiarla
-            if ($farmId && ! $activeFarm) {
+            if ($farmId && !$activeFarm) {
                 session()->forget('active_farm_id');
             }
         }
@@ -52,13 +49,14 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'auth' => [
-                'user'  => $user,
-                'roles' => $user?->getRoleNames() ?? [],
+                'user'        => $user,
+                'roles'       => $user?->getRoleNames() ?? [],
+                'permissions' => $user?->getAllPermissions()->pluck('name') ?? [],
             ],
             'activeFarm' => $activeFarm,
             'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
-            'flash'  => [
+            'flash' => [
                 'success' => session('success'),
                 'info'    => session('info'),
                 'error'   => session('error'),
@@ -72,10 +70,10 @@ class HandleInertiaRequests extends Middleware
                     ->take(5)
                     ->get()
                     ->map(fn($n) => [
-                        'id'        => $n->id,
-                        'mensaje'   => $n->data['mensaje'] ?? 'Nueva notificación',
-                        'fincas'    => $n->data['total_fincas'] ?? 0,
-                        'alertas'   => $n->data['total_alertas'] ?? 0,
+                        'id'         => $n->id,
+                        'mensaje'    => $n->data['mensaje'] ?? 'Nueva notificación',
+                        'fincas'     => $n->data['total_fincas'] ?? 0,
+                        'alertas'    => $n->data['total_alertas'] ?? 0,
                         'created_at' => $n->created_at->diffForHumans(),
                     ]);
 
