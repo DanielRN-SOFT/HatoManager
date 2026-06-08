@@ -108,14 +108,19 @@
     // Rutas para ganadero y veterinario
     // ─────────────────────────────────────────────
     Route::middleware(['auth', 'verified', 'role:ganadero|veterinario'])->group(function () {
+        // Seleccionar fincas en auth
         Route::get('/select-farm', [SelectFarmController::class, 'index'])->name('select-farm.index');
         Route::post('/select-farm', [SelectFarmController::class, 'store'])->name('select-farm.store');
+
+        // Fincas
         Route::get('/mis-fincas', [FarmController::class, 'index'])->name('farms.index');
         Route::post('/mis-fincas', [FarmController::class, 'store'])->name('farms.store');
         Route::put('/mis-fincas/{farm}', [FarmController::class, 'update'])->name('farms.update');
         Route::delete('/mis-fincas/{farm}', [FarmController::class, 'destroy'])->name('farms.destroy');
         Route::post('/mis-fincas/{farm}/activar', [FarmController::class, 'setActive'])->name('farms.setActive');
         Route::get('/mis-fincas/list', [FarmController::class, 'list'])->name('farms.list');
+
+        // Sanidad
         Route::resource('sanidad', HealthRecordController::class)->parameters(['sanidad' => 'health'])->names('health');
 
         // Animales
@@ -125,10 +130,9 @@
         // Pesajes
         Route::get('/weight-records', [WeightRecordController::class, 'index'])->name('weight-records.index');
 
+        // Cerficado de finca
         Route::get('/fincas/{farm}/certificado-lote', [HealthRecordController::class, 'certificadoLote'])->name('health.certificado.lote');
         Route::put('/farms/{id}/restore', [FarmController::class, 'restore'])->name('farms.restore');
-
-
     });
 
     require __DIR__ . '/auth.php';
