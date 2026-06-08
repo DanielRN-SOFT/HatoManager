@@ -96,6 +96,12 @@
         // animales
         Route::resource('animals', AnimalController::class)->except(['index']);
         Route::put('/animals/{animal}/restore', [AnimalController::class, 'restore'])->name('animals.restore')->withTrashed();
+
+        // Pesajes
+        Route::resource('/weight-records', WeightRecordController::class)->except(['index']);
+        Route::put('/weight-records/{weightRecord}/restore', [WeightRecordController::class, 'restore'])
+            ->name('weight-records.restore')
+            ->withTrashed();
     });
 
     // ─────────────────────────────────────────────
@@ -112,14 +118,17 @@
         Route::get('/mis-fincas/list', [FarmController::class, 'list'])->name('farms.list');
         Route::resource('sanidad', HealthRecordController::class)->parameters(['sanidad' => 'health'])->names('health');
 
+        // Animales
         Route::get('/animals', [AnimalController::class, 'index'])->name('animals.index');
         Route::get('/animals/{animal}/certificado', [HealthRecordController::class, 'certificadoIndividual'])->name('health.certificado.individual');
+
+        // Pesajes
+        Route::get('/weight-records', [WeightRecordController::class, 'index'])->name('weight-records.index');
+
         Route::get('/fincas/{farm}/certificado-lote', [HealthRecordController::class, 'certificadoLote'])->name('health.certificado.lote');
         Route::put('/farms/{id}/restore', [FarmController::class, 'restore'])->name('farms.restore');
-        Route::put('/weight-records/{weightRecord}/restore', [WeightRecordController::class, 'restore'])
-            ->name('weight-records.restore')
-            ->withTrashed();
-        Route::resource('/weight-records', WeightRecordController::class);
+
+
     });
 
     require __DIR__ . '/auth.php';

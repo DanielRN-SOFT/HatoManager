@@ -5,6 +5,7 @@ import WeightRecordRow from '@/Components/HistorialPeso/WeightRecordRow';
 import WeightRecordShow from '@/Components/HistorialPeso/WeightRecordShow';
 import Modal from '@/Components/Modal';
 import Flash from '@/Components/Shared/Flash';
+import { useRole } from '@/hooks/useRole';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
@@ -17,7 +18,7 @@ export default function Index({
     productiveStages,
     weightMethods,
 }) {
-    console.log(weightRecords);
+    const { isGanadero } = useRole();
     const [modal, setModal] = useState({
         show: false,
         mode: 'create',
@@ -94,19 +95,21 @@ export default function Index({
                             </h1>
                         </div>
                     </div>
-                    <button
-                        onClick={openCreate}
-                        className="flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
-                    >
-                        <span className="material-symbols-outlined text-[20px]">
-                            add_circle
-                        </span>
-                        Nuevo registro
-                    </button>
+                    {isGanadero && (
+                        <button
+                            onClick={openCreate}
+                            className="flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
+                        >
+                            <span className="material-symbols-outlined text-[20px]">
+                                add_circle
+                            </span>
+                            Nuevo registro
+                        </button>
+                    )}
                 </div>
 
                 {/* Selector de animal */}
-                <div className="mb-4 flex items-center justify-between rounded-xl border-t-4 border-primary bg-white px-4 py-3 shadow-sm max-w-sm">
+                <div className="mb-4 flex max-w-sm items-center justify-between rounded-xl border-t-4 border-primary bg-white px-4 py-3 shadow-sm">
                     <AnimalSelector
                         animals={animals}
                         selectedAnimal={selectedAnimal}
@@ -214,7 +217,6 @@ export default function Index({
                 show={show.show}
                 onClose={closeShow}
                 record={show.record}
-
             />
 
             {/* Modal crear/editar */}

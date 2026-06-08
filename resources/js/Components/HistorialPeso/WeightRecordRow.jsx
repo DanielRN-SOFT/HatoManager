@@ -1,5 +1,8 @@
+import { useRole } from '@/hooks/useRole';
+
 const WeightRecordRow = ({ record, onEdit, onDelete, onRestore, onShow }) => {
     const isDeleted = !!record.deleted_at;
+    const { isGanadero } = useRole();
 
     return (
         <tr
@@ -102,17 +105,19 @@ const WeightRecordRow = ({ record, onEdit, onDelete, onRestore, onShow }) => {
                             visibility
                         </span>
                     </button>
-                    <button
-                        onClick={() => onEdit(record)}
-                        title="Editar"
-                        className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-green-50 hover:text-green-600"
-                    >
-                        <span className="material-symbols-outlined text-[18px]">
-                            edit
-                        </span>
-                    </button>
+                    {isGanadero && (
+                        <button
+                            onClick={() => onEdit(record)}
+                            title="Editar"
+                            className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-green-50 hover:text-green-600"
+                        >
+                            <span className="material-symbols-outlined text-[18px]">
+                                edit
+                            </span>
+                        </button>
+                    )}
 
-                    {!isDeleted ? (
+                    {!isDeleted && isGanadero ? (
                         <>
                             <button
                                 onClick={() => onDelete(record)}
@@ -125,15 +130,18 @@ const WeightRecordRow = ({ record, onEdit, onDelete, onRestore, onShow }) => {
                             </button>
                         </>
                     ) : (
-                        <button
-                            onClick={() => onRestore(record)}
-                            title="Restaurar"
-                            className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-green-50 hover:text-green-700"
-                        >
-                            <span className="material-symbols-outlined text-[18px]">
-                                restore_from_trash
-                            </span>
-                        </button>
+                        isDeleted &&
+                        isGanadero && (
+                            <button
+                                onClick={() => onRestore(record)}
+                                title="Restaurar"
+                                className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-green-50 hover:text-green-700"
+                            >
+                                <span className="material-symbols-outlined text-[18px]">
+                                    restore_from_trash
+                                </span>
+                            </button>
+                        )
                     )}
                 </div>
             </td>
