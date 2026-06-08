@@ -1,3 +1,4 @@
+import { useRole } from '@/hooks/useRole';
 import { router } from '@inertiajs/react';
 
 const SEX_LABELS = {
@@ -21,6 +22,8 @@ const FilaTable = ({ animal, setShowModalEliminar }) => {
     const statusInfo = STATUS_STYLES[animal.status] ?? {
         cls: 'bg-gray-100 text-gray-600',
     };
+
+    const { isGanadero } = useRole();
 
     return (
         <tr className="bg- border-b border-gray-100 transition-colors hover:bg-gray-50">
@@ -95,14 +98,16 @@ const FilaTable = ({ animal, setShowModalEliminar }) => {
                         }
                         cls="hover:text-blue-500"
                     />
-                    <ActionBtn
-                        icon="edit"
-                        label="Editar"
-                        onClick={() =>
-                            router.visit(route('animals.edit', animal.id))
-                        }
-                        cls="hover:text-secondary"
-                    />
+                    {isGanadero && (
+                        <ActionBtn
+                            icon="edit"
+                            label="Editar"
+                            onClick={() =>
+                                router.visit(route('animals.edit', animal.id))
+                            }
+                            cls="hover:text-secondary"
+                        />
+                    )}
 
                     {/* Certificado sanitario */}
                     <div className="group relative">
@@ -152,7 +157,7 @@ const FilaTable = ({ animal, setShowModalEliminar }) => {
                         </div>
                     </div>
 
-                    {animal.status === 'Activo' && (
+                    {animal.status === 'Activo' && isGanadero && (
                         <ActionBtn
                             icon="delete"
                             label="Eliminar"
@@ -160,7 +165,7 @@ const FilaTable = ({ animal, setShowModalEliminar }) => {
                             cls="hover:text-red-500"
                         />
                     )}
-                    {animal.status === 'Inactivo' && (
+                    {animal.status === 'Inactivo' && isGanadero && (
                         <ActionBtn
                             icon="restore_from_trash"
                             label="Restaurar"

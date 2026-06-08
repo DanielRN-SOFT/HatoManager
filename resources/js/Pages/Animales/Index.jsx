@@ -2,11 +2,13 @@ import AnimalFilterBar from '@/Components/Animales/AnimalFilterBar';
 import AnimalTable from '@/Components/Animales/AnimalTable';
 import CertificadoLoteBtn from '@/Components/Animales/CertificadoLoteBtn';
 import Flash from '@/Components/Shared/Flash';
+import { useRole } from '@/hooks/useRole';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
 import { SiSwisscows } from 'react-icons/si';
 
 export default function Index({ animales, filters, finca, razas, categorias }) {
+    const { isGanadero } = useRole();
     function handleNuevo() {
         router.visit(route('animals.create'));
     }
@@ -30,15 +32,17 @@ export default function Index({ animales, filters, finca, razas, categorias }) {
                 </div>
                 <div className="flex items-center gap-3">
                     <CertificadoLoteBtn farmId={finca.id} />
-                    <button
-                        onClick={handleNuevo}
-                        className="flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
-                    >
-                        <span className="material-symbols-outlined text-[20px]">
-                            add_circle
-                        </span>
-                        Registrar animal
-                    </button>
+                    {isGanadero && (
+                        <button
+                            onClick={handleNuevo}
+                            className="flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
+                        >
+                            <span className="material-symbols-outlined text-[20px]">
+                                add_circle
+                            </span>
+                            Registrar animal
+                        </button>
+                    )}
                 </div>
             </div>
 
