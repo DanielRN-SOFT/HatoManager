@@ -13,8 +13,13 @@
     use Inertia\Inertia;
 
     Route::get('/', function () {
-        return Inertia::render('Auth/Login');
+        return Inertia::render('Ecommerce/Index');
     });
+
+
+    Route::get('/login', function () {
+        return Inertia::render('Auth/Login');
+    })->name('login');
 
     Route::get('/dashboard', function () {
 
