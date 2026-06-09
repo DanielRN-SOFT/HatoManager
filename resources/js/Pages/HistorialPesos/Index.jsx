@@ -1,5 +1,6 @@
 import AnimalSelector from '@/Components/HistorialPeso/AnimalSelector';
 import ConfirmDeleteRecord from '@/Components/HistorialPeso/ConfirmDeleteRecord';
+import PaginacionTabla from '@/Components/HistorialPeso/PaginacionTabla';
 import WeightRecordModal from '@/Components/HistorialPeso/WeightRecordModal';
 import WeightRecordRow from '@/Components/HistorialPeso/WeightRecordRow';
 import WeightRecordShow from '@/Components/HistorialPeso/WeightRecordShow';
@@ -178,36 +179,7 @@ export default function Index({
 
                         {/* Paginación */}
                         {weightRecords.last_page > 1 && (
-                            <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
-                                <span className="text-xs text-gray-500">
-                                    Página {weightRecords.current_page} de{' '}
-                                    {weightRecords.last_page}
-                                </span>
-                                <div className="flex gap-2">
-                                    {weightRecords.links.map((link, i) => (
-                                        <button
-                                            key={i}
-                                            disabled={!link.url}
-                                            onClick={() =>
-                                                link.url &&
-                                                router.get(
-                                                    link.url,
-                                                    {},
-                                                    { preserveState: false },
-                                                )
-                                            }
-                                            className={`rounded px-3 py-1 text-xs transition ${
-                                                link.active
-                                                    ? 'bg-green-600 text-white'
-                                                    : 'text-gray-500 hover:bg-gray-100 disabled:opacity-40'
-                                            }`}
-                                            dangerouslySetInnerHTML={{
-                                                __html: link.label,
-                                            }}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
+                          <PaginacionTabla weightRecords={weightRecords}/>
                         )}
                     </div>
                 )}
