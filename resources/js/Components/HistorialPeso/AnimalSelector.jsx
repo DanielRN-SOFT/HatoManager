@@ -1,5 +1,7 @@
 import { router } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
+import Avatar from './Avatar';
+import Buscador from './Buscador';
 
 const AnimalSelector = ({ animals, selectedAnimal }) => {
     const [open, setOpen] = useState(false);
@@ -50,38 +52,6 @@ const AnimalSelector = ({ animals, selectedAnimal }) => {
         );
     }
 
-    function getInitials(animal) {
-        return String(animal.ear_tag ?? '??')
-            .slice(0, 2)
-            .toUpperCase();
-    }
-
-    function getImageUrl(animal) {
-        return animal.media?.[0]?.original_url ?? null;
-    }
-
-    const Avatar = ({ animal, size = 'md' }) => {
-        const img = getImageUrl(animal);
-        const sizes = {
-            sm: 'h-7 w-7 text-[11px]',
-            md: 'h-9 w-9 text-sm',
-            lg: 'h-11 w-11 text-base',
-        };
-        return img ? (
-            <img
-                src={img}
-                alt={String(animal.ear_tag)}
-                className={`${sizes[size]} rounded-full object-cover ring-2 ring-white`}
-            />
-        ) : (
-            <div
-                className={`${sizes[size]} flex shrink-0 items-center justify-center rounded-full bg-green-100 font-semibold text-green-700 ring-2 ring-white`}
-            >
-                {getInitials(animal)}
-            </div>
-        );
-    };
-
     return (
         <div className="relative" ref={ref}>
             {/* Trigger */}
@@ -127,31 +97,11 @@ const AnimalSelector = ({ animals, selectedAnimal }) => {
             {open && (
                 <div className="absolute left-0 top-full z-50 mt-2 w-72 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
                     {/* Buscador */}
-                    <div className="border-b border-gray-100 p-2">
-                        <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 focus-within:border-green-400 focus-within:bg-white focus-within:ring-2 focus-within:ring-green-500/20">
-                            <span className="material-symbols-outlined text-[16px] text-gray-400">
-                                search
-                            </span>
-                            <input
-                                ref={searchRef}
-                                type="text"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                placeholder="Buscar por arete, nombre o raza..."
-                                className="w-full bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none"
-                            />
-                            {search && (
-                                <button
-                                    onClick={() => setSearch('')}
-                                    className="text-gray-400 hover:text-gray-600"
-                                >
-                                    <span className="material-symbols-outlined text-[16px]">
-                                        close
-                                    </span>
-                                </button>
-                            )}
-                        </div>
-                    </div>
+                    <Buscador
+                        search={search}
+                        setSearch={setSearch}
+                        searchRef={searchRef}
+                    />
 
                     {/* Lista */}
                     <ul className="max-h-64 overflow-y-auto py-1">
