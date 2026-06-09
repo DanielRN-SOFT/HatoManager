@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import '../../css/login.css';
 export default function GuestLayout({ children }) {
     return (
@@ -24,6 +25,16 @@ export default function GuestLayout({ children }) {
 
                 {children}
             </main>
+
+            <p className="pt-10 text-center text-sm text-on-surface-variant">
+                Ventas y subastas en: {''}
+                <Link
+                    href={route('ecommerce.index')}
+                    className="font-semibold text-primary hover:underline"
+                >
+                    HatoManager
+                </Link>
+            </p>
         </div>
     );
 }

@@ -106,11 +106,11 @@ export default function TopNavBar() {
 
                         {/* Auth actions en mobile */}
                         <div className="mt-4 flex flex-col gap-2 border-t border-outline-variant pt-4">
-                            <Link href='/login' className="w-full cursor-pointer rounded-lg border border-outline-variant bg-transparent px-4 py-2.5 text-sm font-medium text-on-surface-variant transition-colors hover:text-primary">
+                            <Link href={route('login')} className="w-full cursor-pointer rounded-lg border border-outline-variant bg-transparent px-4 py-2.5 text-sm font-medium text-on-surface-variant transition-colors hover:text-primary">
                                 Iniciar Sesión
                             </Link>
                             <Link
-                                href="/register"
+                                href={route('register')}
                                 onClick={() => setMenuOpen(false)}
                                 className="block w-full rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-bold text-on-primary no-underline transition-all hover:bg-primary-container"
                             >

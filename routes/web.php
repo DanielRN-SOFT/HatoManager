@@ -14,7 +14,7 @@
 
     Route::get('/', function () {
         return Inertia::render('Ecommerce/Index');
-    });
+    })->name('ecommerce.index');
 
 
     Route::get('/login', function () {
