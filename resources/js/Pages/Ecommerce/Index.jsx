@@ -1,35 +1,17 @@
 import CatalogCard from '@/Components/Ecommerce/CatalogoCard';
-import FilterBar from '@/Components/Ecommerce/FilterBar';
 import HeroSection from '@/Components/Ecommerce/HeroSection';
 import NewsLetter from '@/Components/Ecommerce/NewsLetter';
 import TrustSection from '@/Components/Ecommerce/TrustSection';
 import EcommerceLayout from '@/Layouts/EcommerceLayout';
 import { Head } from '@inertiajs/react';
-import { useState } from 'react';
 
 export default function Index({ animals, total = 458 }) {
-    const [filters, setFilters] = useState({});
-    console.log(animals)
-
-    const handleFilter = () => {
-        // Trigger an Inertia visit with filters as query params:
-        // router.get('/catalogo', filters, { preserveState: true });
-        console.log('Filtros aplicados:', filters);
-    };
-
     return (
         <EcommerceLayout>
             <Head title="Catálogo de Ventas — HatoManager" />
 
             {/* ── Hero ── */}
             <HeroSection />
-
-            {/* ── Filter Bar ── */}
-            <FilterBar
-                filters={filters}
-                onChange={setFilters}
-                onFilter={handleFilter}
-            />
 
             {/* ── Sales Grid ── */}
             <section className="mx-auto max-w-[1440px] px-8 py-16">
