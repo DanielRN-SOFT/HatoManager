@@ -1,14 +1,14 @@
-import CatalogCard from '@/Components/Ecommerce/CatalogoCard';
-import HeroSection from '@/Components/Ecommerce/HeroSection';
-import NewsLetter from '@/Components/Ecommerce/NewsLetter';
-import TrustSection from '@/Components/Ecommerce/TrustSection';
+import CatalogCard from '@/Components/InicioEcommerce/CatalogoCard';
+import HeroSection from '@/Components/InicioEcommerce/HeroSection';
+import NewsLetter from '@/Components/InicioEcommerce/NewsLetter';
+import TrustSection from '@/Components/InicioEcommerce/TrustSection';
 import EcommerceLayout from '@/Layouts/EcommerceLayout';
 import { Head } from '@inertiajs/react';
 
 export default function Index({ animals, total = 458 }) {
     return (
         <EcommerceLayout>
-            <Head title="Catálogo de Ventas — HatoManager" />
+            <Head title="Inicio — HatoManager" />
 
             {/* ── Hero ── */}
             <HeroSection />

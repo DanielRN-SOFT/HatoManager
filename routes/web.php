@@ -7,6 +7,7 @@
     use App\Http\Controllers\VeterinarianController;
     use App\Http\Controllers\FarmController;
     use App\Http\Controllers\HealthRecordController;
+    use App\Http\Controllers\SalesController;
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\TwoFactorController;
@@ -14,6 +15,7 @@
     use Inertia\Inertia;
 
     Route::get('/', [EcommerceController::class, 'index'])->name('ecommerce.index');
+    Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
 
 
     Route::get('/login', function () {

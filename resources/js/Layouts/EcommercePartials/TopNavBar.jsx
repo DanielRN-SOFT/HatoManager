@@ -2,7 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 const navLinks = [
-    { href: '/catalogo', label: 'Catálogo' },
+    { href: '/sales', label: 'Ventas' },
     { href: '/subastas', label: 'Subastas' },
 ];
 
@@ -55,7 +55,10 @@ export default function TopNavBar() {
                     {/* Right: Auth actions (desktop) + Hamburger (mobile) */}
                     <div className="flex shrink-0 items-center gap-3">
                         <div className="flex items-center gap-3 max-md:hidden">
-                            <Link href="/login" className="cursor-pointer border-none bg-transparent px-3 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:text-primary">
+                            <Link
+                                href="/login"
+                                className="cursor-pointer border-none bg-transparent px-3 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:text-primary"
+                            >
                                 Iniciar Sesión
                             </Link>
                             <Link
@@ -106,7 +109,10 @@ export default function TopNavBar() {
 
                         {/* Auth actions en mobile */}
                         <div className="mt-4 flex flex-col gap-2 border-t border-outline-variant pt-4">
-                            <Link href={route('login')} className="w-full cursor-pointer rounded-lg border border-outline-variant bg-transparent px-4 py-2.5 text-sm font-medium text-on-surface-variant transition-colors hover:text-primary">
+                            <Link
+                                href={route('login')}
+                                className="w-full cursor-pointer rounded-lg border border-outline-variant bg-transparent px-4 py-2.5 text-sm font-medium text-on-surface-variant transition-colors hover:text-primary"
+                            >
                                 Iniciar Sesión
                             </Link>
                             <Link

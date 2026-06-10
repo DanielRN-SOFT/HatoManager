@@ -6,7 +6,7 @@ use App\Models\Animal;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class EcommerceController extends Controller
+class SalesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,8 +30,10 @@ class EcommerceController extends Controller
                 ];
             });
 
-        return Inertia::render('InicioEcommerce/Index', ['animals' => $animals]);
+        return Inertia::render('Ventas/Index', ['animals' => $animals]);
     }
+
+
     /**
      * Show the form for creating a new resource.
      */
