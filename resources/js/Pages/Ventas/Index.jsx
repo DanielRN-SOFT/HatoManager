@@ -6,7 +6,13 @@ import EcommerceLayout from '@/Layouts/EcommerceLayout';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function Index({ animals, total = 0, meta = {} }) {
+export default function Index({
+    animals,
+    breeds,
+    categories,
+    total = 0,
+    meta = {},
+}) {
     const [filters, setFilters] = useState({});
 
     function handleFilter() {
@@ -35,6 +41,8 @@ export default function Index({ animals, total = 0, meta = {} }) {
             <main className="mx-auto max-w-[1440px] px-4 py-10 md:px-8">
                 <Header total={total} />
                 <FilterBar
+                    categories={categories}
+                    breeds={breeds}
                     filters={filters}
                     onChange={setFilters}
                     onFilter={handleFilter}

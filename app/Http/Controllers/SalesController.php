@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Animal;
+use App\Models\AnimalCategory;
+use App\Models\Breed;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -13,10 +15,11 @@ class SalesController extends Controller
      */
     public function index()
     {
+        $breed = Breed::all();
+        $categories = AnimalCategory::all();
         $animals = Animal::with(['media', 'farm'])
             ->whereIn('status', ['Activo', 'Reservado', 'Vendido'])
             ->orderBy('created_at', 'desc')
-            ->limit(4)
             ->get()
             ->map(function ($animal) {
                 return [
@@ -30,7 +33,14 @@ class SalesController extends Controller
                 ];
             });
 
-        return Inertia::render('Ventas/Index', ['animals' => $animals]);
+        return Inertia::render(
+            'Ventas/Index',
+            [
+                'animals' => $animals,
+                'breeds' => $breed,
+                'categories' => $categories
+            ]
+        );
     }
 
 

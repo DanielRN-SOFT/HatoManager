@@ -1,4 +1,10 @@
-const FilterBar = ({ filters = {}, onChange, onFilter }) => {
+const FilterBar = ({
+    filters = {},
+    breeds,
+    categories,
+    onChange,
+    onFilter,
+}) => {
     function handleChange(key, value) {
         onChange?.({ ...filters, [key]: value });
     }
@@ -21,10 +27,11 @@ const FilterBar = ({ filters = {}, onChange, onFilter }) => {
                         onChange={(e) => handleChange('raza', e.target.value)}
                     >
                         <option value="">Todas las razas</option>
-                        <option>Brahman</option>
-                        <option>Angus</option>
-                        <option>Brangus</option>
-                        <option>Holstein</option>
+                        {breeds.map((breed) => (
+                            <option key={breed.id} value={breed.id}>
+                                {breed.name}
+                            </option>
+                        ))}
                     </select>
                 </div>
 
@@ -39,10 +46,11 @@ const FilterBar = ({ filters = {}, onChange, onFilter }) => {
                         }
                     >
                         <option value="">Todas las categorías</option>
-                        <option>Novillo</option>
-                        <option>Vaquilla</option>
-                        <option>Toro</option>
-                        <option>Vaca</option>
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
                     </select>
                 </div>
 

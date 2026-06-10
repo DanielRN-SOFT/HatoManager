@@ -12,7 +12,7 @@ const AnimalCard = ({ animal, onCart }) => {
             {/* Imagen */}
             <div className="relative h-48 overflow-hidden bg-surface-container">
                 <img
-                    src={animal.imagen}
+                    src={animal.photo}
                     alt={`${animal.raza} - ${animal.categoria}`}
                     className={`h-full w-full object-cover transition-transform duration-500 ${
                         !reservado ? 'group-hover:scale-105' : ''
