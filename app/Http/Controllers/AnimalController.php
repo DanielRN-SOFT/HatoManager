@@ -37,10 +37,11 @@ class AnimalController extends Controller
             ->orderByRaw('
         CASE status
             WHEN "Activo"    THEN 1
-            WHEN "Reservado" THEN 2
-            WHEN "Vendido"   THEN 3
-            WHEN "Muerto"    THEN 4
-            WHEN "Inactivo"  THEN 5
+            WHEN "Publicado" THEN 2
+            WHEN "Reservado" THEN 3
+            WHEN "Vendido"   THEN 4
+            WHEN "Muerto"    THEN 5
+            WHEN "Inactivo"  THEN 6
             ELSE 6
         END ASC
     ');

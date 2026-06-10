@@ -37,10 +37,6 @@ class AnimalRequest extends FormRequest
                 'string',
                 'max:200'
             ],
-            'price' => [
-                'required',
-                'numeric'
-            ],
             'target_weight' => [
                 'required',
                 'numeric',
@@ -88,7 +84,12 @@ class AnimalRequest extends FormRequest
             ],
             'status' => [
                 'nullable'
-            ]
+            ],
+            'price' => [
+                'nullable',
+                'numeric',
+                'min:0'
+            ],
         ];
     }
 
@@ -106,5 +107,17 @@ class AnimalRequest extends FormRequest
             'target_weight' => "peso objectivo",
             'price_weight' => "precio por peso"
         ];
+    }
+
+    #[Override]
+    protected function prepareForValidation()
+    {
+        $priceWeight = (float) $this->price_weight;
+        $targetWeight = (float) $this->target_weight;
+
+        $this->merge([
+            'price' => $priceWeight > 0 && $targetWeight > 0 ? round($priceWeight * $targetWeight, 2) : 0,
+            'status' => $this->publication_date ? 'Publicado' : $this->status
+        ]);
     }
 }

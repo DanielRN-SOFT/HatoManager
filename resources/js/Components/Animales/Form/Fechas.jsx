@@ -1,7 +1,14 @@
-import Field from "./Field";
-import SectionCard from "./SectionCard";
+import { useState } from 'react';
+import Field from './Field';
+import SectionCard from './SectionCard';
 
-const Fechas = ({errors, data, setData, inputCls}) => {
+const Fechas = ({ errors, data, setData, inputCls }) => {
+    const [showPublicationDate, setShowPublicationDate] = useState(
+        data.publication_date ? true : false,
+    );
+    function handleRadio(e) {
+        setShowPublicationDate(e.target.value === 'true');
+    }
     return (
         <SectionCard icon="calendar_today" title="Fechas">
             <div className="grid grid-cols-2 gap-4">
@@ -18,6 +25,47 @@ const Fechas = ({errors, data, setData, inputCls}) => {
                     />
                 </Field>
 
+                <Field label="¿Animal en venta?" icon="sell_cloud">
+                    <div className="flex gap-3">
+                        <label
+                            className={`flex h-10 w-10 cursor-pointer items-center justify-center gap-2 rounded-full border transition-all ${
+                                showPublicationDate
+                                    ? 'border-primary bg-primary text-white'
+                                    : 'border-outline-variant text-on-surface-variant hover:border-outline'
+                            }`}
+                        >
+                            <input
+                                type="radio"
+                                name="en_venta"
+                                id="en_venta_si"
+                                value="true"
+                                onChange={handleRadio}
+                                className="sr-only"
+                            />
+                            Sí
+                        </label>
+                        <label
+                            className={`flex h-10 w-10 cursor-pointer items-center justify-center gap-2 rounded-full border transition-all ${
+                                !showPublicationDate
+                                    ? 'border-primary bg-primary text-white'
+                                    : 'border-outline-variant text-on-surface-variant hover:border-outline'
+                            }`}
+                        >
+                            <input
+                                type="radio"
+                                name="en_venta"
+                                id="en_venta_no"
+                                value="false"
+                                onChange={handleRadio}
+                                className="sr-only"
+                            />
+                            No
+                        </label>
+                    </div>
+                </Field>
+            </div>
+
+            {showPublicationDate && (
                 <Field
                     label="Fecha de publicación"
                     icon="calendar_today"
@@ -32,7 +80,7 @@ const Fechas = ({errors, data, setData, inputCls}) => {
                         className={inputCls}
                     />
                 </Field>
-            </div>
+            )}
         </SectionCard>
     );
 };

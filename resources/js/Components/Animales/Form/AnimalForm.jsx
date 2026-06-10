@@ -30,7 +30,7 @@ const AnimalForm = ({
         ear_tag: animal?.ear_tag ?? '',
         sex: animal?.sex ?? '',
         birth_date: animal?.birth_date ?? '',
-        status: animal?.status ?? '',
+        status: animal?.status ?? 'Activo',
         description: animal?.description ?? '',
         previous_diseases: animal?.previous_diseases ?? '',
         price: animal?.price ?? '',

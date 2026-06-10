@@ -18,7 +18,7 @@ return new class extends Migration
             $table->enum('sex', ['M', 'H']);
             $table->text('photo')->nullable();
             $table->date('birth_date');
-            $table->enum('status', ['Activo', 'Inactivo', 'Muerto', 'Reservado', 'Vendido'])->nullable()->default('Activo');
+            $table->enum('status', ['Activo', 'Inactivo', 'Muerto', 'Reservado', 'Vendido', 'Publicado'])->nullable()->default('Activo');
             $table->text('description')->nullable();
             $table->text('previous_diseases')->nullable();
             $table->decimal('price', 15, 4);

@@ -12,6 +12,7 @@ const STATUS_STYLES = {
     Muerto: { cls: 'bg-red-50 text-red-600' },
     Reservado: { cls: 'bg-blue-50 text-blue-600' },
     Vendido: { cls: 'bg-purple-50 text-purple-600' },
+    Publicado: { cls: 'bg-orange-50 text-orange-600' },
 };
 
 const FilaTable = ({ animal, setShowModalEliminar }) => {

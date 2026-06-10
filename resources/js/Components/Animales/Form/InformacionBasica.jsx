@@ -90,13 +90,8 @@ const InformacionBasica = ({
                                 }}
                                 className={selectCls}
                             >
-                                <option disabled value="Activo">
-                                    Seleccionar
-                                </option>
+                                <option disabled value=''>Seleccionar</option>
                                 <option value="Activo">Activo</option>
-                                <option value="Inactivo">Inactivo</option>
-                                <option value="Vendido">Vendido</option>
-                                <option value="Reservado">Reservado</option>
                                 <option value="Muerto">Muerto</option>
                             </select>
                         </Field>
