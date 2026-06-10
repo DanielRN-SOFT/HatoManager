@@ -68,7 +68,7 @@ class Animal extends Model implements HasMedia
     {
         return $this->getFirstMediaUrl('animals');
     }
-    
+
     protected $casts = [
         'birth_date' => 'date',   // or 'datetime'
     ];

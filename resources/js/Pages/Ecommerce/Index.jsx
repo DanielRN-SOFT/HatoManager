@@ -7,48 +7,9 @@ import EcommerceLayout from '@/Layouts/EcommerceLayout';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 
-// ── Static seed data (replace with Inertia props from controller) ──
-const ANIMALS = [
-    {
-        id: 1,
-        name: 'Brahman Blanco - 450kg',
-        image: 'https://lh3.googleusercontent.com/aida/AP1WRLs8bu3fgxPXIzCqcjGyAtosJLszPCFtHu0WGZjAWMpbdvZdWpyYCkWJyJyJbhnNpMII2zk5X_yUahouEJYGB00HgTA2epjqiETGh_fCJ6cdtKGDHrnhH1IBSj9n6Kq8mIgLIvcqS9CUSI0Os7e_jDdoGkme4MPOMTWfOQ2cwHEoKbHDGVhWByvy5v7YUjr8m0OSOVReRDIkHFbBXDqNEYhh-mfx5l_s1Y-NTuWDucdlTNitql4E-4IH5ow',
-        location: 'Hacienda La Gloria, Córdoba',
-        price: 'COP $4.850.000',
-        status: 'disponible',
-    },
-    {
-        id: 2,
-        name: 'Angus Negro - 520kg',
-        image: 'https://lh3.googleusercontent.com/aida/AP1WRLuHJYe_K740346Wmo8JFt9MbtECFLOM1UZ-XeIyAjvsy85ZuzcmzDmuhbclE2I6DYCVidTIclFMe4YEGT95P3JsmOdGO49eGP9-UoYJ7HK3tBQmR6mpZ5PqJgrVjzQpUrGczOOBzVWtQNIE-Guy8uwzmJNzm2bQ2GNU0VdUhKATXvpPjlxdqy_8cvg4PRH30gA76lCQESw8cAZlXlOUnn3GmGPQFSRMxZXzcium6i8-BWbvicjZnVljb9Y',
-        location: 'Rancho San José, Antioquia',
-        price: 'COP $6.200.000',
-        status: 'reservado',
-    },
-    {
-        id: 3,
-        name: 'Holstein F1 - 380kg',
-        image: 'https://lh3.googleusercontent.com/aida/AP1WRLsMNwkhhLu06jYZntxCu3XtgKHe7BzgRFphEHz11_rCvbjwGFYkgKneztRTLlkvIk_b0dgUiq5SfqE-vgLs99OuESGzc4aeDKT7OO2wsGwhjUElNLIQUBmnJy-xu2o2VpDQfZgu3L9R3oFVKC1CAVGoe5JbXfQN_YvHHyEGGtiTk76h5j3fXozgKMmOLJ4G-VSvIKIXJ8cpBCji7dgvSS0_wo_FKgC_q0cPXcd6opazifm5L8m_9l0x7wY',
-        location: 'Ganadería El Trebol, Boyacá',
-        price: 'COP $3.950.000',
-        status: 'disponible',
-    },
-    {
-        id: 4,
-        name: 'Gyr Lechero - 410kg',
-        image: 'https://lh3.googleusercontent.com/aida/AP1WRLtu33bFKigJSh9V9xzLiEb-0FJho1HFJ0S0OpjdFcnjVy36dMvSjPt6tJQk9rzEf5o3Dfx_Xb11M4QM_x-z4u70gPvstKRJK9ilnxEe1d12uiUw-fyy4uHYtuJobSPGLvGjGjpIjrFTmQ2pbGSlhTZTH6p-9dvTYASMrd8RAjuHV1k4mIydXQe2e7cnJoqMR76LwXMtzNEIqZjb0P_xXGQSPMHmlsJnHWxH0mg2tH5OepAkDxhnUULwIzs',
-        location: 'Hato El Diamante, Meta',
-        price: 'COP $5.100.000',
-        status: 'disponible',
-    },
-];
-
-/**
- * Inertia page — receives `animals` and `total` from the controller.
- * Falls back to static seed data when props are absent.
- */
-export default function Index({ animals = ANIMALS, total = 458 }) {
+export default function Index({ animals, total = 458 }) {
     const [filters, setFilters] = useState({});
+    console.log(animals)
 
     const handleFilter = () => {
         // Trigger an Inertia visit with filters as query params:

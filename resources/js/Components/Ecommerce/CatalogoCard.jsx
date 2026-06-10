@@ -1,15 +1,15 @@
 const statusConfig = {
-    disponible: {
+    Activo: {
         label: 'Disponible',
         dot: 'bg-green-400',
         badge: 'bg-primary-container text-on-primary-container',
     },
-    reservado: {
+    Reservado: {
         label: 'Reservado',
         dot: 'bg-amber-400',
         badge: 'bg-tertiary-container text-on-tertiary-container',
     },
-    vendido: {
+    Vendido: {
         label: 'Vendido',
         dot: 'bg-red-400',
         badge: 'bg-error-container text-on-error-container',
@@ -29,14 +29,33 @@ const statusConfig = {
 export default function CatalogCard({ animal, onDetail, onCart }) {
     const status = statusConfig[animal.status] ?? statusConfig.disponible;
 
+    const formatearDinero = (valor) => {
+        return new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP',
+        }).format(valor);
+    };
+
     return (
         <div className="group overflow-hidden rounded-xl border border-outline-variant bg-white transition-all duration-300 hover:shadow-lg">
             <div className="relative h-56">
-                <img
-                    src={animal.image}
-                    alt={animal.name}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
+                {animal.image_url ? (
+                    <img
+                        src={animal.image_url}
+                        alt={animal.name}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-primary transition-transform duration-300 group-hover:scale-105">
+                        <span className="text-4xl font-bold text-gray-200">
+                            {animal.name
+                                .split(' ')
+                                .slice(0, 2)
+                                .map((word) => word[0].toUpperCase())
+                                .join('')}
+                        </span>
+                    </div>
+                )}
                 <span
                     className={`absolute right-4 top-4 flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${status.badge}`}
                 >
@@ -44,7 +63,6 @@ export default function CatalogCard({ animal, onDetail, onCart }) {
                     {status.label}
                 </span>
             </div>
-
             <div className="p-6">
                 <h3 className="mb-2 font-bold leading-tight text-on-surface">
                     {animal.name}
@@ -54,7 +72,7 @@ export default function CatalogCard({ animal, onDetail, onCart }) {
                     <span className="material-symbols-outlined text-base">
                         location_on
                     </span>
-                    {animal.location}
+                    {animal.farm.city}, {animal.farm.department}
                 </div>
 
                 <div className="mb-5 flex flex-col">
@@ -62,7 +80,7 @@ export default function CatalogCard({ animal, onDetail, onCart }) {
                         Precio
                     </span>
                     <span className="text-xl font-extrabold text-primary">
-                        {animal.price}
+                        {formatearDinero(animal.price)}
                     </span>
                 </div>
 

@@ -1,6 +1,7 @@
     <?php
 
     use App\Http\Controllers\AnimalController;
+    use App\Http\Controllers\EcommerceController;
     use App\Http\Controllers\ProfileController;
     use App\Http\Controllers\SelectFarmController;
     use App\Http\Controllers\VeterinarianController;
@@ -12,9 +13,7 @@
     use App\Http\Controllers\WeightRecordController;
     use Inertia\Inertia;
 
-    Route::get('/', function () {
-        return Inertia::render('Ecommerce/Index');
-    })->name('ecommerce.index');
+    Route::get('/', [EcommerceController::class, 'index'])->name('ecommerce.index');
 
 
     Route::get('/login', function () {
