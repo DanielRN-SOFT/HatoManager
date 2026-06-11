@@ -7,7 +7,9 @@ const FilterBar = ({
     onFilter,
 }) => {
     function handleChange(key, value) {
-        onChange?.({ ...filters, [key]: value });
+        const updated = { ...filters, [key]: value };
+        onChange?.(updated);
+        onFilter?.(updated);
     }
 
     const selectClass =
@@ -18,7 +20,7 @@ const FilterBar = ({
 
     return (
         <section className="mb-8 rounded-xl border border-outline-variant bg-surface-container-lowest p-4">
-            <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-3 lg:grid-cols-6">
+            <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-3 lg:grid-cols-5">
                 {/* Raza */}
                 <div>
                     <label className={labelClass}>Raza</label>
@@ -77,56 +79,46 @@ const FilterBar = ({
                 {/* Rango de peso */}
                 <div>
                     <label className={labelClass}>
-                        Peso máx: {filters.peso || 450} kg
+                        Peso máx:{' '}
+                        {filters.peso ? `${filters.peso} kg` : 'Sin límite'}
                     </label>
                     <input
                         type="range"
                         min="200"
                         max="800"
-                        value={filters.peso || 450}
+                        value={filters.peso || 800} // ← máximo = sin límite
                         onChange={(e) => handleChange('peso', e.target.value)}
+                        onMouseUp={(e) => handleChange('peso', e.target.value)}
                         className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-surface-container-high accent-primary"
                     />
                     <div className="mt-1 flex justify-between text-[10px] text-outline">
                         <span>200 kg</span>
-                        <span>800 kg</span>
+                        <span>Sin límite</span>
                     </div>
                 </div>
 
                 {/* Rango de precio */}
                 <div>
                     <label className={labelClass}>
-                        Precio máx: $
-                        {Number(filters.precio || 5000000).toLocaleString(
-                            'es-CO',
-                        )}
+                        Precio máx:{' '}
+                        {filters.precio
+                            ? `$${Number(filters.precio).toLocaleString('es-CO')}`
+                            : 'Sin límite'}
                     </label>
                     <input
                         type="range"
                         min="1000000"
                         max="10000000"
                         step="100000"
-                        value={filters.precio || 5000000}
+                        value={filters.precio || 10000000} // ← máximo = sin límite
                         onChange={(e) => handleChange('precio', e.target.value)}
+                        onMouseUp={(e) => handleChange('peso', e.target.value)}
                         className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-surface-container-high accent-primary"
                     />
                     <div className="mt-1 flex justify-between text-[10px] text-outline">
                         <span>$1M</span>
-                        <span>$10M</span>
+                        <span>Sin límite</span>
                     </div>
-                </div>
-
-                {/* Botón */}
-                <div>
-                    <button
-                        onClick={onFilter}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-2 font-bold text-on-primary shadow-md shadow-primary/30 transition-all duration-150 hover:brightness-110 active:scale-95"
-                    >
-                        <span className="material-symbols-outlined text-[18px]">
-                            tune
-                        </span>
-                        Filtrar
-                    </button>
                 </div>
             </div>
         </section>

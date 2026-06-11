@@ -14,42 +14,65 @@ class EcommerceSalesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $breed = Breed::all();
-        $categories = AnimalCategory::all();
-        $departments = Farm::distinct()->orderBy('department')->pluck('department');
-        $animals = Animal::with(['media', 'farm'])
+        $animals = Animal::with(['media', 'farm', 'breed', 'animalCategory', 'latestWeight'])
             ->whereIn('status', ['Activo', 'Reservado', 'Vendido'])
             ->whereNotNull('publication_date')
+            ->when(
+                $request->filled('raza'),
+                fn($q) =>
+                $q->where('breed_id', $request->raza)
+            )
+            ->when(
+                $request->filled('categoria'),
+                fn($q) =>
+                $q->where('animal_category_id', $request->categoria)
+            )
+            ->when(
+                $request->filled('departamento'),
+                fn($q) =>
+                $q->whereHas(
+                    'farm',
+                    fn($q) =>
+                    $q->where('department', $request->departamento)
+                )
+            )
+            ->when(
+                $request->filled('peso') && (int) $request->peso < 800,
+                fn($q) => $q->whereHas(
+                    'latestWeight',
+                    fn($q) =>
+                    $q->where('weight', '<=', (int) $request->peso)
+                )
+            )
+            ->when(
+                $request->filled('precio') && (int) $request->precio < 10000000,
+                fn($q) => $q->where('price', '<=', (int) $request->precio)
+            )
             ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($animal) {
-                return [
-                    'id'        => $animal->id,
-                    'name'      => $animal->name,
-                    'status'    => $animal->status,
-                    'farm'      => $animal->farm,
-                    'breed_name'     => $animal->breed->name,
-                    'category_name' => $animal->animalCategory->name,
-                    'weight' => $animal->latestWeight?->weight ?? null,
-                    'photo' => $animal->hasMedia('animals')
-                        ? $animal->getFirstMedia('animals')?->getFullUrl()
-                        : null,
-                    'price' => $animal->price
+            ->paginate(12)
+            ->through(fn($animal) => [
+                'id'            => $animal->id,
+                'name'          => $animal->name,
+                'status'        => $animal->status,
+                'farm'          => $animal->farm,
+                'breed_name'    => $animal->breed->name,
+                'category_name' => $animal->animalCategory->name,
+                'weight'        => $animal->latestWeight?->weight ?? null,
+                'photo'         => $animal->hasMedia('animals')
+                    ? $animal->getFirstMedia('animals')?->getFullUrl()
+                    : null,
+                'price'         => $animal->price,
+            ]);
 
-                ];
-            });
-
-        return Inertia::render(
-            'Ventas/Index',
-            [
-                'animals' => $animals,
-                'breeds' => $breed,
-                'categories' => $categories,
-                'departments' => $departments
-            ]
-        );
+        return Inertia::render('Ventas/Index', [
+            'animals'     => $animals,
+            'breeds'      => Breed::orderBy('name')->get(['id', 'name']),
+            'categories'  => AnimalCategory::orderBy('name')->get(['id', 'name']),
+            'departments' => Farm::distinct()->orderBy('department')->pluck('department'),
+            'filters'     => $request->only(['raza', 'categoria', 'departamento', 'peso', 'precio']),
+        ]);
     }
     /**
      * Show the form for creating a new resource.
