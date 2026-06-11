@@ -33,7 +33,9 @@ class EcommerceSalesController extends Controller
                     'breed_name'     => $animal->breed->name,
                     'category_name' => $animal->animalCategory->name,
                     'weight' => $animal->latestWeight?->weight ?? null,
-                    'photo' => $animal->getFirstMediaUrl('animals'),
+                    'photo' => $animal->hasMedia('animals')
+                        ? $animal->getFirstMedia('animals')?->getFullUrl()
+                        : null,
                     'price' => $animal->price
 
                 ];

@@ -8,9 +8,31 @@ use App\Models\Breed;
 use App\Models\Farm;
 use App\Models\Paddock;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class AnimalSeeder extends Seeder
 {
+    private array $cattlePhotos = [
+        'M' => [
+            'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=400&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=400&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1484557052118-f32bd25b45b5?w=400&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=400&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?w=400&h=300&fit=crop',
+        ],
+        'H' => [
+            'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?w=400&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=400&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1597200381847-30ec200eeb9a?w=400&h=300&fit=crop',
+            'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400&h=300&fit=crop',
+        ],
+    ];
+
+    /** Rutas locales cacheadas: ['M' => [...paths], 'H' => [...paths]] */
+    private array $localPhotos = ['M' => [], 'H' => []];
+
     public function run(): void
     {
         $farms      = Farm::all();
@@ -31,6 +53,10 @@ class AnimalSeeder extends Seeder
             $this->command->error('No hay razas. Ejecuta BreedSeeder primero.');
             return;
         }
+
+        // Descargar todas las imágenes una sola vez antes de crear animales
+        $this->command->info('Descargando imágenes de ganado...');
+        $this->downloadAllPhotos();
 
         $diseases = [
             'Ninguna',
@@ -92,7 +118,6 @@ class AnimalSeeder extends Seeder
         ];
 
         $totalAnimals = 0;
-        $globalIndex  = 1;
 
         foreach ($farms as $farm) {
             $paddocks = Paddock::where('farm_id', $farm->id)->get();
@@ -118,16 +143,11 @@ class AnimalSeeder extends Seeder
 
                 $paddock = $paddocks->random();
 
-                // Keyword según sexo para imágenes más representativas
-                $keyword = $sex === 'M' ? 'bull,cattle' : 'cow,cattle';
-                $photo   = "https://loremflickr.com/400/300/{$keyword}?lock={$globalIndex}";
-
-                Animal::create([
+                $animal = Animal::create([
                     'name'               => $name,
                     'ear_tag'            => $this->generateUniqueEarTag(),
                     'breed_id'           => $breeds->random()->id,
                     'sex'                => $sex,
-                    'photo'              => $photo,
                     'birth_date'         => $birthDate,
                     'status'             => $statuses[array_rand($statuses)],
                     'description'        => "Animal en buen estado general. Criado en {$farm->city}, {$farm->department}.",
@@ -141,7 +161,20 @@ class AnimalSeeder extends Seeder
                     'paddock_id'         => $paddock->id,
                 ]);
 
-                $globalIndex++;
+                // Adjuntar imagen desde disco local — sin petición HTTP por animal
+                $localPaths = $this->localPhotos[$sex];
+
+                if (!empty($localPaths)) {
+                    $sourcePath = $localPaths[array_rand($localPaths)];
+
+                    // Copiar a un temporal para que Spatie no borre el original
+                    $tmpPath = sys_get_temp_dir() . '/' . uniqid('animal_') . '.jpg';
+                    copy($sourcePath, $tmpPath);
+
+                    $animal
+                        ->addMedia($tmpPath)
+                        ->toMediaCollection('animals');
+                }
             }
 
             $totalAnimals += $count;
@@ -149,6 +182,60 @@ class AnimalSeeder extends Seeder
         }
 
         $this->command->info("Total: {$totalAnimals} animales creados en {$farms->count()} fincas.");
+
+        // Limpiar archivos temporales de caché
+        $this->cleanupTempPhotos();
+    }
+
+    /**
+     * Descarga cada URL una sola vez y la guarda en /tmp.
+     * Los animales posteriores usan los archivos locales — sin reintentar HTTP.
+     */
+    private function downloadAllPhotos(): void
+    {
+        foreach ($this->cattlePhotos as $sex => $urls) {
+            foreach ($urls as $index => $url) {
+                $tmpPath = sys_get_temp_dir() . "/cattle_{$sex}_{$index}.jpg";
+
+                // Reusar si ya existe de una ejecución previa en la misma sesión
+                if (file_exists($tmpPath)) {
+                    $this->localPhotos[$sex][] = $tmpPath;
+                    continue;
+                }
+
+                try {
+                    $response = Http::timeout(10)->get($url);
+
+                    if ($response->successful()) {
+                        file_put_contents($tmpPath, $response->body());
+                        $this->localPhotos[$sex][] = $tmpPath;
+                        $this->command->line("  ↓ Imagen {$sex}[{$index}] descargada.");
+                    } else {
+                        $this->command->warn("  ⚠ No se pudo descargar {$url} (HTTP {$response->status()})");
+                    }
+                } catch (\Exception $e) {
+                    $this->command->warn("  ⚠ Error descargando {$url}: {$e->getMessage()}");
+                }
+            }
+        }
+
+        $totalM = count($this->localPhotos['M']);
+        $totalH = count($this->localPhotos['H']);
+        $this->command->info("  ✓ Imágenes listas: {$totalM} machos, {$totalH} hembras.");
+    }
+
+    /**
+     * Elimina los archivos de caché temporal al finalizar.
+     */
+    private function cleanupTempPhotos(): void
+    {
+        foreach ($this->localPhotos as $paths) {
+            foreach ($paths as $path) {
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+        }
     }
 
     private static array $usedTags = [];

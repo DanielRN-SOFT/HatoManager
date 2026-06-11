@@ -24,7 +24,9 @@ class EcommerceController extends Controller
                     'name'      => $animal->name,
                     'status'    => $animal->status,
                     'farm'      => $animal->farm,
-                    'photo' => $animal->getFirstMediaUrl('animals'),
+                    'photo' => $animal->hasMedia('animals')
+                        ? $animal->getFirstMedia('animals')?->getFullUrl()
+                        : null,
                     'price' => $animal->price
 
                 ];

@@ -24,9 +24,9 @@ const CatalogCard = ({ animal, onDetail, onCart }) => {
     return (
         <div className="group overflow-hidden rounded-xl border border-outline-variant bg-white transition-all duration-300 hover:shadow-lg">
             <div className="relative h-56">
-                {animal.image_url ? (
+                {animal.photo ? (
                     <img
-                        src={animal.image_url}
+                        src={animal.photo}
                         alt={animal.name}
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />

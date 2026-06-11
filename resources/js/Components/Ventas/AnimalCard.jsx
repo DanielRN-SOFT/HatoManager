@@ -1,6 +1,7 @@
 import formatearDinero from '@/helpers/formatearDinero';
 
 const AnimalCard = ({ animal, onCart }) => {
+    console.log(animal)
     const reservado = animal.status === 'Reservado';
 
     return (
