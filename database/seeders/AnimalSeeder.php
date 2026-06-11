@@ -92,12 +92,12 @@ class AnimalSeeder extends Seeder
         ];
 
         $totalAnimals = 0;
+        $globalIndex  = 1;
 
         foreach ($farms as $farm) {
-            // Paddocks de esta finca específica
             $paddocks = Paddock::where('farm_id', $farm->id)->get();
 
-            if($paddocks->isEmpty()) {
+            if ($paddocks->isEmpty()) {
                 $this->command->warn("  ⚠ {$farm->name} no tiene lotes. Omitiendo animales.");
                 continue;
             }
@@ -116,15 +116,18 @@ class AnimalSeeder extends Seeder
                 $baseWeight = min(100 + ($ageInMonths * 8), 550);
                 $weight     = $baseWeight + rand(-30, 30);
 
-                // Paddock aleatorio de la finca
                 $paddock = $paddocks->random();
+
+                // Keyword según sexo para imágenes más representativas
+                $keyword = $sex === 'M' ? 'bull,cattle' : 'cow,cattle';
+                $photo   = "https://loremflickr.com/400/300/{$keyword}?lock={$globalIndex}";
 
                 Animal::create([
                     'name'               => $name,
                     'ear_tag'            => $this->generateUniqueEarTag(),
                     'breed_id'           => $breeds->random()->id,
                     'sex'                => $sex,
-                    'photo'              => "https://placehold.co/400x300?text={$name}",
+                    'photo'              => $photo,
                     'birth_date'         => $birthDate,
                     'status'             => $statuses[array_rand($statuses)],
                     'description'        => "Animal en buen estado general. Criado en {$farm->city}, {$farm->department}.",
@@ -137,6 +140,8 @@ class AnimalSeeder extends Seeder
                     'animal_category_id' => $categories->random()->id,
                     'paddock_id'         => $paddock->id,
                 ]);
+
+                $globalIndex++;
             }
 
             $totalAnimals += $count;

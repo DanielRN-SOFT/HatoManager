@@ -2,6 +2,7 @@
 
     use App\Http\Controllers\AnimalController;
     use App\Http\Controllers\EcommerceController;
+    use App\Http\Controllers\EcommerceSalesController;
     use App\Http\Controllers\ProfileController;
     use App\Http\Controllers\SelectFarmController;
     use App\Http\Controllers\VeterinarianController;
@@ -15,7 +16,7 @@
     use Inertia\Inertia;
 
     Route::get('/', [EcommerceController::class, 'index'])->name('ecommerce.index');
-    Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
+    Route::get('/sales', [EcommerceSalesController::class, 'index'])->name('sales.index');
 
 
     Route::get('/login', function () {

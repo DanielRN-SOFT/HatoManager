@@ -1,3 +1,5 @@
+import formatearDinero from '@/helpers/formatearDinero';
+
 const statusConfig = {
     Activo: {
         label: 'Disponible',
@@ -16,25 +18,8 @@ const statusConfig = {
     },
 };
 
-/**
- * @param {{ animal: {
- *   id: number,
- *   name: string,
- *   image: string,
- *   location: string,
- *   price: string,
- *   status: 'disponible'|'reservado'|'vendido',
- * }, onDetail: Function, onCart: Function }} props
- */
-export default function CatalogCard({ animal, onDetail, onCart }) {
+const CatalogCard = ({ animal, onDetail, onCart }) => {
     const status = statusConfig[animal.status] ?? statusConfig.disponible;
-
-    const formatearDinero = (valor) => {
-        return new Intl.NumberFormat('es-CO', {
-            style: 'currency',
-            currency: 'COP',
-        }).format(valor);
-    };
 
     return (
         <div className="group overflow-hidden rounded-xl border border-outline-variant bg-white transition-all duration-300 hover:shadow-lg">
@@ -104,4 +89,6 @@ export default function CatalogCard({ animal, onDetail, onCart }) {
             </div>
         </div>
     );
-}
+};
+
+export default CatalogCard;

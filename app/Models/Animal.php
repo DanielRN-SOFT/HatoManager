@@ -62,6 +62,13 @@ class Animal extends Model implements HasMedia
     {
         return $this->hasMany(WeightRecord::class);
     }
+
+    public function latestWeight()
+    {
+        return $this->hasOne(WeightRecord::class)->latestOfMany();
+    }
+
+
     protected $appends = ['photo'];
 
     public function getPhotoAttribute(): string

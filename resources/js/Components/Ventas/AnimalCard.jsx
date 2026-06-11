@@ -1,5 +1,7 @@
+import formatearDinero from '@/helpers/formatearDinero';
+
 const AnimalCard = ({ animal, onCart }) => {
-    const reservado = animal.estado === 'Reservado';
+    const reservado = animal.status === 'Reservado';
 
     return (
         <article
@@ -13,7 +15,7 @@ const AnimalCard = ({ animal, onCart }) => {
             <div className="relative h-48 overflow-hidden bg-surface-container">
                 <img
                     src={animal.photo}
-                    alt={`${animal.raza} - ${animal.categoria}`}
+                    alt={`${animal.breed_name} - ${animal.category_name}`}
                     className={`h-full w-full object-cover transition-transform duration-500 ${
                         !reservado ? 'group-hover:scale-105' : ''
                     }`}
@@ -31,10 +33,10 @@ const AnimalCard = ({ animal, onCart }) => {
                 {/* Badges */}
                 <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
                     <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold uppercase text-on-primary shadow-sm">
-                        {animal.raza}
+                        {animal.breed_name}
                     </span>
                     <span className="rounded-full bg-secondary-container px-2 py-0.5 text-[10px] font-bold uppercase text-on-secondary-container shadow-sm">
-                        {animal.categoria}
+                        {animal.category_name}
                     </span>
                 </div>
             </div>
@@ -50,7 +52,7 @@ const AnimalCard = ({ animal, onCart }) => {
                                 : 'text-primary'
                         }`}
                     >
-                        {animal.precio}
+                        {formatearDinero(animal.price)}
                     </span>
                     <span
                         className={`text-sm font-semibold ${
@@ -59,7 +61,7 @@ const AnimalCard = ({ animal, onCart }) => {
                                 : 'text-on-surface-variant'
                         }`}
                     >
-                        {animal.peso} kg
+                        {animal.weight} kg
                     </span>
                 </div>
 
@@ -68,7 +70,9 @@ const AnimalCard = ({ animal, onCart }) => {
                     <span className="material-symbols-outlined text-[16px]">
                         location_on
                     </span>
-                    <span className="truncate">{animal.ubicacion}</span>
+                    <span className="truncate">
+                        {animal.farm.city}, {animal.farm.department}
+                    </span>
                 </div>
 
                 {/* Botón */}

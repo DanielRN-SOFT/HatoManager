@@ -10,6 +10,7 @@ export default function Index({
     animals,
     breeds,
     categories,
+    departments,
     total = 0,
     meta = {},
 }) {
@@ -43,6 +44,7 @@ export default function Index({
                 <FilterBar
                     categories={categories}
                     breeds={breeds}
+                    departments={departments}
                     filters={filters}
                     onChange={setFilters}
                     onFilter={handleFilter}

@@ -2,6 +2,7 @@ const FilterBar = ({
     filters = {},
     breeds,
     categories,
+    departments,
     onChange,
     onFilter,
 }) => {
@@ -65,10 +66,11 @@ const FilterBar = ({
                         }
                     >
                         <option value="">Todos</option>
-                        <option>Antioquia</option>
-                        <option>Córdoba</option>
-                        <option>Meta</option>
-                        <option>Casanare</option>
+                        {departments.map((department) => (
+                            <option key={department} value={department}>
+                                {department}
+                            </option>
+                        ))}
                     </select>
                 </div>
 
