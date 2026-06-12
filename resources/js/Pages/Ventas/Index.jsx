@@ -16,6 +16,12 @@ export default function Index({
     cartItems = [],
 }) {
     const [filters, setFilters] = useState(initialFilters);
+    const [toast, setToast] = useState(null);
+
+    function showToast(message, type = 'success') {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 3000);
+    }
 
     function handleFilter() {
         router.get(route('sales.index'), filters, {
@@ -40,7 +46,13 @@ export default function Index({
         router.post(
             '/carrito/agregar',
             { animal_id: animal.id },
-            { preserveScroll: true },
+            {
+                preserveScroll: true,
+                onSuccess: () =>
+                    showToast(`${animal.name} agregado al carrito`),
+                onError: () =>
+                    showToast('No se pudo agregar al carrito', 'error'),
+            },
         );
     }
 
@@ -102,6 +114,20 @@ export default function Index({
                     )}
                 </section>
             </main>
+            {toast && (
+                <div
+                    className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg transition-all duration-300 ${
+                        toast.type === 'error'
+                            ? 'bg-error text-on-error'
+                            : 'bg-primary text-on-primary'
+                    }`}
+                >
+                    <span className="material-symbols-outlined text-[20px]">
+                        {toast.type === 'error' ? 'error' : 'check_circle'}
+                    </span>
+                    <span className="text-sm font-medium">{toast.message}</span>
+                </div>
+            )}
         </EcommerceLayout>
     );
 }
