@@ -2,10 +2,43 @@ import CatalogCard from '@/Components/InicioEcommerce/CatalogoCard';
 import HeroSection from '@/Components/InicioEcommerce/HeroSection';
 import NewsLetter from '@/Components/InicioEcommerce/NewsLetter';
 import TrustSection from '@/Components/InicioEcommerce/TrustSection';
+import ToastEcommerce from '@/Components/ToastEcommerce';
 import EcommerceLayout from '@/Layouts/EcommerceLayout';
-import { Head } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
+import { useState } from 'react';
 
-export default function Index({ animals, total = 458 }) {
+export default function Index({ animals, cartItems = [] }) {
+    const { auth } = usePage().props;
+    const [toast, setToast] = useState(null);
+    function handleCart(animal, e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        if (!auth.user) {
+            router.visit('/login');
+            return;
+        }
+
+        router.post(
+            '/carrito/agregar',
+            { animal_id: animal.id },
+            {
+                preserveScroll: true,
+                onSuccess: () =>
+                    showToast(`${animal.name} agregado al carrito`),
+                onError: () =>
+                    showToast('No se pudo agregar al carrito', 'error'),
+            },
+        );
+    }
+
+    function showToast(message, type = 'success') {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 3000);
+    }
+
     return (
         <EcommerceLayout>
             <Head title="Inicio — HatoManager" />
@@ -25,9 +58,6 @@ export default function Index({ animals, total = 458 }) {
                             inmediata.
                         </p>
                     </div>
-                    <div className="text-sm text-on-surface-variant">
-                        Mostrando {animals.length} de {total} resultados
-                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -35,18 +65,10 @@ export default function Index({ animals, total = 458 }) {
                         <CatalogCard
                             key={animal.id}
                             animal={animal}
-                            onDetail={(a) => console.log('Ver detalle:', a.id)}
-                            onCart={(a) =>
-                                console.log('Añadir al carrito:', a.id)
-                            }
+                            enCarrito={cartItems.includes(animal.id)}
+                            onCart={handleCart}
                         />
                     ))}
-                </div>
-
-                <div className="mt-16 flex justify-center">
-                    <button className="rounded-xl border-2 border-primary px-10 py-4 font-bold text-primary transition-all hover:bg-primary/5">
-                        Cargar más ejemplares
-                    </button>
                 </div>
             </section>
 
@@ -55,6 +77,10 @@ export default function Index({ animals, total = 458 }) {
 
             {/* ── Newsletter ── */}
             <NewsLetter />
+
+            {toast && (
+              <ToastEcommerce toast={toast}/>
+            )}
         </EcommerceLayout>
     );
 }

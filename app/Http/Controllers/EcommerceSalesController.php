@@ -19,7 +19,7 @@ class EcommerceSalesController extends Controller
     public function index(Request $request)
     {
         $animals = Animal::with(['media', 'farm', 'breed', 'animalCategory', 'latestWeight'])
-            ->whereIn('status', ['Activo', 'Reservado'])
+            ->whereIn('status', ['Publicado', 'Reservado'])
             ->whereNotNull('publication_date')
             ->when(
                 $request->filled('raza'),

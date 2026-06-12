@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Animal;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,7 +15,7 @@ class EcommerceController extends Controller
     public function index()
     {
         $animals = Animal::with(['media', 'farm'])
-            ->whereIn('status', ['Activo', 'Reservado', 'Vendido'])
+            ->whereIn('status', ['Publicado'])
             ->orderBy('created_at', 'desc')
             ->limit(4)
             ->get()
@@ -32,7 +33,12 @@ class EcommerceController extends Controller
                 ];
             });
 
-        return Inertia::render('InicioEcommerce/Index', ['animals' => $animals]);
+        return Inertia::render('InicioEcommerce/Index', ['animals' => $animals,   'cartItems' => auth()->check()
+            ? Cart::forUser(auth()->id())
+            ->items()
+            ->pluck('animal_id')
+            ->toArray()
+            : [],]);
     }
     /**
      * Show the form for creating a new resource.

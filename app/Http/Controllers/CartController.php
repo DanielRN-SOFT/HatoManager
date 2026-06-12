@@ -30,7 +30,7 @@ class CartController extends Controller
             $animal     = $item->animal;
             $disponible = $animal
                 && ! $animal->trashed()
-                && $animal->status === 'Activo'
+                && $animal->status === 'Publicado'
                 && $animal->publication_date !== null;
 
             return [
@@ -86,7 +86,7 @@ class CartController extends Controller
             'animal_id' => ['required', 'integer', 'exists:animals,id'],
         ]);
 
-        $animal = Animal::where('status', 'Activo')
+        $animal = Animal::where('status', 'Publicado')
             ->whereNotNull('publication_date')
             ->find($request->animal_id);
 

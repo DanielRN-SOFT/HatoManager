@@ -1,7 +1,8 @@
 import formatearDinero from '@/helpers/formatearDinero';
+import { useRole } from '@/hooks/useRole';
 
 const statusConfig = {
-    Activo: {
+    Publicado: {
         label: 'Disponible',
         dot: 'bg-green-400',
         badge: 'bg-primary-container text-on-primary-container',
@@ -11,15 +12,12 @@ const statusConfig = {
         dot: 'bg-amber-400',
         badge: 'bg-tertiary-container text-on-tertiary-container',
     },
-    Vendido: {
-        label: 'Vendido',
-        dot: 'bg-red-400',
-        badge: 'bg-error-container text-on-error-container',
-    },
 };
 
-const CatalogCard = ({ animal, onDetail, onCart }) => {
+const CatalogCard = ({ animal, enCarrito, onCart }) => {
+    const { isVeterinario } = useRole();
     const status = statusConfig[animal.status] ?? statusConfig.disponible;
+    const reservado = animal.status === 'Reservado';
 
     return (
         <div className="group overflow-hidden rounded-xl border border-outline-variant bg-white transition-all duration-300 hover:shadow-lg">
@@ -69,23 +67,47 @@ const CatalogCard = ({ animal, onDetail, onCart }) => {
                     </span>
                 </div>
 
-                <div className="grid grid-cols-5 gap-2">
+                {reservado ? (
                     <button
-                        onClick={() => onDetail?.(animal)}
-                        className="col-span-4 rounded-lg bg-primary py-2.5 text-sm font-bold text-on-primary transition-all hover:bg-primary-container active:opacity-80"
+                        disabled
+                        className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-outline-variant bg-surface-container py-2 text-sm font-semibold text-outline"
                     >
-                        Ver detalle
+                        <span className="material-symbols-outlined text-[18px]">
+                            remove_shopping_cart
+                        </span>
+                        No disponible
                     </button>
+                ) : isVeterinario ? (
                     <button
-                        onClick={() => onCart?.(animal)}
-                        className="col-span-1 flex items-center justify-center rounded-lg border border-primary text-primary transition-all hover:bg-primary/5"
-                        aria-label="Agregar al carrito"
+                        disabled
+                        className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-outline-variant bg-surface-container py-2 text-sm font-semibold text-outline"
                     >
-                        <span className="material-symbols-outlined text-lg">
+                        <span className="material-symbols-outlined text-[18px]">
+                            visibility
+                        </span>
+                        Solo visualización
+                    </button>
+                ) : enCarrito ? (
+                    <button
+                        disabled
+                        className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/10 py-2 text-sm font-semibold text-primary"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">
+                            check_circle
+                        </span>
+                        En tu carrito
+                    </button>
+                ) : (
+                    <button
+                        onClick={(e) => onCart?.(animal, e)}
+                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-2 text-sm font-bold text-on-primary shadow-sm shadow-primary/20 transition-all duration-150 hover:bg-primary-container hover:text-on-primary active:scale-95"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">
                             shopping_cart
                         </span>
+                        Agregar al carrito
                     </button>
-                </div>
+                )}
             </div>
         </div>
     );

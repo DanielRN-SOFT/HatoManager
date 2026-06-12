@@ -1,3 +1,6 @@
+import { Link } from "@inertiajs/react";
+import { MdOutlineArrowForward } from "react-icons/md";
+
 const HeroSection = () => {
     return (
         <section className="relative flex h-[500px] items-center overflow-hidden">
@@ -19,12 +22,13 @@ const HeroSection = () => {
                         Conectamos compradores con los mejores ganaderos del
                         país. Venta directa y segura para fortalecer tu hato.
                     </p>
-                    <button className="flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-lg font-bold text-on-primary transition-all hover:bg-primary-container">
+                    <Link
+                        href={'/sales'}
+                        className="flex max-w-xs items-center gap-2 rounded-xl bg-primary px-8 py-4 text-lg font-bold text-on-primary transition-all hover:bg-primary-container"
+                    >
                         Explorar Catálogo
-                        <span className="material-symbols-outlined">
-                            arrow_forward
-                        </span>
-                    </button>
+                        <MdOutlineArrowForward className="text-2xl"/>
+                    </Link>
                 </div>
             </div>
         </section>

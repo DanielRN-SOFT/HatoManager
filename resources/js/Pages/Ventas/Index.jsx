@@ -1,3 +1,4 @@
+import ToastEcommerce from '@/Components/ToastEcommerce';
 import AnimalCard from '@/Components/Ventas/AnimalCard';
 import FilterBar from '@/Components/Ventas/FilterBar';
 import Header from '@/Components/Ventas/Header';
@@ -17,7 +18,7 @@ export default function Index({
     minWeight,
     maxWeight,
     minPrice,
-    maxPrice
+    maxPrice,
 }) {
     const [filters, setFilters] = useState(initialFilters);
     const { auth } = usePage().props;
@@ -47,7 +48,6 @@ export default function Index({
             preserveScroll: true,
         });
     }
-
 
     function handleCart(animal, e) {
         if (e) {
@@ -138,20 +138,7 @@ export default function Index({
                     )}
                 </section>
             </main>
-            {toast && (
-                <div
-                    className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg transition-all duration-300 ${
-                        toast.type === 'error'
-                            ? 'bg-error text-on-error'
-                            : 'bg-primary text-on-primary'
-                    }`}
-                >
-                    <span className="material-symbols-outlined text-[20px]">
-                        {toast.type === 'error' ? 'error' : 'check_circle'}
-                    </span>
-                    <span className="text-sm font-medium">{toast.message}</span>
-                </div>
-            )}
+            {toast && <ToastEcommerce toast={toast} />}
         </EcommerceLayout>
     );
 }
