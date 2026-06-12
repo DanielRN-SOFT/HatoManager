@@ -118,6 +118,12 @@ export default function CartIndex({ grupos, total, count }) {
     const { props } = usePage();
     const [localGrupos, setLocalGrupos] = useState(grupos);
     const [hasUnavailable, setHasUnavailable] = useState(false);
+    const [toast, setToast] = useState(null);
+
+    function showToast(message, type = 'success') {
+        setToast({ message, type });
+        setTimeout(() => setToast(null), 3000);
+    }
 
     // Detectar si hay ítems no disponibles al cargar
     useEffect(() => {
@@ -169,6 +175,7 @@ export default function CartIndex({ grupos, total, count }) {
         router.delete(`/carrito/${itemId}`, {
             preserveScroll: true,
             onSuccess: () => {
+                showToast('Animal eliminado del carrito');
                 setLocalGrupos((prev) =>
                     prev
                         .map((g) => ({
@@ -311,6 +318,20 @@ export default function CartIndex({ grupos, total, count }) {
                     </div>
                 )}
             </main>
+            {toast && (
+                <div
+                    className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg transition-all duration-300 ${
+                        toast.type === 'error'
+                            ? 'bg-error text-on-error'
+                            : 'bg-primary text-on-primary'
+                    }`}
+                >
+                    <span className="material-symbols-outlined text-[20px]">
+                        {toast.type === 'error' ? 'error' : 'check_circle'}
+                    </span>
+                    <span className="text-sm font-medium">{toast.message}</span>
+                </div>
+            )}
         </EcommerceLayout>
     );
 }
