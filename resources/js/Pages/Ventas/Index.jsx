@@ -16,7 +16,9 @@ export default function Index({
     cartItems = [],
 }) {
     const [filters, setFilters] = useState(initialFilters);
+    const { auth, roles } = usePage().props;
     const [toast, setToast] = useState(null);
+    const esVeterinario = auth.user && auth.roles?.includes('veterinario');
 
     function showToast(message, type = 'success') {
         setToast({ message, type });
@@ -29,8 +31,6 @@ export default function Index({
             preserveScroll: true,
         });
     }
-
-    const { auth } = usePage().props;
 
     function handleCart(animal, e) {
         if (e) {
@@ -100,6 +100,7 @@ export default function Index({
                                     animal={animal}
                                     onCart={handleCart}
                                     enCarrito={cartItems.includes(animal.id)}
+                                    puedeComprar={!esVeterinario}
                                 />
                             ))}
                         </div>

@@ -1,6 +1,11 @@
 import formatearDinero from '@/helpers/formatearDinero';
 
-const AnimalCard = ({ animal, onCart, enCarrito = false }) => {
+const AnimalCard = ({
+    animal,
+    onCart,
+    enCarrito = false,
+    puedeComprar = true,
+}) => {
     const reservado = animal.status === 'Reservado';
 
     return (
@@ -85,6 +90,16 @@ const AnimalCard = ({ animal, onCart, enCarrito = false }) => {
                             remove_shopping_cart
                         </span>
                         No disponible
+                    </button>
+                ) : !puedeComprar ? (
+                    <button
+                        disabled
+                        className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-outline-variant bg-surface-container py-2 text-sm font-semibold text-outline"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">
+                            visibility
+                        </span>
+                        Solo visualización
                     </button>
                 ) : enCarrito ? (
                     <button

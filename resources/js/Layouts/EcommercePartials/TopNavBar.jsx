@@ -8,6 +8,9 @@ const navLinks = [
 
 export default function TopNavBar() {
     const { url, props } = usePage();
+    const user = props.auth?.user ?? null;
+    const roles = props.auth?.roles ?? [];
+    const esVeterinario = roles.includes('veterinario');
     const cartCount = props.cart_count ?? 0;
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -56,35 +59,45 @@ export default function TopNavBar() {
                     {/* Right: Auth actions (desktop) + Hamburger (mobile) */}
                     <div className="flex shrink-0 items-center gap-3">
                         {/* Icono carrito — desktop */}
-                        <button
-                            onClick={() => {
-                                window.location.href = '/carrito';
-                            }}
-                            className="relative flex h-10 w-10 items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
-                            aria-label="Ver carrito"
-                        >
-                            <span className="material-symbols-outlined text-[22px]">
-                                shopping_cart
-                            </span>
-                            {cartCount > 0 && (
-                                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-on-primary">
-                                    {cartCount}
+                        {!esVeterinario && (
+                            <button
+                                onClick={() => {
+                                    window.location.href = '/carrito';
+                                }}
+                                className="relative flex h-10 w-10 items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
+                                aria-label="Ver carrito"
+                            >
+                                <span className="material-symbols-outlined text-[22px]">
+                                    shopping_cart
+                                </span>
+                                {cartCount > 0 && (
+                                    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-on-primary">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </button>
+                        )}
+                        <div className="flex items-center gap-3 max-md:hidden">
+                            {!user ? (
+                                <>
+                                    <Link
+                                        href="/login"
+                                        className="cursor-pointer border-none bg-transparent px-3 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:text-primary"
+                                    >
+                                        Iniciar Sesión
+                                    </Link>
+                                    <Link
+                                        href="/register"
+                                        className="rounded-lg bg-primary px-5 py-2 text-sm font-bold text-on-primary no-underline transition-all hover:bg-primary-container"
+                                    >
+                                        Registrarse
+                                    </Link>
+                                </>
+                            ) : (
+                                <span className="text-sm font-medium text-on-surface-variant">
+                                    {user.name}
                                 </span>
                             )}
-                        </button>
-                        <div className="flex items-center gap-3 max-md:hidden">
-                            <Link
-                                href="/login"
-                                className="cursor-pointer border-none bg-transparent px-3 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:text-primary"
-                            >
-                                Iniciar Sesión
-                            </Link>
-                            <Link
-                                href="/register"
-                                className="rounded-lg bg-primary px-5 py-2 text-sm font-bold text-on-primary no-underline transition-all hover:bg-primary-container"
-                            >
-                                Registrarse
-                            </Link>
                         </div>
 
                         {/* Hamburger — mobile only */}
@@ -125,39 +138,43 @@ export default function TopNavBar() {
                             })}
                         </ul>
                         {/* Icono carrito — mobile */}
-                        <button
-                            onClick={() => {
-                                router.visit('/carrito');
-                                setMenuOpen(false);
-                            }}
-                            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-on-surface-variant hover:bg-surface-container hover:text-primary"
-                        >
-                            <span className="material-symbols-outlined text-[20px]">
-                                shopping_cart
-                            </span>
-                            Carrito
-                            {cartCount > 0 && (
-                                <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-on-primary">
-                                    {cartCount}
+                        {!esVeterinario && (
+                            <button
+                                onClick={() => {
+                                    router.visit('/carrito');
+                                    setMenuOpen(false);
+                                }}
+                                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-on-surface-variant hover:bg-surface-container hover:text-primary"
+                            >
+                                <span className="material-symbols-outlined text-[20px]">
+                                    shopping_cart
                                 </span>
-                            )}
-                        </button>
+                                Carrito
+                                {cartCount > 0 && (
+                                    <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-on-primary">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </button>
+                        )}
                         {/* Auth actions en mobile */}
-                        <div className="mt-4 flex flex-col gap-2 border-t border-outline-variant pt-4">
-                            <Link
-                                href={route('login')}
-                                className="w-full cursor-pointer rounded-lg border border-outline-variant bg-transparent px-4 py-2.5 text-sm font-medium text-on-surface-variant transition-colors hover:text-primary"
-                            >
-                                Iniciar Sesión
-                            </Link>
-                            <Link
-                                href={route('register')}
-                                onClick={() => setMenuOpen(false)}
-                                className="block w-full rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-bold text-on-primary no-underline transition-all hover:bg-primary-container"
-                            >
-                                Registrarse
-                            </Link>
-                        </div>
+                        {!user && (
+                            <div className="mt-4 flex flex-col gap-2 border-t border-outline-variant pt-4">
+                                <Link
+                                    href={route('login')}
+                                    className="w-full cursor-pointer rounded-lg border border-outline-variant bg-transparent px-4 py-2.5 text-sm font-medium text-on-surface-variant transition-colors hover:text-primary"
+                                >
+                                    Iniciar Sesión
+                                </Link>
+                                <Link
+                                    href={route('register')}
+                                    onClick={() => setMenuOpen(false)}
+                                    className="block w-full rounded-lg bg-primary px-4 py-2.5 text-center text-sm font-bold text-on-primary no-underline transition-all hover:bg-primary-container"
+                                >
+                                    Registrarse
+                                </Link>
+                            </div>
+                        )}
                     </div>
                 )}
             </header>

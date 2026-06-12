@@ -150,4 +150,13 @@ class CartController extends Controller
 
         return response()->json(['items' => $result]);
     }
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (auth()->check() && auth()->user()->hasRole('veterinario')) {
+                abort(403);
+            }
+            return $next($request);
+        })->only(['add']);
+    }
 }
