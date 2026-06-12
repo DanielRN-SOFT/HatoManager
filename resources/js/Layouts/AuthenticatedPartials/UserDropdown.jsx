@@ -1,5 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
+import { IoSettings } from 'react-icons/io5';
+import { MdOutlineLocalGroceryStore, MdOutlineManageAccounts, MdOutlineSettings } from 'react-icons/md';
 const UserDropdown = ({ user }) => {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
@@ -73,13 +75,18 @@ const UserDropdown = ({ user }) => {
                     {[
                         {
                             label: 'Mi perfil',
-                            icon: 'manage_accounts',
+                            icon: <MdOutlineManageAccounts />,
                             href: route('profile.edit'),
                         },
                         {
                             label: 'Configuración',
-                            icon: 'settings',
+                            icon: <MdOutlineSettings />,
                             href: route('dashboard'),
+                        },
+                        {
+                            label: 'Tienda en linea',
+                            icon: <MdOutlineLocalGroceryStore />,
+                            href: route('ecommerce.index'),
                         },
                     ].map(({ label, icon, href }) => (
                         <Link

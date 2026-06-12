@@ -15,7 +15,7 @@ class LoginResponse implements LoginResponseContract
         }
 
         if ($user->hasRole('comprador')) {
-            return redirect()->route('subastas');
+            return redirect()->route('ecommerce.index');
         }
 
         if ($user->hasRole('ganadero') || $user->hasRole('veterinario')) {
