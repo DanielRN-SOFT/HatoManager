@@ -11,6 +11,8 @@ const FilterBar = ({
     maxWeight,
     minPrice = 1000000,
     maxPrice = 10000000,
+    onClear,
+    hayFiltros,
 }) => {
     // Estado local para los sliders — evita requests en cada píxel
     const [localPeso, setLocalPeso] = useState(filters.peso ?? maxWeight);
@@ -55,7 +57,7 @@ const FilterBar = ({
 
     return (
         <section className="mb-8 rounded-xl border border-outline-variant bg-surface-container-lowest p-4">
-            <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-3 lg:grid-cols-5">
+            <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-3 lg:grid-cols-6">
                 {/* Raza */}
                 <div>
                     <label className={labelClass}>Raza</label>
@@ -156,6 +158,18 @@ const FilterBar = ({
                         <span>{maxPrice}</span>
                     </div>
                 </div>
+
+                {/* Botón Limpiar — al final del grid */}
+                {hayFiltros && (
+                    <div className="flex items-end">
+                        <button
+                            onClick={onClear}
+                            className="w-full rounded-xl border border-outline-variant bg-surface-container px-4 py-2 text-sm font-medium text-on-surface transition-colors hover:bg-surface-container-high"
+                        >
+                            Limpiar filtros
+                        </button>
+                    </div>
+                )}
             </div>
         </section>
     );

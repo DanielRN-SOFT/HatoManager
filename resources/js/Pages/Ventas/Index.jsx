@@ -19,12 +19,13 @@ export default function Index({
     minPrice,
     maxPrice
 }) {
-    console.log(minPrice);
-    console.log(maxPrice);
     const [filters, setFilters] = useState(initialFilters);
     const { auth } = usePage().props;
     const [toast, setToast] = useState(null);
     const esVeterinario = auth.user && auth.roles?.includes('veterinario');
+    const hayFiltros = Object.values(filters).some(
+        (v) => v !== '' && v != null,
+    );
 
     function showToast(message, type = 'success') {
         setToast({ message, type });
@@ -37,6 +38,17 @@ export default function Index({
             preserveScroll: true,
         });
     }
+
+    function handleClear() {
+        const empty = {};
+        setFilters(empty);
+        router.get(route('sales.index'), empty, {
+            preserveState: true,
+            preserveScroll: true,
+        });
+    }
+
+
     function handleCart(animal, e) {
         if (e) {
             e.preventDefault();
@@ -87,6 +99,8 @@ export default function Index({
                     maxWeight={maxWeight}
                     minPrice={minPrice}
                     maxPrice={maxPrice}
+                    onClear={handleClear}
+                    hayFiltros={hayFiltros}
                 />
                 <section>
                     {!items.length ? (
