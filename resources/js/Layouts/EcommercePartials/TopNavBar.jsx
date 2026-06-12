@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 const navLinks = [
@@ -7,7 +7,8 @@ const navLinks = [
 ];
 
 export default function TopNavBar() {
-    const { url } = usePage();
+    const { url, props } = usePage();
+    const cartCount = props.cart_count ?? 0;
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
@@ -54,6 +55,21 @@ export default function TopNavBar() {
 
                     {/* Right: Auth actions (desktop) + Hamburger (mobile) */}
                     <div className="flex shrink-0 items-center gap-3">
+                        {/* Icono carrito — desktop */}
+                        <button
+                            onClick={() => router.visit(route('cart.index'))}
+                            className="relative flex h-10 w-10 items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
+                            aria-label="Ver carrito"
+                        >
+                            <span className="material-symbols-outlined text-[22px]">
+                                shopping_cart
+                            </span>
+                            {cartCount > 0 && (
+                                <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-on-primary">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </button>
                         <div className="flex items-center gap-3 max-md:hidden">
                             <Link
                                 href="/login"
@@ -106,7 +122,24 @@ export default function TopNavBar() {
                                 );
                             })}
                         </ul>
-
+                        {/* Icono carrito — mobile */}
+                        <button
+                            onClick={() => {
+                                router.visit(route('cart.index'));
+                                setMenuOpen(false);
+                            }}
+                            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-on-surface-variant hover:bg-surface-container hover:text-primary"
+                        >
+                            <span className="material-symbols-outlined text-[20px]">
+                                shopping_cart
+                            </span>
+                            Carrito
+                            {cartCount > 0 && (
+                                <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-on-primary">
+                                    {cartCount}
+                                </span>
+                            )}
+                        </button>
                         {/* Auth actions en mobile */}
                         <div className="mt-4 flex flex-col gap-2 border-t border-outline-variant pt-4">
                             <Link
