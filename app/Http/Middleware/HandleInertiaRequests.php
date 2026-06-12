@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\Cart;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -61,9 +62,12 @@ class HandleInertiaRequests extends Middleware
                 'info'    => session('info'),
                 'error'   => session('error'),
             ],
+            'cart_count' => function () {
+                if (! auth()->check()) return 0;
+                return Cart::forUser(auth()->id())->getCount();
+            },
             'notifications' => function () {
                 if (!auth()->check()) return ['unread_count' => 0, 'items' => []];
-
                 $notifications = auth()->user()
                     ->unreadNotifications()
                     ->latest()
