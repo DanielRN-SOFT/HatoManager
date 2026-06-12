@@ -48,6 +48,11 @@ const AnimalCard = ({
 
             {/* Contenido */}
             <div className="space-y-3 p-4">
+                {/* Nombre */}
+                <div>
+                    <span className='font-bold text-gray-800'>{animal.name}</span>
+                </div>
+
                 {/* Precio y peso */}
                 <div className="flex items-baseline justify-between">
                     <span

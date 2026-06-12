@@ -7,6 +7,7 @@ use App\Models\AnimalCategory;
 use App\Models\Breed;
 use App\Models\Farm;
 use App\Models\Cart;
+use App\Models\WeightRecord;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -70,6 +71,10 @@ class EcommerceSalesController extends Controller
         return Inertia::render('Ventas/Index', [
             'animals'     => $animals,
             'breeds'      => Breed::orderBy('name')->get(['id', 'name']),
+            'minWeight'   => WeightRecord::orderBy('weight', 'ASC')->limit(1)->value('weight'),
+            'maxWeight'   => WeightRecord::orderBy('weight', 'DESC')->limit(1)->value('weight'),
+            'minPrice'   => Animal::orderBy('price', 'ASC')->limit(1)->value('price'),
+            'maxPrice'   => Animal::orderBy('price', 'DESC')->limit(1)->value('price'),
             'categories'  => AnimalCategory::orderBy('name')->get(['id', 'name']),
             'departments' => Farm::distinct()->orderBy('department')->pluck('department'),
             'filters'     => $request->only(['raza', 'categoria', 'departamento', 'peso', 'precio']),

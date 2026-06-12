@@ -14,9 +14,15 @@ export default function Index({
     filters: initialFilters = {}, // ← recibir filtros activos
     total = 0,
     cartItems = [],
+    minWeight,
+    maxWeight,
+    minPrice,
+    maxPrice
 }) {
+    console.log(minPrice);
+    console.log(maxPrice);
     const [filters, setFilters] = useState(initialFilters);
-    const { auth, roles } = usePage().props;
+    const { auth } = usePage().props;
     const [toast, setToast] = useState(null);
     const esVeterinario = auth.user && auth.roles?.includes('veterinario');
 
@@ -25,13 +31,12 @@ export default function Index({
         setTimeout(() => setToast(null), 3000);
     }
 
-    function handleFilter() {
-        router.get(route('sales.index'), filters, {
+    function handleFilter(updatedFilters) {
+        router.get(route('sales.index'), updatedFilters, {
             preserveState: true,
             preserveScroll: true,
         });
     }
-
     function handleCart(animal, e) {
         if (e) {
             e.preventDefault();
@@ -78,6 +83,10 @@ export default function Index({
                     filters={filters}
                     onChange={setFilters}
                     onFilter={handleFilter}
+                    minWeight={minWeight}
+                    maxWeight={maxWeight}
+                    minPrice={minPrice}
+                    maxPrice={maxPrice}
                 />
                 <section>
                     {!items.length ? (
