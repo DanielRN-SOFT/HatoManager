@@ -8,6 +8,7 @@
     use App\Http\Controllers\VeterinarianController;
     use App\Http\Controllers\FarmController;
     use App\Http\Controllers\HealthRecordController;
+    use App\Http\Controllers\CartController;
     use App\Http\Controllers\SalesController;
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
@@ -140,6 +141,16 @@
         // Cerficado de finca
         Route::get('/fincas/{farm}/certificado-lote', [HealthRecordController::class, 'certificadoLote'])->name('health.certificado.lote');
         Route::put('/farms/{id}/restore', [FarmController::class, 'restore'])->name('farms.restore');
+    });
+
+    // ─────────────────────────────────────────────
+    // Carrito de compras — requiere autenticación
+    // ─────────────────────────────────────────────
+    Route::middleware(['auth'])->prefix('carrito')->name('cart.')->group(function () {
+        Route::get('/',            [CartController::class, 'index'])->name('index');
+        Route::post('/agregar',    [CartController::class, 'add'])->name('add');
+        Route::delete('/{itemId}', [CartController::class, 'remove'])->name('remove');
+        Route::get('/sync',        [CartController::class, 'sync'])->name('sync');
     });
 
     require __DIR__ . '/auth.php';
