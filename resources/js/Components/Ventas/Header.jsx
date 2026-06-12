@@ -9,13 +9,6 @@ const Header = ({ total = 0 }) => {
                     Mostrando {total} resultados encontrados en toda Colombia
                 </p>
             </div>
-            <div className="w-full md:w-auto">
-                <select className="w-full rounded-xl border border-outline-variant bg-surface-container-lowest px-3 py-2 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary md:w-[200px]">
-                    <option>Más recientes</option>
-                    <option>Menor precio</option>
-                    <option>Mayor peso</option>
-                </select>
-            </div>
         </header>
     );
 };
