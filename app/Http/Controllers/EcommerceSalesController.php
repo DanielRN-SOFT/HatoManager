@@ -6,6 +6,7 @@ use App\Models\Animal;
 use App\Models\AnimalCategory;
 use App\Models\Breed;
 use App\Models\Farm;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -17,7 +18,7 @@ class EcommerceSalesController extends Controller
     public function index(Request $request)
     {
         $animals = Animal::with(['media', 'farm', 'breed', 'animalCategory', 'latestWeight'])
-            ->whereIn('status', ['Activo', 'Reservado', 'Vendido'])
+            ->whereIn('status', ['Activo', 'Reservado'])
             ->whereNotNull('publication_date')
             ->when(
                 $request->filled('raza'),
@@ -72,6 +73,12 @@ class EcommerceSalesController extends Controller
             'categories'  => AnimalCategory::orderBy('name')->get(['id', 'name']),
             'departments' => Farm::distinct()->orderBy('department')->pluck('department'),
             'filters'     => $request->only(['raza', 'categoria', 'departamento', 'peso', 'precio']),
+            'cartItems' => auth()->check()
+                ? Cart::forUser(auth()->id())
+                ->items()
+                ->pluck('animal_id')
+                ->toArray()
+                : [],
         ]);
     }
     /**

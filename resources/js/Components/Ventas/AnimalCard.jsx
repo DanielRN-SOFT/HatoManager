@@ -1,6 +1,6 @@
 import formatearDinero from '@/helpers/formatearDinero';
 
-const AnimalCard = ({ animal, onCart }) => {
+const AnimalCard = ({ animal, onCart, enCarrito = false }) => {
     const reservado = animal.status === 'Reservado';
 
     return (
@@ -86,9 +86,19 @@ const AnimalCard = ({ animal, onCart }) => {
                         </span>
                         No disponible
                     </button>
+                ) : enCarrito ? (
+                    <button
+                        disabled
+                        className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/10 py-2 text-sm font-semibold text-primary"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">
+                            check_circle
+                        </span>
+                        En tu carrito
+                    </button>
                 ) : (
                     <button
-                        onClick={() => onCart?.(animal)}
+                        onClick={(e) => onCart?.(animal, e)}
                         className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-2 text-sm font-bold text-on-primary shadow-sm shadow-primary/20 transition-all duration-150 hover:bg-primary-container hover:text-on-primary active:scale-95"
                     >
                         <span className="material-symbols-outlined text-[18px]">

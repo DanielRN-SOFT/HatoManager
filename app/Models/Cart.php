@@ -40,7 +40,10 @@ class Cart extends Model
      */
     public function hasAnimal(int $animalId): bool
     {
-        return $this->items()->where('animal_id', $animalId)->exists();
+        return $this->items()
+            ->withTrashed()
+            ->where('animal_id', $animalId)
+            ->exists();
     }
 
     /**

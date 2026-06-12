@@ -3,7 +3,7 @@ import FilterBar from '@/Components/Ventas/FilterBar';
 import Header from '@/Components/Ventas/Header';
 import Paginacion from '@/Components/Ventas/Paginacion';
 import EcommerceLayout from '@/Layouts/EcommerceLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 export default function Index({
@@ -13,6 +13,7 @@ export default function Index({
     departments,
     filters: initialFilters = {}, // ← recibir filtros activos
     total = 0,
+    cartItems = [],
 }) {
     const [filters, setFilters] = useState(initialFilters);
 
@@ -23,8 +24,24 @@ export default function Index({
         });
     }
 
-    function handleCart(animal) {
-        console.log('Agregar al carrito:', animal.id);
+    const { auth } = usePage().props;
+
+    function handleCart(animal, e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        if (!auth.user) {
+            router.visit('/login');
+            return;
+        }
+
+        router.post(
+            '/carrito/agregar',
+            { animal_id: animal.id },
+            { preserveScroll: true },
+        );
     }
 
     function handlePage(page) {
@@ -70,6 +87,7 @@ export default function Index({
                                     key={animal.id}
                                     animal={animal}
                                     onCart={handleCart}
+                                    enCarrito={cartItems.includes(animal.id)}
                                 />
                             ))}
                         </div>

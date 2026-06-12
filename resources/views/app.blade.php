@@ -18,12 +18,12 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
-        <link rel="shortcut icon" href="/images/vaca.png" type="image/x-icon">
+    <link rel="shortcut icon" href="/images/vaca.png" type="image/x-icon">
 
     <!-- Scripts -->
     @routes
     @viteReactRefresh
-    @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
+    @vite(['resources/js/app.jsx'])
     @inertiaHead
 </head>
 

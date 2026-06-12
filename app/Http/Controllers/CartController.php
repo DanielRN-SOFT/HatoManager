@@ -86,23 +86,26 @@ class CartController extends Controller
             'animal_id' => ['required', 'integer', 'exists:animals,id'],
         ]);
 
-        // Solo animales activos y publicados se pueden agregar
         $animal = Animal::where('status', 'Activo')
             ->whereNotNull('publication_date')
-            ->findOrFail($request->animal_id);
+            ->find($request->animal_id);
 
-        $cart = Cart::forUser(auth()->id());
+        if ($animal) {
+            $cart = Cart::forUser(auth()->id());
+            $existente = $cart->items()->withTrashed()->where('animal_id', $animal->id)->first();
 
-        if ($cart->hasAnimal($animal->id)) {
-            return back()->with('info', 'Este animal ya está en tu carrito.');
+            if ($existente && $existente->trashed()) {
+                $existente->restore();
+                $existente->update(['price_snapshot' => $animal->price]);
+            } elseif (!$existente) {
+                $cart->items()->create([
+                    'animal_id'      => $animal->id,
+                    'price_snapshot' => $animal->price,
+                ]);
+            }
         }
 
-        $cart->items()->create([
-            'animal_id'      => $animal->id,
-            'price_snapshot' => $animal->price,
-        ]);
-
-        return back()->with('success', "{$animal->name} fue agregado al carrito.");
+        return back();
     }
 
     /* ── DELETE /carrito/{itemId} ────────────────────────────── */

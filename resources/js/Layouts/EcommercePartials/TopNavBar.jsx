@@ -57,7 +57,9 @@ export default function TopNavBar() {
                     <div className="flex shrink-0 items-center gap-3">
                         {/* Icono carrito — desktop */}
                         <button
-                            onClick={() => router.visit(route('cart.index'))}
+                            onClick={() => {
+                                window.location.href = '/carrito';
+                            }}
                             className="relative flex h-10 w-10 items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
                             aria-label="Ver carrito"
                         >
@@ -125,7 +127,7 @@ export default function TopNavBar() {
                         {/* Icono carrito — mobile */}
                         <button
                             onClick={() => {
-                                router.visit(route('cart.index'));
+                                router.visit('/carrito');
                                 setMenuOpen(false);
                             }}
                             className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-on-surface-variant hover:bg-surface-container hover:text-primary"
