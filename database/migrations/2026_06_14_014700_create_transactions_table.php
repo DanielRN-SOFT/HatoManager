@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("order_id")->nullable()->constrained()->restrictOnDelete();
-            $table->foreignId("deposit_id")->nullable()->constrained()->restrictOnDelete();
             $table->foreignId('transaction_id')->nullable()->constrained()->restrictOnDelete();
             $table->string('wompi_id', 255)->unique();
             $table->string('internal_reference', 100);

@@ -24,16 +24,6 @@ class Transaction extends Model
         'amount' => 'decimal:2',
     ];
 
-    public function order()
-    {
-        return $this->belongsTo(Order::class);
-    }
-
-    public function deposit()
-    {
-        return $this->belongsTo(Deposit::class);
-    }
-
     public function transaction()
     {
         return $this->belongsTo(Transaction::class);

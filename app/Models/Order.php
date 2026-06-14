@@ -25,8 +25,16 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function animals()
+    {
+        return $this->belongsToMany(Animal::class)
+            ->using(AnimalOrder::class)
+            ->withPivot('user_id', 'status_order', 'snapshot_price')
+            ->withTimestamps();
+    }
+
     public function transactions()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->belongsTo(Transaction::class);
     }
 }

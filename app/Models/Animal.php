@@ -68,6 +68,15 @@ class Animal extends Model implements HasMedia
         return $this->hasOne(WeightRecord::class)->latestOfMany();
     }
 
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class)
+            ->using(AnimalOrder::class)
+            ->withPivot('user_id', 'status_order', 'snapshot_price')
+            ->withTimestamps();
+    }
+
+
 
     protected $appends = ['photo'];
 

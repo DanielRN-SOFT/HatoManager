@@ -31,6 +31,7 @@ return new class extends Migration
             $table->decimal('subtotal', 10, 2);
             $table->string('referencia', 100)->unique()->nullable();
            $table->foreignId('user_id')->constrained()->restrictOnDelete();
+           $table->foreignId('transaction_id')->constrained();
             $table->timestamps();
         });
     }
