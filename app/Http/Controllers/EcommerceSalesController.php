@@ -107,8 +107,65 @@ class EcommerceSalesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $animal = Animal::with([
+            'media',
+            'farm',
+            'breed',
+            'animalCategory',
+            'weightRecords',
+            'healthRecords',
+        ])
+            ->whereIn('status', ['Publicado', 'Reservado'])
+            ->whereNotNull('publication_date')
+            ->findOrFail($id);
+
+        return Inertia::render('Ventas/Show', [
+            'animal' => [
+                'id'               => $animal->id,
+                'name'             => $animal->name,
+                'status'           => $animal->status,
+                'sex'              => $animal->sex,
+                'ear_tag'          => $animal->ear_tag,
+                'birth_date'       => $animal->birth_date,
+                'publication_date' => $animal->publication_date,
+                'description'      => $animal->description,
+                'previous_diseases' => $animal->previous_diseases,
+                'target_weight'    => $animal->target_weight,
+                'price'            => $animal->price,
+
+                'breed'           => $animal->breed?->only(['id', 'name']),
+                'animal_category' => $animal->animalCategory?->only(['id', 'name']),
+                'farm'            => $animal->farm?->only(['id', 'name', 'department']),
+
+                'photos' => $animal->getMedia('animals')
+                    ->map(fn($m) => $m->getFullUrl())
+                    ->values(),
+
+                'weight_records' => $animal->weightRecords->map(fn($w) => [
+                    'id'          => $w->id,
+                    'weight'      => $w->weight,
+                    'weight_date' => $w->weight_date,
+                ]),
+
+                'health_records' => $animal->healthRecords->map(fn($h) => [
+                    'id'         => $h->id,
+                    'type'       => $h->type,
+                    'product'    => $h->product,
+                    'dose'       => $h->dose,
+                    'applied_at' => $h->applied_at,
+                    'next_date'  => $h->next_date,
+                    'notes'      => $h->notes,
+                ]),
+            ],
+            'cartItems' => auth()->check()
+                ? Cart::forUser(auth()->id())
+                ->items()
+                ->pluck('animal_id')
+                ->toArray()
+                : [],
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

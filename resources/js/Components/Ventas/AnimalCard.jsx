@@ -1,5 +1,5 @@
 import formatearDinero from '@/helpers/formatearDinero';
-
+import { router } from '@inertiajs/react';
 const AnimalCard = ({
     animal,
     onCart,
@@ -10,7 +10,8 @@ const AnimalCard = ({
 
     return (
         <article
-            className={`group overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest transition-all duration-300 ${
+            onClick={() => router.visit(route('sales.show', animal.id))}
+            className={`group cursor-pointer overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest transition-all duration-300 ${
                 reservado
                     ? 'opacity-80'
                     : 'hover:-translate-y-0.5 hover:shadow-xl'
@@ -50,7 +51,9 @@ const AnimalCard = ({
             <div className="space-y-3 p-4">
                 {/* Nombre */}
                 <div>
-                    <span className='font-bold text-gray-800'>{animal.name}</span>
+                    <span className="font-bold text-gray-800">
+                        {animal.name}
+                    </span>
                 </div>
 
                 {/* Precio y peso */}
@@ -118,7 +121,10 @@ const AnimalCard = ({
                     </button>
                 ) : (
                     <button
-                        onClick={(e) => onCart?.(animal, e)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onCart?.(animal, e);
+                        }}
                         className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-2 text-sm font-bold text-on-primary shadow-sm shadow-primary/20 transition-all duration-150 hover:bg-primary-container hover:text-on-primary active:scale-95"
                     >
                         <span className="material-symbols-outlined text-[18px]">

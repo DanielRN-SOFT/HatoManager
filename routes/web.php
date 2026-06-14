@@ -18,6 +18,7 @@
 
     Route::get('/', [EcommerceController::class, 'index'])->name('ecommerce.index');
     Route::get('/sales', [EcommerceSalesController::class, 'index'])->name('sales.index');
+    Route::get('/sales/animales/{id}', [EcommerceSalesController::class, 'show'])->name('sales.show');
 
 
     Route::get('/login', function () {
