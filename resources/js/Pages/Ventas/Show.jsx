@@ -69,6 +69,23 @@ export default function AnimalDetalle({ animal, cartItems = [] }) {
             ? Number(latestWeight.weight) - Number(firstWeight.weight)
             : null;
 
+    const hasDescripcion = !!animal.description;
+    const hasPeso = weightRecords.length > 0;
+    const hasSalud = healthRecords.length > 0 || !!animal.previous_diseases;
+
+    const tabs = [
+        hasDescripcion && { key: 'descripcion', label: 'Descripción' },
+        hasPeso && { key: 'peso', label: `Peso (${weightRecords.length})` },
+        hasSalud && {
+            key: 'salud',
+            label: healthRecords.length
+                ? `Salud (${healthRecords.length})`
+                : 'Salud',
+        },
+    ].filter(Boolean);
+
+    const [activeTab, setActiveTab] = useState(tabs[0]?.key ?? null);
+
     function showToast(message, type = 'success') {
         setToast({ message, type });
         setTimeout(() => setToast(null), 3000);
@@ -97,25 +114,9 @@ export default function AnimalDetalle({ animal, cartItems = [] }) {
         <EcommerceLayout>
             <Head title={animal.name} />
 
-            <div className="mx-auto max-w-[1440px] px-6 py-8">
-                {/* Breadcrumb */}
-                <nav className="mb-6 flex items-center gap-1 text-sm text-on-surface-variant">
-                    <Link
-                        href="/catalogo"
-                        className="no-underline transition-colors hover:text-primary"
-                    >
-                        Catálogo
-                    </Link>
-                    <span className="material-symbols-outlined text-base">
-                        chevron_right
-                    </span>
-                    <span className="font-medium text-on-surface">
-                        {animal.name}
-                    </span>
-                </nav>
-
-                <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
-                    {/* ---- Columna izquierda: galería + detalle ---- */}
+            <div className="mx-auto max-w-[1440px] px-6 py-5">
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
+                    {/* ---- Columna izquierda: galería + información ---- */}
                     <div className="lg:col-span-7">
                         {/* Galería */}
                         <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-surface-container">
@@ -141,6 +142,12 @@ export default function AnimalDetalle({ animal, cartItems = [] }) {
                             >
                                 {animal.status}
                             </span>
+
+                            {photos.length > 1 && (
+                                <span className="absolute bottom-3 right-3 rounded-full bg-surface/90 px-2.5 py-1 text-xs font-semibold text-on-surface backdrop-blur">
+                                    {activePhoto + 1} / {photos.length}
+                                </span>
+                            )}
                         </div>
 
                         {photos.length > 1 && (
@@ -165,151 +172,237 @@ export default function AnimalDetalle({ animal, cartItems = [] }) {
                             </div>
                         )}
 
-                        {/* Descripción */}
-                        {animal.description && (
+                        {/* Tabs: descripción / peso / salud */}
+                        {tabs.length > 0 && (
                             <div className="mt-8">
-                                <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-on-surface">
-                                    Descripción
-                                </h2>
-                                <p className="text-sm leading-relaxed text-on-surface-variant">
-                                    {animal.description}
-                                </p>
-                            </div>
-                        )}
-
-                        {/* Historial de peso */}
-                        {weightRecords.length > 0 && (
-                            <div className="mt-8">
-                                <div className="mb-3 flex items-center justify-between">
-                                    <h2 className="text-sm font-bold uppercase tracking-wider text-on-surface">
-                                        Historial de Peso
-                                    </h2>
-                                    {weightGain !== null && (
-                                        <span
-                                            className={`flex items-center gap-1 text-sm font-bold ${
-                                                weightGain >= 0
-                                                    ? 'text-primary'
-                                                    : 'text-on-surface-variant'
+                                <div className="flex gap-6 overflow-x-auto border-b border-outline-variant">
+                                    {tabs.map((tab) => (
+                                        <button
+                                            key={tab.key}
+                                            onClick={() =>
+                                                setActiveTab(tab.key)
+                                            }
+                                            className={`shrink-0 whitespace-nowrap border-b-2 px-1 pb-3 text-sm font-bold transition-colors ${
+                                                activeTab === tab.key
+                                                    ? 'border-primary text-primary'
+                                                    : 'border-transparent text-on-surface-variant hover:text-on-surface'
                                             }`}
                                         >
-                                            <span className="material-symbols-outlined text-base">
-                                                {weightGain >= 0
-                                                    ? 'trending_up'
-                                                    : 'trending_down'}
-                                            </span>
-                                            {weightGain >= 0 ? '+' : ''}
-                                            {weightGain} kg
-                                        </span>
-                                    )}
+                                            {tab.label}
+                                        </button>
+                                    ))}
                                 </div>
-                                <div className="overflow-hidden rounded-2xl border border-outline-variant">
-                                    <table className="w-full text-sm">
-                                        <thead className="bg-surface-container-highest text-xs uppercase tracking-wider text-on-surface-variant">
-                                            <tr>
-                                                <th className="px-4 py-3 text-left font-bold">
-                                                    Fecha
-                                                </th>
-                                                <th className="px-4 py-3 text-right font-bold">
-                                                    Peso
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {weightRecords.map((w, i) => (
-                                                <tr
-                                                    key={w.id}
+
+                                <div className="pt-6">
+                                    {/* Descripción */}
+                                    {activeTab === 'descripcion' && (
+                                        <p className="text-sm leading-relaxed text-on-surface-variant">
+                                            {animal.description}
+                                        </p>
+                                    )}
+
+                                    {/* Peso */}
+                                    {activeTab === 'peso' && (
+                                        <div>
+                                            {weightGain !== null && (
+                                                <div className="mb-3 flex justify-end">
+                                                    <span
+                                                        className={`flex items-center gap-1 text-sm font-bold ${
+                                                            weightGain >= 0
+                                                                ? 'text-primary'
+                                                                : 'text-on-surface-variant'
+                                                        }`}
+                                                    >
+                                                        <span className="material-symbols-outlined text-base">
+                                                            {weightGain >= 0
+                                                                ? 'trending_up'
+                                                                : 'trending_down'}
+                                                        </span>
+                                                        {weightGain >= 0
+                                                            ? '+'
+                                                            : ''}
+                                                        {weightGain} kg desde el
+                                                        primer registro
+                                                    </span>
+                                                </div>
+                                            )}
+                                            <div className="overflow-hidden rounded-2xl border border-outline-variant">
+                                                <div
                                                     className={
-                                                        i % 2 === 0
-                                                            ? 'bg-surface'
-                                                            : 'bg-surface-container'
+                                                        weightRecords.length > 5
+                                                            ? 'max-h-[18rem] overflow-y-auto'
+                                                            : ''
                                                     }
                                                 >
-                                                    <td className="px-4 py-3 text-on-surface-variant">
-                                                        {formatDate(
-                                                            w.weight_date,
-                                                        )}
-                                                    </td>
-                                                    <td className="px-4 py-3 text-right font-semibold text-on-surface">
-                                                        {w.weight} kg
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Historial sanitario */}
-                        {healthRecords.length > 0 && (
-                            <div className="mt-8">
-                                <h2 className="mb-3 text-sm font-bold uppercase tracking-wider text-on-surface">
-                                    Historial Sanitario
-                                </h2>
-                                <div className="flex flex-col gap-3">
-                                    {healthRecords.map((h) => (
-                                        <div
-                                            key={h.id}
-                                            className="rounded-2xl border border-outline-variant p-4"
-                                        >
-                                            <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
-                                                <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
-                                                    {h.type}
-                                                </span>
-                                                <span className="text-xs text-on-surface-variant">
-                                                    {formatDate(h.applied_at)}
-                                                </span>
+                                                    <table className="w-full text-sm">
+                                                        <thead className="sticky top-0 z-10 bg-surface-container-highest text-xs uppercase tracking-wider text-on-surface-variant">
+                                                            <tr>
+                                                                <th className="px-4 py-3 text-left font-bold">
+                                                                    Fecha
+                                                                </th>
+                                                                <th className="px-4 py-3 text-right font-bold">
+                                                                    Peso
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {weightRecords.map(
+                                                                (w, i) => (
+                                                                    <tr
+                                                                        key={
+                                                                            w.id
+                                                                        }
+                                                                        className={
+                                                                            i %
+                                                                                2 ===
+                                                                            0
+                                                                                ? 'bg-surface'
+                                                                                : 'bg-surface-container'
+                                                                        }
+                                                                    >
+                                                                        <td className="px-4 py-3 text-on-surface-variant">
+                                                                            {formatDate(
+                                                                                w.weight_date,
+                                                                            )}
+                                                                        </td>
+                                                                        <td className="px-4 py-3 text-right font-semibold text-on-surface">
+                                                                            {
+                                                                                w.weight
+                                                                            }{' '}
+                                                                            kg
+                                                                        </td>
+                                                                    </tr>
+                                                                ),
+                                                            )}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
-                                            {h.product && (
-                                                <p className="text-sm font-semibold text-on-surface">
-                                                    {h.product}
-                                                    {h.dose
-                                                        ? ` · ${h.dose}`
-                                                        : ''}
-                                                </p>
-                                            )}
-                                            {h.notes && (
-                                                <p className="mt-1 text-sm text-on-surface-variant">
-                                                    {h.notes}
-                                                </p>
-                                            )}
-                                            {h.next_date && (
-                                                <p className="mt-2 flex items-center gap-1 text-xs text-on-surface-variant">
-                                                    <span className="material-symbols-outlined text-sm">
-                                                        event_repeat
+                                        </div>
+                                    )}
+
+                                    {/* Salud */}
+                                    {activeTab === 'salud' && (
+                                        <div>
+                                            {animal.previous_diseases && (
+                                                <div className="mb-4 flex items-start gap-3 rounded-2xl border border-outline-variant bg-surface-container p-4">
+                                                    <span className="material-symbols-outlined text-on-surface-variant">
+                                                        info
                                                     </span>
-                                                    Próxima aplicación:{' '}
-                                                    {formatDate(h.next_date)}
-                                                </p>
+                                                    <div>
+                                                        <p className="mb-1 text-sm font-bold text-on-surface">
+                                                            Antecedentes médicos
+                                                        </p>
+                                                        <p className="text-sm text-on-surface-variant">
+                                                            {
+                                                                animal.previous_diseases
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {healthRecords.length > 0 && (
+                                                <div
+                                                    className={
+                                                        healthRecords.length > 5
+                                                            ? 'max-h-[28rem] overflow-y-auto pr-1'
+                                                            : ''
+                                                    }
+                                                >
+                                                    <div className="flex flex-col gap-3">
+                                                        {healthRecords.map(
+                                                            (h) => (
+                                                                <div
+                                                                    key={h.id}
+                                                                    className="rounded-2xl border border-outline-variant p-4"
+                                                                >
+                                                                    <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+                                                                        <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
+                                                                            {
+                                                                                h.type
+                                                                            }
+                                                                        </span>
+                                                                        <span className="text-xs text-on-surface-variant">
+                                                                            {formatDate(
+                                                                                h.applied_at,
+                                                                            )}
+                                                                        </span>
+                                                                    </div>
+                                                                    {h.product && (
+                                                                        <p className="text-sm font-semibold text-on-surface">
+                                                                            {
+                                                                                h.product
+                                                                            }
+                                                                            {h.dose
+                                                                                ? ` · ${h.dose}`
+                                                                                : ''}
+                                                                        </p>
+                                                                    )}
+                                                                    {h.notes && (
+                                                                        <p className="mt-1 text-sm text-on-surface-variant">
+                                                                            {
+                                                                                h.notes
+                                                                            }
+                                                                        </p>
+                                                                    )}
+                                                                    {h.next_date && (
+                                                                        <p className="mt-2 flex items-center gap-1 text-xs text-on-surface-variant">
+                                                                            <span className="material-symbols-outlined text-sm">
+                                                                                event_repeat
+                                                                            </span>
+                                                                            Próxima
+                                                                            aplicación:{' '}
+                                                                            {formatDate(
+                                                                                h.next_date,
+                                                                            )}
+                                                                        </p>
+                                                                    )}
+                                                                </div>
+                                                            ),
+                                                        )}
+                                                    </div>
+                                                </div>
                                             )}
                                         </div>
-                                    ))}
+                                    )}
                                 </div>
                             </div>
                         )}
                     </div>
 
-                    {/* ---- Columna derecha: ficha / compra ---- */}
+                    {/* ---- Columna derecha: ficha de compra ---- */}
                     <div className="lg:col-span-5">
-                        <div className="lg:sticky lg:top-24">
+                        <div className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 lg:sticky lg:top-24">
                             {animal.animal_category && (
-                                <span className="mb-2 inline-block rounded-full bg-surface-container px-3 py-1 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
+                                <span className="mb-3 inline-block rounded-full bg-surface-container px-3 py-1 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
                                     {animal.animal_category.name}
                                 </span>
                             )}
-                            <h1 className="mb-1 text-3xl font-bold text-on-surface">
+                            <h1 className="text-3xl font-bold text-on-surface">
                                 {animal.name}
                             </h1>
-                            <p className="mb-6 text-sm text-on-surface-variant">
+                            <p className="mt-1 text-sm text-on-surface-variant">
                                 Arete N° {animal.ear_tag}
                             </p>
 
-                            <div className="mb-6 text-3xl font-extrabold text-primary">
-                                {formatCOP(animal.price)}
+                            <div className="mt-5 flex items-baseline justify-between gap-3">
+                                <span className="text-3xl font-extrabold text-primary">
+                                    {formatCOP(animal.price)}
+                                </span>
+                                {animal.publication_date && (
+                                    <span className="text-right text-xs leading-tight text-on-surface-variant">
+                                        Publicado
+                                        <br />
+                                        {formatDate(animal.publication_date)}
+                                    </span>
+                                )}
                             </div>
 
+                            <div className="my-5 h-px bg-outline-variant" />
+
                             {/* Ficha técnica */}
-                            <div className="mb-6 grid grid-cols-2 gap-4 rounded-2xl border border-outline-variant p-5">
+                            <div className="grid grid-cols-2 gap-y-4">
                                 <Spec
                                     icon="pets"
                                     label="Raza"
@@ -342,50 +435,27 @@ export default function AnimalDetalle({ animal, cartItems = [] }) {
 
                             {/* Finca */}
                             {animal.farm && (
-                                <div className="mb-6 flex items-center gap-3 rounded-2xl bg-surface-container-highest p-4">
-                                    <span className="material-symbols-outlined text-primary">
-                                        home_pin
-                                    </span>
-                                    <div>
-                                        <p className="text-sm font-bold text-on-surface">
-                                            {animal.farm.name}
-                                        </p>
-                                        {animal.farm.department && (
-                                            <p className="text-xs text-on-surface-variant">
-                                                {animal.farm.department}
+                                <>
+                                    <div className="my-5 h-px bg-outline-variant" />
+                                    <div className="flex items-center gap-3">
+                                        <span className="material-symbols-outlined text-primary">
+                                            home_pin
+                                        </span>
+                                        <div>
+                                            <p className="text-sm font-bold text-on-surface">
+                                                {animal.farm.name}
                                             </p>
-                                        )}
+                                            {animal.farm.department && (
+                                                <p className="text-xs text-on-surface-variant">
+                                                    {animal.farm.department}
+                                                </p>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
+                                </>
                             )}
 
-                            {/* Antecedentes médicos */}
-                            {animal.previous_diseases && (
-                                <div className="mb-6 flex items-start gap-3 rounded-2xl border border-outline-variant bg-surface-container p-4">
-                                    <span className="material-symbols-outlined text-on-surface-variant">
-                                        info
-                                    </span>
-                                    <div>
-                                        <p className="mb-1 text-sm font-bold text-on-surface">
-                                            Antecedentes médicos
-                                        </p>
-                                        <p className="text-sm text-on-surface-variant">
-                                            {animal.previous_diseases}
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* Fecha de publicación */}
-                            {animal.publication_date && (
-                                <p className="mb-6 flex items-center gap-1 text-xs text-on-surface-variant">
-                                    <span className="material-symbols-outlined text-sm">
-                                        calendar_today
-                                    </span>
-                                    Publicado el{' '}
-                                    {formatDate(animal.publication_date)}
-                                </p>
-                            )}
+                            <div className="my-5 h-px bg-outline-variant" />
 
                             {/* CTA */}
                             <div className="flex flex-col gap-3 sm:flex-row">
@@ -430,12 +500,15 @@ export default function AnimalDetalle({ animal, cartItems = [] }) {
                                         Agregar al carrito
                                     </button>
                                 )}
-                                <button className="flex items-center justify-center gap-2 rounded-lg border border-outline-variant px-6 py-3 text-sm font-medium text-on-surface-variant transition-colors hover:border-primary hover:text-primary">
+                                <Link
+                                    href={'/sales'}
+                                    className="flex items-center justify-center gap-2 rounded-lg border border-outline-variant px-6 py-3 text-sm font-medium text-on-surface-variant transition-colors hover:border-primary hover:text-primary"
+                                >
                                     <span className="material-symbols-outlined text-[20px]">
-                                        favorite
+                                        arrow_back
                                     </span>
-                                    Guardar
-                                </button>
+                                    Volver
+                                </Link>
                             </div>
                         </div>
                     </div>
