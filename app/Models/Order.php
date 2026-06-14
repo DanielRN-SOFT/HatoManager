@@ -13,6 +13,7 @@ class Order extends Model
         'subtotal',
         'referencia',
         'user_id',
+        'transaction_id'
     ];
 
     protected $casts = [

@@ -31,6 +31,9 @@ class DatabaseSeeder extends Seeder
             WeightMethodSeeder::class,
             WeightRecordSeeder::class,
             HealthRecordSeeder::class,
+            TransactionSeeder::class,
+            OrderSeeder::class,
+            AnimalOrderSeeder::class,
         ]);
     }
 }
