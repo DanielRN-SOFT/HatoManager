@@ -21,7 +21,8 @@ function getInitials(name) {
 
 export default function TopNavBar() {
     const { url, props } = usePage();
-    const { isGanadero, isVeterinario} = useRole();
+    const { isGanadero, isVeterinario } = useRole();
+    console.log(isGanadero);
     const user = props.auth?.user ?? null;
     const cartCount = props.cart_count ?? 0;
     const [menuOpen, setMenuOpen] = useState(false);
@@ -171,7 +172,11 @@ export default function TopNavBar() {
                                 </Link>
                             </div>
                         ) : (
-                      <MobilePerfil user={user} getInitials={getInitials} isGanadero={isGanadero}/>
+                            <MobilePerfil
+                                user={user}
+                                getInitials={getInitials}
+                                isGanadero={isGanadero}
+                            />
                         )}
                     </div>
                 )}

@@ -1,5 +1,5 @@
 import Dropdown from '@/Components/Dropdown';
-const Perfil = ({getInitials, user, esGanadero}) => {
+const Perfil = ({getInitials, user, isGanadero}) => {
     return (
         <Dropdown>
             <Dropdown.Trigger>
@@ -50,7 +50,7 @@ const Perfil = ({getInitials, user, esGanadero}) => {
                         </span>
                         Historial de ventas
                     </Dropdown.Link>
-                    {esGanadero && (
+                    {isGanadero && (
                         <Dropdown.Link
                             href="/dashboard"
                             className="flex items-center gap-2.5"

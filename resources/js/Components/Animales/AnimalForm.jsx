@@ -1,12 +1,12 @@
 // resources/js/Components/Animales/AnimalForm.jsx
 import { router, useForm } from '@inertiajs/react';
-import Acciones from './Acciones';
-import Clasificacion from './Clasificacion';
-import Fechas from './Fechas';
-import Header from './Header';
-import InformacionAdicional from './InformacionAdicional';
-import InformacionBasica from './InformacionBasica';
-import PreciosPeso from './PreciosPeso';
+import Acciones from './Form/Acciones';
+import Clasificacion from './Form/Clasificacion';
+import Fechas from './Form/Fechas';
+import Header from './Form/Header';
+import InformacionAdicional from './Form/InformacionAdicional';
+import InformacionBasica from './Form/InformacionBasica';
+import PreciosPeso from './Form/PreciosPeso';
 
 const inputCls =
     'w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-800 placeholder-gray-300 outline-none transition-all focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10';
@@ -43,6 +43,7 @@ const AnimalForm = ({
         paddock_id: animal?.paddock_id ?? '',
         reason_to_death:
             animal?.status === 'Muerto' ? animal?.reason_to_death : null,
+        in_sell: animal?.publication_date ? 'true' : 'false',
     });
 
     function handleSubmit(e) {

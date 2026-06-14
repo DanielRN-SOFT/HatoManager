@@ -90,6 +90,10 @@ class AnimalRequest extends FormRequest
                 'numeric',
                 'min:0'
             ],
+            'publication_date' => [
+                'nullable',
+                'date'
+            ],
         ];
     }
 
@@ -115,9 +119,19 @@ class AnimalRequest extends FormRequest
         $priceWeight = (float) $this->price_weight;
         $targetWeight = (float) $this->target_weight;
 
+        // Calcula primero la fecha de publicación que realmente vas a usar
+        $publicationDate = $this->in_sell == "true"
+            ? ($this->publication_date ?: now()->toDateString())
+            : null;
+
         $this->merge([
-            'price' => $priceWeight > 0 && $targetWeight > 0 ? round($priceWeight * $targetWeight, 2) : 0,
-            'status' => $this->publication_date ? 'Publicado' : $this->status
+            'price' => $priceWeight > 0 && $targetWeight > 0
+                ? round($priceWeight * $targetWeight, 2)
+                : 0,
+            'status' => $this->in_sell == "false"
+                ? 'Activo'
+                : ($publicationDate ? "Publicado" : $this->status),
+            'publication_date' => $publicationDate,
         ]);
     }
 }

@@ -1,4 +1,4 @@
-import AnimalForm from '@/Components/Animales/Form/AnimalForm';
+import AnimalForm from '@/Components/Animales/AnimalForm';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 

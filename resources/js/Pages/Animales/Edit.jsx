@@ -1,7 +1,6 @@
-import AnimalForm from '@/Components/Animales/Form/AnimalForm';
+import AnimalForm from '@/Components/Animales/AnimalForm';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
-import { SiSwisscows } from 'react-icons/si';
 
 export default function Edit({ animal, razas, categoriasAnimales, lotes }) {
     function handleCancel() {

@@ -7,6 +7,7 @@ const Fechas = ({ errors, data, setData, inputCls }) => {
         data.publication_date ? true : false,
     );
     function handleRadio(e) {
+        setData('in_sell', e.target.value);
         setShowPublicationDate(e.target.value === 'true');
     }
     return (
@@ -73,11 +74,15 @@ const Fechas = ({ errors, data, setData, inputCls }) => {
                 >
                     <input
                         type="date"
-                        value={data.publication_date ?? ''}
+                        value={
+                            data.publication_date
+                                ? data.publication_date
+                                : new Date().toISOString().split('T')[0]
+                        }
                         onChange={(e) =>
                             setData('publication_date', e.target.value)
                         }
-                        className={inputCls}
+                        className={`${inputCls} cursor-not-allowed opacity-45`}
                     />
                 </Field>
             )}
