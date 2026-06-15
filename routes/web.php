@@ -102,6 +102,11 @@
 
             return response()->json(['sent' => 3, 'to' => $ganadero->email]);
         })->middleware('auth');
+
+        // ── Panel del ganadero ──────────────────────────────────────────
+        Route::get('/my-sales', [EcommerceSalesController::class, 'sellerOrders'])->name('seller.orders');
+        Route::post('/seller/animal-order/{id}/confirm', [EcommerceSalesController::class, 'confirmAnimalOrder'])->name('seller.animal-order.confirm');
+        Route::post('/seller/animal-order/{id}/reject',  [EcommerceSalesController::class, 'rejectAnimalOrder'])->name('seller.animal-order.reject');
     });
 
     // ─────────────────────────────────────────────

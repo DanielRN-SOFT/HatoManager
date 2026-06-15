@@ -211,6 +211,140 @@ class EcommerceSalesController extends Controller
             'orders' => $orders,
         ]);
     }
+    /**
+     * GET /my-sales — Pedidos recibidos por el ganadero
+     */
+    public function sellerOrders(Request $request)
+    {
+        $user = $request->user();
+
+        // IDs de animales que pertenecen a fincas del ganadero
+        $farmIds   = $user->farms()->pluck('farms.id');
+        $animalIds = Animal::whereIn('farm_id', $farmIds)->withTrashed()->pluck('id');
+
+        // Líneas de pedido (animal_order) donde el ganadero es dueño
+        $rows = \App\Models\AnimalOrder::whereIn('animal_id', $animalIds)
+            ->with([
+                'animal' => fn($q) => $q->withTrashed()->with('media'),
+                'order.user',
+                'order.transaction',
+            ])
+            ->orderByDesc('created_at')
+            ->paginate(12);
+
+        $items = $rows->through(fn($row) => [
+            'animal_order_id' => $row->id,
+            'status_order'    => $row->status_order,
+            'snapshot_price'  => $row->snapshot_price,
+            'order' => [
+                'id'               => $row->order->id,
+                'date'             => $row->order->date->format('d/m/Y H:i'),
+                'reference'        => $row->order->reference,
+                'bussiness_status' => $row->order->bussiness_status,
+                'payment_status'   => $row->order->payment_status,
+                'comprador'        => $row->order->user?->name,
+            ],
+            'animal' => [
+                'id'      => $row->animal->id,
+                'name'    => $row->animal->name,
+                'ear_tag' => $row->animal->ear_tag,
+                'image'   => $row->animal->getFirstMediaUrl('animals'),
+            ],
+        ]);
+
+        return Inertia::render('Ventas/SellerOrders', [
+            'items' => $items,
+        ]);
+    }
+
+    /**
+     * POST /seller/animal-order/{id}/confirm
+     * POST /seller/animal-order/{id}/reject
+     */
+    public function confirmAnimalOrder(Request $request, int $id)
+    {
+        return $this->handleAnimalOrderAction($id, 'confirm', $request->user());
+    }
+
+    public function rejectAnimalOrder(Request $request, int $id)
+    {
+        return $this->handleAnimalOrderAction($id, 'reject', $request->user());
+    }
+
+    private function handleAnimalOrderAction(int $animalOrderId, string $action, $user): \Illuminate\Http\RedirectResponse
+    {
+        $row = \App\Models\AnimalOrder::with(['animal.farm', 'order.transaction'])->findOrFail($animalOrderId);
+
+        // Verificar que el ganadero autenticado es dueño del animal
+        $farmIds = $user->farms()->pluck('farms.id');
+        abort_unless($farmIds->contains($row->animal->farm_id), 403);
+
+        // Solo se puede actuar si está pendiente
+        abort_unless($row->status_order === 'Pendiente de confirmacion', 422);
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($row, $action, $user) {
+            if ($action === 'confirm') {
+                // ── Confirmar ──────────────────────────────────────────
+                $row->update(['status_order' => 'Confirmado']);
+                $row->animal->update(['status' => 'Vendido']);
+
+                // Recalcular bussiness_status del pedido:
+                // Si TODOS los animales del pedido están confirmados → Completado
+                $order      = $row->order;
+                $allAnimals = $order->animals;
+                $allDone    = $allAnimals->every(
+                    fn($a) => in_array($a->pivot->status_order, ['Confirmado', 'Rechazado'])
+                );
+
+                if ($allDone) {
+                    $anyConfirmed = $allAnimals->some(fn($a) => $a->pivot->status_order === 'Confirmado');
+                    $order->update([
+                        'bussiness_status' => $anyConfirmed ? 'Completado' : 'Rechazado por ganadero',
+                    ]);
+                }
+
+                // Notificar al comprador
+                $order->user?->notify(new \App\Notifications\AnimalConfirmadoNotification($row));
+            } else {
+                // ── Rechazar + RF-43 reembolso automático ──────────────
+                $row->update(['status_order' => 'Rechazado']);
+                $row->animal->update(['status' => 'Publicado']); // vuelve al catálogo
+
+                $order = $row->order;
+
+                // Crear transacción de reembolso parcial
+                $originalTx = $order->transaction;
+                if ($originalTx) {
+                    \App\Models\Transaction::create([
+                        'transaction_id'     => $originalTx->id, // apunta a la compra original
+                        'internal_reference' => $order->reference . '-REF-' . $row->id,
+                        'transaction_date'   => now(),
+                        'moneda'             => 'COP',
+                        'amount'             => $row->snapshot_price,
+                        'transaction_status' => 'aprobada',
+                        'transaction_type'   => 'reembolso',
+                    ]);
+                }
+
+                // Recalcular bussiness_status
+                $allAnimals = $order->fresh()->animals;
+                $allDone    = $allAnimals->every(
+                    fn($a) => in_array($a->pivot->status_order, ['Confirmado', 'Rechazado'])
+                );
+                if ($allDone) {
+                    $anyConfirmed = $allAnimals->some(fn($a) => $a->pivot->status_order === 'Confirmado');
+                    $order->update([
+                        'bussiness_status' => $anyConfirmed ? 'Completado' : 'Rechazado por ganadero',
+                    ]);
+                }
+
+                // Notificar al comprador
+                $order->user?->notify(new \App\Notifications\AnimalRechazadoNotification($row));
+            }
+        });
+
+        return back()->with('success', $action === 'confirm' ? 'Animal confirmado.' : 'Animal rechazado y reembolso registrado.');
+    }
 
 
     /**
