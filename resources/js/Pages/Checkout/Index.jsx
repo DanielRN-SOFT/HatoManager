@@ -1,7 +1,7 @@
 import EcommerceLayout from '@/Layouts/EcommerceLayout';
 import formatearDinero from '@/helpers/formatearDinero';
 import { Head, router } from '@inertiajs/react';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 export default function CheckoutIndex({
     publicKey,
@@ -17,40 +17,33 @@ export default function CheckoutIndex({
 }) {
     const btnRef = useRef(null);
 
-    useEffect(() => {
-        // Cargar el script del widget de Wompi una sola vez
-        if (document.getElementById('wompi-script')) return;
-        const script = document.createElement('script');
-        script.id = 'wompi-script';
-        script.src = 'https://checkout.wompi.co/widget.js';
-        script.setAttribute('data-render', 'button');
-        document.head.appendChild(script);
-    }, []);
-
     function handlePagar() {
-        // Usar la API JS del widget en lugar del botón automático
-        // para poder controlar el flujo desde React
-        if (window.WidgetCheckout) {
-            const checkout = new window.WidgetCheckout({
-                currency,
-                amountInCents,
-                reference,
-                publicKey,
-                signature: { integrity: signature },
-                redirectUrl,
-                customerData: {
-                    email: userEmail,
-                    fullName: userName,
-                },
-            });
-            checkout.open((result) => {
-                const tx = result?.transaction;
-                if (tx?.id) {
-                    // Redirigir manualmente al resultado con el ID de Wompi
-                    window.location.href = `/checkout/resultado?id=${tx.id}`;
-                }
-            });
-        }
+        const form = document.createElement('form');
+        form.method = 'GET';
+        form.action = 'https://checkout.wompi.co/p/';
+
+        const campos = {
+            'public-key': publicKey,
+            currency: currency,
+            'amount-in-cents': amountInCents,
+            reference: reference,
+            'signature:integrity': signature,
+            'redirect-url': redirectUrl,
+            'customer-data:email': userEmail,
+            'customer-data:full-name': userName,
+        };
+
+        Object.entries(campos).forEach(([name, value]) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value;
+            form.appendChild(input);
+        });
+
+        document.body.appendChild(form);
+        console.log('Wompi params:', campos);
+        form.submit();
     }
 
     return (

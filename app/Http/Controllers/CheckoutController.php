@@ -56,7 +56,7 @@ class CheckoutController extends Controller
             'amountInCents' => $totalCOP,
             'currency'      => $currency,
             'signature'     => $signature,
-            'redirectUrl'   => route('checkout.result'),
+            'redirectUrl'   => 'https://transaction-redirect.wompi.co/check',
             'userEmail'     => $user->email,
             'userName'      => $user->name,
             'total'         => $disponibles->sum('price_snapshot'),
