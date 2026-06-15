@@ -291,6 +291,10 @@ export default function CartIndex({ grupos, total, count }) {
 
                                 <button
                                     disabled={hasUnavailable}
+                                    onClick={() =>
+                                        !hasUnavailable &&
+                                        router.visit('/checkout')
+                                    }
                                     className={`w-full rounded-xl py-3 text-sm font-bold transition-all ${
                                         hasUnavailable
                                             ? 'cursor-not-allowed bg-surface-container text-outline'

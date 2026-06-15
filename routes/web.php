@@ -102,6 +102,11 @@
 
             return response()->json(['sent' => 3, 'to' => $ganadero->email]);
         })->middleware('auth');
+
+        // ── Panel del ganadero ──────────────────────────────────────────
+        Route::get('/my-sales', [EcommerceSalesController::class, 'sellerOrders'])->name('seller.orders');
+        Route::post('/seller/animal-order/{id}/confirm', [EcommerceSalesController::class, 'confirmAnimalOrder'])->name('seller.animal-order.confirm');
+        Route::post('/seller/animal-order/{id}/reject',  [EcommerceSalesController::class, 'rejectAnimalOrder'])->name('seller.animal-order.reject');
     });
 
     // ─────────────────────────────────────────────
@@ -159,5 +164,15 @@
         Route::delete('/{itemId}', [CartController::class, 'remove'])->name('remove');
         Route::get('/sync',        [CartController::class, 'sync'])->name('sync');
     });
+
+    // ── Checkout con Wompi ──────────────────────────────────────────
+    Route::middleware(['auth', 'verified'])->prefix('checkout')->name('checkout.')->group(function () {
+        Route::get('/',          [App\Http\Controllers\CheckoutController::class, 'index'])->name('index');
+        Route::get('/resultado', [App\Http\Controllers\CheckoutController::class, 'result'])->name('result');
+    });
+
+    // ── Webhook Wompi (sin auth, verificación por firma) ──────────
+    Route::post('/webhook/wompi', [App\Http\Controllers\CheckoutController::class, 'webhook'])
+        ->name('webhook.wompi');
 
     require __DIR__ . '/auth.php';
