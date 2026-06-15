@@ -7,6 +7,7 @@ use App\Models\AnimalCategory;
 use App\Models\Breed;
 use App\Models\Farm;
 use App\Models\Cart;
+use App\Models\Order;
 use App\Models\WeightRecord;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -168,6 +169,46 @@ class EcommerceSalesController extends Controller
                 ->pluck('animal_id')
                 ->toArray()
                 : [],
+        ]);
+    }
+
+    public function showOrderHistory(Request $request)
+    {
+        $user = $request->user();
+
+        $orders = Order::with([
+            'animals' => fn($q) => $q->withTrashed()->with('media'),
+            'transaction',
+        ])
+            ->where('user_id', $user->id)
+            ->orderByDesc('date')
+            ->paginate(9)
+            ->through(fn($order) => [
+                'id'               => $order->id,
+                'date'             => $order->date->format('d/m/Y H:i'),
+                'bussiness_status' => $order->bussiness_status,
+                'payment_status'   => $order->payment_status,
+                'subtotal'         => $order->subtotal,
+                'reference'       => $order->reference,
+                'animals' => $order->animals->map(fn($a) => [
+                    'id'             => $a->id,
+                    'name'           => $a->name,
+                    'ear_tag'        => $a->ear_tag,
+                    'snapshot_price' => $a->pivot->snapshot_price,
+                    'status_order'   => $a->pivot->status_order,
+                    'image'          => $a->getFirstMediaUrl('animals'),
+                ]),
+                'transaction' => $order->transaction ? [
+                    'wompi_id'           => $order->transaction->wompi_id,
+                    'amount'             => $order->transaction->amount,
+                    'transaction_status' => $order->transaction->transaction_status,
+                    'transaction_type'   => $order->transaction->transaction_type,
+                    'transaction_date'   => $order->transaction->transaction_date?->format('d/m/Y H:i'),
+                ] : null,
+            ]);
+
+        return Inertia::render('Ventas/OrderHistory', [
+            'orders' => $orders,
         ]);
     }
 

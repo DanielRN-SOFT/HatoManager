@@ -21,6 +21,7 @@
     Route::get('/sales/animales/{id}', [EcommerceSalesController::class, 'show'])->name('sales.show');
 
 
+
     Route::get('/login', function () {
         return Inertia::render('Auth/Login');
     })->name('login');
@@ -44,6 +45,11 @@
     // Rutas para usuario autenticado y que tiene correo verificado
     // ─────────────────────────────────────────────
     Route::middleware(['auth', 'verified'])->group(function () {
+
+        Route::get('/my-orders', [EcommerceSalesController::class, 'showOrderHistory'])
+            ->name('orders.history');
+
+
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

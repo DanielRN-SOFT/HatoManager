@@ -1,5 +1,6 @@
 import formatearDinero from '@/helpers/formatearDinero';
 import { useRole } from '@/hooks/useRole';
+import { router } from '@inertiajs/react';
 
 const statusConfig = {
     Publicado: {
@@ -20,7 +21,10 @@ const CatalogCard = ({ animal, enCarrito, onCart }) => {
     const reservado = animal.status === 'Reservado';
 
     return (
-        <div className="group overflow-hidden rounded-xl border border-outline-variant bg-white transition-all duration-300 hover:shadow-lg">
+        <div
+            onClick={() => router.visit(route('sales.show', animal.id))}
+            className="group overflow-hidden rounded-xl border border-outline-variant bg-white transition-all duration-300 hover:shadow-lg cursor-pointer"
+        >
             <div className="relative h-56">
                 {animal.photo ? (
                     <img

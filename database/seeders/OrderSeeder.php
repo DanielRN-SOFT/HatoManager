@@ -1,5 +1,5 @@
 <?php
-
+// OrderSeeder.php
 namespace Database\Seeders;
 
 use App\Models\Order;
@@ -11,9 +11,8 @@ class OrderSeeder extends Seeder
 {
     public function run(): void
     {
-        // Transacciones "de pago" (no reembolsos) disponibles para asociar 1 a 1 con órdenes
         $transactions = Transaction::where('transaction_type', '!=', 'reembolso')
-            ->orderBy('id')
+            ->orderBy('transaction_date')
             ->get();
 
         if ($transactions->isEmpty()) {
@@ -21,16 +20,14 @@ class OrderSeeder extends Seeder
             return;
         }
 
-        // Usuario que tendrá al menos 30 órdenes (y por lo tanto 30 transacciones propias)
         $mainUser = User::role('comprador')->first()
             ?? User::role('ganadero')->first();
 
         if (!$mainUser) {
-            $this->command->error('No hay usuarios con rol ganadero o comprador. Ejecuta RolesAndPermissionsSeeder y UserSeeder primero.');
+            $this->command->error('No hay usuarios con rol comprador o ganadero.');
             return;
         }
 
-        // Resto de usuarios (ganadero/comprador) para las demás órdenes
         $otherUsers = User::role(['ganadero', 'comprador'])
             ->where('id', '!=', $mainUser->id)
             ->get();
@@ -43,52 +40,49 @@ class OrderSeeder extends Seeder
         $mainUserOrders = min(30, $totalOrders);
 
         foreach ($transactions as $index => $transaction) {
-            $i = $index + 1;
-
-            $user = $i <= $mainUserOrders
-                ? $mainUser
-                : $otherUsers->random();
+            $i    = $index + 1;
+            $user = $i <= $mainUserOrders ? $mainUser : $otherUsers->random();
 
             [$paymentStatus, $bussinessStatus] = $this->resolveStatuses($transaction->transaction_status);
 
-            $order = new Order([
+            // La referencia usa la fecha real de la transacción, no now()
+            $dateForRef = $transaction->transaction_date->format('Ymd');
+
+            $order                 = new Order([
                 'date'             => $transaction->transaction_date,
                 'bussiness_status' => $bussinessStatus,
                 'payment_status'   => $paymentStatus,
+                // El subtotal lo actualizará AnimalOrderSeeder con la suma real
+                // Por ahora usamos el monto de la transacción como placeholder
                 'subtotal'         => $transaction->amount,
-                'referencia'       => 'ORD-' . now()->format('Ymd') . '-' . str_pad((string) $i, 5, '0', STR_PAD_LEFT),
+                'reference'        => 'ORD-' . $dateForRef . '-' . str_pad((string) $i, 5, '0', STR_PAD_LEFT),
                 'user_id'          => $user->id,
             ]);
-
-            // transaction_id no está en $fillable del modelo, se asigna directamente
             $order->transaction_id = $transaction->id;
             $order->save();
         }
 
         $this->command->info("Órdenes creadas: {$totalOrders}");
-        $this->command->info("  · {$mainUser->email} (rol {$mainUser->getRoleNames()->first()}): {$mainUserOrders} órdenes / transacciones");
+        $this->command->info(
+            "  · {$mainUser->email} ({$mainUser->getRoleNames()->first()}): {$mainUserOrders} órdenes"
+        );
     }
 
-    /**
-     * Mapea el estado de la transacción a los estados de pago/negocio de la orden.
-     *
-     * @return array{0: string, 1: string}
-     */
     private function resolveStatuses(string $transactionStatus): array
     {
         return match ($transactionStatus) {
-            'aprobada' => [
+            'aprobada'    => [
                 'Aprobado',
                 fake()->randomElement(['Confirmado', 'Completado', 'Pendiente de confirmacion']),
             ],
             'reembolsada' => ['Reembolsado', 'Cancelado por comprador'],
-            'pendiente'   => ['Pendiente', 'Pendiente de confirmacion'],
+            'pendiente'   => ['Pendiente',   'Pendiente de confirmacion'],
             'rechazada'   => [
                 'Rechazado',
                 fake()->randomElement(['Cancelado por comprador', 'Rechazado por ganadero']),
             ],
-            'expirada' => ['Expirado', 'Cancelado por comprador'],
-            default    => ['Pendiente', 'Pendiente de confirmacion'],
+            'expirada'    => ['Expirado', 'Cancelado por comprador'],
+            default       => ['Pendiente', 'Pendiente de confirmacion'],
         };
     }
 }

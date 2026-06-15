@@ -11,7 +11,7 @@ class Order extends Model
         'bussiness_status',
         'payment_status',
         'subtotal',
-        'referencia',
+        'reference',
         'user_id',
         'transaction_id'
     ];
@@ -34,7 +34,7 @@ class Order extends Model
             ->withTimestamps();
     }
 
-    public function transactions()
+    public function transaction()
     {
         return $this->belongsTo(Transaction::class);
     }
