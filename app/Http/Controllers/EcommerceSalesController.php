@@ -32,6 +32,11 @@ class EcommerceSalesController extends Controller
                 $q->where('animal_category_id', $request->categoria)
             )
             ->when(
+                $request->filled('estado'),
+                fn($q) =>
+                $q->where('status', $request->estado)
+            )
+            ->when(
                 $request->filled('departamento'),
                 fn($q) =>
                 $q->whereHas(
@@ -77,7 +82,7 @@ class EcommerceSalesController extends Controller
             'maxPrice'   => Animal::orderBy('price', 'DESC')->limit(1)->value('price'),
             'categories'  => AnimalCategory::orderBy('name')->get(['id', 'name']),
             'departments' => Farm::distinct()->orderBy('department')->pluck('department'),
-            'filters'     => $request->only(['raza', 'categoria', 'departamento', 'peso', 'precio']),
+            'filters'     => $request->only(['raza', 'categoria', 'departamento', 'peso', 'precio', 'estado']),
             'cartItems' => auth()->check()
                 ? Cart::forUser(auth()->id())
                 ->items()

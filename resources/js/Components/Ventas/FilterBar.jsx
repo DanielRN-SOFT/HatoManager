@@ -14,11 +14,9 @@ const FilterBar = ({
     onClear,
     hayFiltros,
 }) => {
-    // Estado local para los sliders — evita requests en cada píxel
     const [localPeso, setLocalPeso] = useState(filters.peso ?? maxWeight);
     const [localPrecio, setLocalPrecio] = useState(filters.precio ?? maxPrice);
 
-    // Sincronizar si los filtros cambian desde afuera (ej. al limpiar)
     useEffect(() => {
         setLocalPeso(filters.peso ?? maxWeight);
     }, [filters.peso, maxWeight]);
@@ -33,7 +31,6 @@ const FilterBar = ({
         onFilter?.(updated);
     }
 
-    // Solo dispara el filtro al soltar el slider (mouseUp / touchEnd)
     function commitPeso() {
         const value = Number(localPeso) >= Number(maxWeight) ? '' : localPeso;
         handleChange('peso', value);
@@ -46,7 +43,7 @@ const FilterBar = ({
     }
 
     const selectClass =
-        'w-full bg-surface-container border border-outline-variant rounded-xl text-sm py-2 px-3 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary';
+        'w-full bg-surface-container border border-outline-variant rounded-xl text-sm py-2 px-3 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer';
 
     const labelClass =
         'block text-xs font-semibold text-on-surface-variant mb-1.5 uppercase tracking-wider';
@@ -56,13 +53,13 @@ const FilterBar = ({
         filters.precio && Number(filters.precio) < Number(maxPrice);
 
     return (
-        <section className="mb-8 rounded-xl border border-outline-variant bg-surface-container-lowest p-4">
-            <div className="grid grid-cols-1 items-end gap-4 md:grid-cols-3 lg:grid-cols-6">
-                {/* Raza */}
+        <section className="mb-8 rounded-2xl border border-outline-variant bg-surface-container-lowest p-5">
+            {/* Fila 1: selects */}
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 <div>
                     <label className={labelClass}>Raza</label>
                     <select
-                        className={`${selectClass} cursor-pointer`}
+                        className={selectClass}
                         value={filters.raza || ''}
                         onChange={(e) => handleChange('raza', e.target.value)}
                     >
@@ -75,11 +72,10 @@ const FilterBar = ({
                     </select>
                 </div>
 
-                {/* Categoría */}
                 <div>
                     <label className={labelClass}>Categoría</label>
                     <select
-                        className={`${selectClass} cursor-pointer`}
+                        className={selectClass}
                         value={filters.categoria || ''}
                         onChange={(e) =>
                             handleChange('categoria', e.target.value)
@@ -94,11 +90,10 @@ const FilterBar = ({
                     </select>
                 </div>
 
-                {/* Departamento */}
                 <div>
                     <label className={labelClass}>Departamento</label>
                     <select
-                        className={`${selectClass} cursor-pointer`}
+                        className={selectClass}
                         value={filters.departamento || ''}
                         onChange={(e) =>
                             handleChange('departamento', e.target.value)
@@ -113,20 +108,39 @@ const FilterBar = ({
                     </select>
                 </div>
 
-                {/* Peso */}
                 <div>
+                    <label className={labelClass}>Estado</label>
+                    <select
+                        className={selectClass}
+                        value={filters.estado || ''}
+                        onChange={(e) => handleChange('estado', e.target.value)}
+                    >
+                        <option value="">Todos</option>
+                        <option value="Publicado">Disponible</option>
+                        <option value="Reservado">Reservado</option>
+                    </select>
+                </div>
+            </div>
+
+            {/* Fila 2: sliders + botón limpiar */}
+            <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end">
+                {/* Peso */}
+                <div className="flex-1">
                     <label className={labelClass}>
                         Peso máx:{' '}
-                        {pesoActivo ? `${localPeso} kg` : 'Sin límite'}
+                        <span className="text-primary">
+                            {pesoActivo ? `${localPeso} kg` : 'Sin límite'}
+                        </span>
                     </label>
                     <input
                         type="range"
                         min={minWeight}
                         max={maxWeight}
+                        step={1}
                         value={localPeso}
-                        onChange={(e) => setLocalPeso(e.target.value)} // solo mueve UI
-                        onMouseUp={commitPeso} // dispara filtro
-                        onTouchEnd={commitPeso} // soporte móvil
+                        onChange={(e) => setLocalPeso(e.target.value)}
+                        onMouseUp={commitPeso}
+                        onTouchEnd={commitPeso}
                         className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-surface-container-high accent-primary"
                     />
                     <div className="mt-1 flex justify-between text-[10px] text-outline">
@@ -136,35 +150,38 @@ const FilterBar = ({
                 </div>
 
                 {/* Precio */}
-                <div>
+                <div className="flex-1">
                     <label className={labelClass}>
                         Precio máx:{' '}
-                        {precioActivo
-                            ? `$${Number(localPrecio).toLocaleString('es-CO')}`
-                            : 'Sin límite'}
+                        <span className="text-primary">
+                            {precioActivo
+                                ? `$${Number(localPrecio).toLocaleString('es-CO')}`
+                                : 'Sin límite'}
+                        </span>
                     </label>
                     <input
                         type="range"
                         min={minPrice}
                         max={maxPrice}
+                        step={1000}
                         value={localPrecio}
-                        onChange={(e) => setLocalPrecio(e.target.value)} // solo mueve UI
-                        onMouseUp={commitPrecio} // ← antes decía 'peso' — BUG CORREGIDO
-                        onTouchEnd={commitPrecio} // soporte móvil
+                        onChange={(e) => setLocalPrecio(e.target.value)}
+                        onMouseUp={commitPrecio}
+                        onTouchEnd={commitPrecio}
                         className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-surface-container-high accent-primary"
                     />
                     <div className="mt-1 flex justify-between text-[10px] text-outline">
-                        <span>{minPrice}</span>
-                        <span>{maxPrice}</span>
+                        <span>${Number(minPrice).toLocaleString('es-CO')}</span>
+                        <span>${Number(maxPrice).toLocaleString('es-CO')}</span>
                     </div>
                 </div>
 
-                {/* Botón Limpiar — al final del grid */}
+                {/* Botón limpiar */}
                 {hayFiltros && (
-                    <div className="flex items-end">
+                    <div className="sm:w-40">
                         <button
                             onClick={onClear}
-                            className="w-full rounded-xl border border-outline-variant bg-surface-container px-4 py-2 text-sm font-medium text-on-surface transition-colors hover:bg-surface-container-high"
+                            className="w-full rounded-xl border border-outline-variant bg-surface-container px-4 py-2 text-sm font-medium text-on-surface transition-colors hover:border-error hover:bg-error-container hover:text-on-error-container"
                         >
                             Limpiar filtros
                         </button>
