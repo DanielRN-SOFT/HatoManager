@@ -20,7 +20,7 @@ class SalesController extends Controller
         $animalIds = Animal::whereIn('farm_id', $farmIds)->withTrashed()->pluck('id');
 
         // ── VENTAS: órdenes que contienen animales del ganadero, creadas por otro ──
-        $salesRaw = Order::with(['user:id,name', 'transaction'])
+        $salesRaw = Order::with(['user:id,name', 'transaction', 'animals' => fn($q) => $q->with(['breed:id,name', 'animalCategory:id,name'])->withTrashed()])
             ->withCount('animals')
             ->where('orders.user_id', '!=', $user->id)
             ->whereHas('animals', function ($q) use ($animalIds) {
@@ -38,6 +38,17 @@ class SalesController extends Controller
                     'subtotal'         => $o->subtotal,
                     'animals_count'    => $o->animals_count,
                     'counterpart_name' => $o->user ? $o->user->name : null,
+                    'animals' => $o->animals->map(fn($a) => [
+                        'id'              => $a->id,
+                        'name'            => $a->name,
+                        'ear_tag'         => $a->ear_tag,
+                        'sex'             => $a->sex,
+                        'price'           => $a->pivot->snapshot_price ?? $a->price,
+                        'status'          => $a->status,
+                        'breed'           => $a->breed?->name,
+                        'animal_category' => $a->animalCategory?->name,
+                        'photo'           => $a->photo,
+                    ])->values(),
                     'transaction'      => $o->transaction ? [
                         'wompi_id'           => $o->transaction->wompi_id,
                         'transaction_date'   => $o->transaction->transaction_date,
@@ -50,7 +61,7 @@ class SalesController extends Controller
             });
 
         // ── COMPRAS: órdenes creadas por el ganadero con animales ajenos ──
-        $purchasesRaw = Order::with(['transaction'])
+        $purchasesRaw =  Order::with(['transaction', 'animals' => fn($q) => $q->with(['breed:id,name', 'animalCategory:id,name'])->withTrashed()])
             ->withCount('animals')
             ->where('user_id', $user->id)
             ->whereHas('animals', function ($q) use ($animalIds) {
@@ -68,6 +79,16 @@ class SalesController extends Controller
                     'subtotal'         => $o->subtotal,
                     'animals_count'    => $o->animals_count,
                     'counterpart_name' => null,
+                    'animals' => $o->animals->map(fn($a) => [
+                        'id'              => $a->id,
+                        'ear_tag'         => $a->ear_tag,
+                        'sex'             => $a->sex,
+                        'price'           => $a->price,
+                        'status'          => $a->status,
+                        'breed'           => $a->breed?->name,
+                        'animal_category' => $a->animalCategory?->name,
+                        'photo'           => $a->photo,
+                    ])->values(),
                     'transaction'      => $o->transaction ? [
                         'wompi_id'           => $o->transaction->wompi_id,
                         'transaction_date'   => $o->transaction->transaction_date,
