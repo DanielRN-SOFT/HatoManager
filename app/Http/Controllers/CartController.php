@@ -138,7 +138,7 @@ class CartController extends Controller
             $animal     = $item->animal;
             $disponible = $animal
                 && ! $animal->trashed()
-                && $animal->status === 'Activo'
+                && $animal->status === 'Publicado'
                 && $animal->publication_date !== null;
 
             return [
