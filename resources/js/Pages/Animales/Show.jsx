@@ -28,6 +28,7 @@ const STATUS_STYLES = {
         cls: 'bg-purple-50 text-purple-600 border-purple-200',
         dot: 'bg-purple-500',
     },
+    Publicado: { cls: 'bg-orange-50 text-orange-600 border-orange-600', dot: 'bg-orange-500' },
 };
 
 function fmt(dateStr) {

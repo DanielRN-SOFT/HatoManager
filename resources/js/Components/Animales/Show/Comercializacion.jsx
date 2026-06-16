@@ -14,7 +14,7 @@ const Comercializacion = ({animal, fmt, statusInfo}) => {
                     </p>
                     <p className="text-lg font-bold text-gray-800">
                         {animal.price
-                            ? `$${parseFloat(animal.price).toLocaleString('es-CO', { maximumFractionDigits: 0 })}`
+                            ? `$${parseFloat(animal.price).toLocaleString('es-CO')}`
                             : '—'}
                     </p>
                     <p className="text-[11px] text-gray-400">COP</p>

@@ -104,9 +104,11 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                     >
                         <option value="">Todos</option>
                         <option value="Activo">Activo</option>
+                        <option value="Reservado">Reservado</option>
+                        <option value="Publicado"> Publicado</option>
                         <option value="Inactivo">Inactivo</option>
                         <option value="Vendido">Vendido</option>
-                        <option value="Reservado">Reservado</option>
+
                         <option value="Muerto">Muerto</option>
                     </select>
                 </FilterField>
