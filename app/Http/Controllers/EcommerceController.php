@@ -87,4 +87,47 @@ class EcommerceController extends Controller
     {
         //
     }
+
+    /**
+     * POST /orders/{id}/cancel — RF-28
+     * Solo cancelable en estado "Pendiente de pago".
+     * Animales vuelven a "Publicado". Ganadero(s) reciben notificación.
+     */
+    public function cancelOrder(Request $request, int $id)
+    {
+        $user  = $request->user();
+        $order = Order::with(['animals.farm.users', 'animals' => fn($q) => $q->withTrashed()])
+            ->where('user_id', $user->id)
+            ->findOrFail($id);
+
+        abort_unless(
+            $order->bussiness_status === 'Pendiente de pago',
+            422,
+            'Solo puedes cancelar pedidos en estado "Pendiente de pago".'
+        );
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($order) {
+            $order->update(['bussiness_status' => 'Cancelado por comprador']);
+
+            foreach ($order->animals as $animal) {
+                if ($animal->status !== 'Vendido') {
+                    $animal->update(['status' => 'Publicado']);
+                }
+                $order->animals()->updateExistingPivot($animal->id, [
+                    'status_order' => 'Cancelado',
+                ]);
+            }
+
+            $ganaderos = $order->animals
+                ->map(fn($a) => $a->farm?->users ?? collect())
+                ->flatten()
+                ->unique('id');
+
+            foreach ($ganaderos as $ganadero) {
+                $ganadero->notify(new \App\Notifications\PedidoCanceladoNotification($order));
+            }
+        });
+
+        return back()->with('success', 'Pedido cancelado correctamente.');
+    }
 }
