@@ -49,6 +49,8 @@
         Route::get('/my-orders', [EcommerceSalesController::class, 'showOrderHistory'])
             ->name('orders.history');
 
+        Route::post('/orders/{id}/cancel', [EcommerceSalesController::class, 'cancelOrder'])
+            ->name('orders.cancel');
 
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
