@@ -15,12 +15,13 @@ return new class extends Migration
             $table->id();
             $table->dateTime('date')->useCurrent();
             $table->enum('bussiness_status', [
+                'Pendiente de pago',
                 'Pendiente de confirmacion',
                 'Cancelado por comprador',
                 'Rechazado por ganadero',
                 'Confirmado',
                 'Completado',
-            ])->default('Pendiente de confirmacion');
+            ])->default('Pendiente de Pago');
             $table->enum('payment_status', [
                 'Pendiente',
                 'Aprobado',
@@ -30,8 +31,8 @@ return new class extends Migration
             ])->default('Pendiente');
             $table->decimal('subtotal', 10, 2);
             $table->string('reference', 100)->unique()->nullable();
-           $table->foreignId('user_id')->constrained()->restrictOnDelete();
-           $table->foreignId('transaction_id')->nullable()->constrained();
+            $table->foreignId('user_id')->constrained()->restrictOnDelete();
+            $table->foreignId('transaction_id')->nullable()->constrained();
             $table->timestamps();
         });
     }

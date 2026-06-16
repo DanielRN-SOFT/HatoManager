@@ -41,25 +41,59 @@ class CheckoutController extends Controller
                 ->with('error', 'Tu carrito no tiene animales disponibles.');
         }
 
-        $totalCOP    = (int) ($disponibles->sum('price_snapshot') * 100); // Wompi trabaja en centavos
-        $reference   = 'HM-' . strtoupper(Str::random(10));
-        $amountStr   = (string) $totalCOP;
-        $currency    = 'COP';
-        $integritySecret = config('services.wompi.integrity_secret');
+        // Si ya existe un pedido pendiente de pago para este carrito, reutilizarlo
+        $order = Order::where('user_id', $user->id)
+            ->where('bussiness_status', 'Pendiente de pago')
+            ->latest()
+            ->first();
 
-        // Firma de integridad SHA-256: reference + amount_in_cents + currency + integrity_secret
-        $signature = hash('sha256', $reference . $amountStr . $currency . $integritySecret);
+        if (! $order) {
+            $reference = 'HM-' . strtoupper(Str::random(10));
+
+            $order = DB::transaction(function () use ($user, $disponibles, $reference) {
+                $o = Order::create([
+                    'date'             => now(),
+                    'bussiness_status' => 'Pendiente de pago',
+                    'payment_status'   => 'Pendiente',
+                    'subtotal'         => $disponibles->sum('price_snapshot'),
+                    'reference'        => $reference,
+                    'user_id'          => $user->id,
+                    'transaction_id'   => null,
+                ]);
+
+                foreach ($disponibles as $item) {
+                    $animal   = $item->animal;
+                    $farmUser = $animal->farm?->users()->first();
+
+                    $o->animals()->attach($animal->id, [
+                        'user_id'        => $farmUser?->id ?? $user->id,
+                        'status_order'   => 'Pendiente de pago',
+                        'snapshot_price' => $item->price_snapshot,
+                    ]);
+
+                    $animal->update(['status' => 'Reservado']);
+                }
+
+                return $o;
+            });
+        }
+
+        $totalCOP        = (int) ($order->subtotal * 100);
+        $amountStr       = (string) $totalCOP;
+        $currency        = 'COP';
+        $integritySecret = config('services.wompi.integrity_secret');
+        $signature       = hash('sha256', $order->reference . $amountStr . $currency . $integritySecret);
 
         return Inertia::render('Checkout/Index', [
             'publicKey'     => config('services.wompi.public_key'),
-            'reference'     => $reference,
+            'reference'     => $order->reference,
             'amountInCents' => $totalCOP,
             'currency'      => $currency,
             'signature'     => $signature,
             'redirectUrl'   => 'https://transaction-redirect.wompi.co/check',
             'userEmail'     => $user->email,
             'userName'      => $user->name,
-            'total'         => $disponibles->sum('price_snapshot'),
+            'total'         => $order->subtotal,
             'itemCount'     => $disponibles->count(),
         ]);
     }
@@ -78,6 +112,8 @@ class CheckoutController extends Controller
 
         // Consultar el estado real a la API de Wompi
         $wompiData = $this->fetchWompiTransaction($wompiTransactionId);
+
+        Log::info('Wompi result', ['id' => $wompiTransactionId, 'data' => $wompiData]);
 
         if (! $wompiData) {
             return Inertia::render('Checkout/Result', [
@@ -102,7 +138,14 @@ class CheckoutController extends Controller
         }
 
         if ($status === 'approved') {
-            $order = $this->createOrderFromCart(auth()->user(), $wompiData, $reference);
+            $order = Order::where('reference', $reference)
+                ->where('bussiness_status', 'Pendiente de pago')
+                ->first();
+
+            if ($order) {
+                $this->approveOrder($order, $wompiData);
+            }
+
             return Inertia::render('Checkout/Result', [
                 'status'    => 'approved',
                 'reference' => $reference,
@@ -111,7 +154,7 @@ class CheckoutController extends Controller
         }
 
         return Inertia::render('Checkout/Result', [
-            'status'    => $status, // pending, declined, voided, error
+            'status'    => $status,
             'reference' => $reference,
             'orderId'   => null,
         ]);
@@ -123,7 +166,6 @@ class CheckoutController extends Controller
      * ───────────────────────────────────────────── */
     public function webhook(Request $request)
     {
-        // 1. Verificar firma del webhook
         $payload   = $request->all();
         $event     = $payload['event'] ?? '';
         $timestamp = $payload['timestamp'] ?? '';
@@ -144,30 +186,33 @@ class CheckoutController extends Controller
             return response()->json(['ok' => true]);
         }
 
-        $tx     = $payload['data']['transaction'];
-        $status = strtolower($tx['status']);
+        $tx        = $payload['data']['transaction'];
+        $status    = strtolower($tx['status']);
         $wompiId   = $tx['id'];
         $reference = $tx['reference'];
 
-        // Idempotencia: si ya procesamos esta transacción con este estado, salir
         $existingTx = Transaction::where('wompi_id', $wompiId)->first();
 
         if ($status === 'approved' && ! $existingTx) {
-            // Buscar el usuario por referencia temporal — la guardamos en el carrito o la inferimos
-            // La referencia tiene formato HM-XXXXXXXXXX; buscamos la orden si ya fue creada desde /resultado
-            $order = Order::where('reference', $reference)->first();
+            $order = Order::where('reference', $reference)
+                ->where('bussiness_status', 'Pendiente de pago')
+                ->first();
+
             if (! $order) {
-                // El usuario llegó directo sin pasar por /resultado — crear la orden ahora
-                // Necesitamos el user_id: Wompi no lo envía, pero podemos encontrarlo
-                // via customer_email del payload
                 $email = $tx['customer_email'] ?? null;
                 $user  = $email ? User::where('email', $email)->first() : null;
                 if ($user) {
-                    $this->createOrderFromCart($user, $tx, $reference);
+                    $order = Order::where('user_id', $user->id)
+                        ->where('bussiness_status', 'Pendiente de pago')
+                        ->latest()
+                        ->first();
                 }
             }
+
+            if ($order) {
+                $this->approveOrder($order, $tx);
+            }
         } elseif (in_array($status, ['declined', 'voided', 'error']) && $existingTx) {
-            // Actualizar estado de la transacción y el pedido
             $existingTx->update(['transaction_status' => $status === 'voided' ? 'reembolsada' : 'rechazada']);
             $order = Order::where('transaction_id', $existingTx->id)->first();
             if ($order) {
@@ -203,89 +248,60 @@ class CheckoutController extends Controller
         return null;
     }
 
-    private function createOrderFromCart(User $user, array $wompiTx, string $reference): ?Order
+    private function approveOrder(Order $order, array $wompiTx): void
     {
-        $cart  = Cart::forUser($user->id);
-        $items = $cart->items()
-            ->with(['animal' => fn($q) => $q->with('farm')])
-            ->get();
-
-        $disponibles = $items->filter(
-            fn($i) => $i->animal
-                && ! $i->animal->trashed()
-                && $i->animal->status === 'Publicado'
-                && $i->animal->publication_date !== null
-        );
-
-        if ($disponibles->isEmpty()) {
-            return null;
-        }
-
-        return DB::transaction(function () use ($user, $wompiTx, $reference, $disponibles, $cart) {
+        DB::transaction(function () use ($order, $wompiTx) {
             // 1. Crear la transacción
             $amountCents = $wompiTx['amount_in_cents'] ?? ($wompiTx['amount'] ?? 0);
             $amountPesos = is_int($amountCents) && $amountCents > 999999
-                ? $amountCents / 100   // viene en centavos de Wompi
+                ? $amountCents / 100
                 : $amountCents;
 
             $transaction = Transaction::create([
-                'wompi_id'            => $wompiTx['id'],
-                'internal_reference'  => $reference,
-                'transaction_date'    => now(),
-                'moneda'              => $wompiTx['currency'] ?? 'COP',
-                'amount'              => $amountPesos,
-                'transaction_status'  => 'aprobada',
-                'transaction_type'    => 'compra',
+                'wompi_id'           => $wompiTx['id'],
+                'internal_reference' => $order->reference,
+                'transaction_date'   => now(),
+                'moneda'             => $wompiTx['currency'] ?? 'COP',
+                'amount'             => $amountPesos,
+                'transaction_status' => 'aprobada',
+                'transaction_type'   => 'compra',
             ]);
 
-            // 2. Crear el pedido
-            $order = Order::create([
-                'date'             => now(),
+            // 2. Actualizar el pedido
+            $order->update([
                 'bussiness_status' => 'Pendiente de confirmacion',
                 'payment_status'   => 'Aprobado',
-                'subtotal'         => $disponibles->sum('price_snapshot'),
-                'reference'        => $reference,
-                'user_id'          => $user->id,
                 'transaction_id'   => $transaction->id,
             ]);
 
-            // 3. Adjuntar animales y marcarlos como Reservado
-            //    Agrupar por ganadero (farm->user_id) para notificaciones
+            // 3. Actualizar status_order en pivot y notificar ganaderos
             $ganaderoAnimales = [];
 
-            foreach ($disponibles as $item) {
-                $animal   = $item->animal;
-                $farmUser = $animal->farm?->users()->first(); // dueño de la finca
+            foreach ($order->animals as $animal) {
+                $farmUser = $animal->farm?->users()->first();
 
-                $order->animals()->attach($animal->id, [
-                    'user_id'        => $farmUser?->id ?? $user->id,
-                    'status_order'   => 'Pendiente de confirmacion',
-                    'snapshot_price' => $item->price_snapshot,
+                $order->animals()->updateExistingPivot($animal->id, [
+                    'status_order' => 'Pendiente de confirmacion',
                 ]);
 
-                // Cambiar estado del animal a Reservado
-                $animal->update(['status' => 'Reservado']);
-
-                // Acumular para notificación agrupada por ganadero
                 if ($farmUser) {
                     $ganaderoAnimales[$farmUser->id][] = [
                         'id'             => $animal->id,
                         'name'           => $animal->name,
-                        'snapshot_price' => $item->price_snapshot,
+                        'snapshot_price' => $animal->pivot->snapshot_price,
                     ];
                 }
             }
 
-            // 4. Notificar a cada ganadero (agrupado — un solo aviso por ganadero)
+            // 4. Notificar ganaderos
             foreach ($ganaderoAnimales as $ganaderoId => $animales) {
                 $ganadero = User::find($ganaderoId);
                 $ganadero?->notify(new PedidoRecibidoNotification($order, $animales));
             }
 
             // 5. Vaciar el carrito
+            $cart = Cart::forUser($order->user_id);
             $cart->items()->delete();
-
-            return $order;
         });
     }
 }

@@ -19,10 +19,12 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->restrictOnDelete();
             $table->foreignId('user_id')->constrained()->restrictOnDelete();
             $table->enum('status_order', [
+                'Pendiente de pago',
                 'Pendiente de confirmacion',
                 'Confirmado',
                 'Rechazado',
-            ])->default('Pendiente de confirmacion');
+                'Cancelado',
+            ])->default('Pendiente de pago');
             $table->decimal('snapshot_price', 10, 2);
             $table->timestamps();
         });

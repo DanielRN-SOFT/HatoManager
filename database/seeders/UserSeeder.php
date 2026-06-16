@@ -62,5 +62,12 @@ class UserSeeder extends Seeder
         $admin->assignRole('admin');
         $veterinario->assignRole('veterinario');
         $comprador->assignRole('comprador');
+
+        // Valores en consola
+        $this->command->info('4 Usuarios creados.');
+        $this->command->info("  · {$admin->email}: 12345");
+        $this->command->info("  · {$ganadero->email}: 12345");
+        $this->command->info("  · {$veterinario->email}: 12345");
+        $this->command->info("  · {$comprador->email}: 12345");
     }
 }
