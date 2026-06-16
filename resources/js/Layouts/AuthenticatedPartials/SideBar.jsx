@@ -40,7 +40,7 @@ const NAV_ITEMS = [
     {
         label: 'Ventas',
         icon: <MdOutlineSell />,
-        route: 'login',
+        route: 'sales.index',
         permission: 'gestionar ventas',
     },
     {

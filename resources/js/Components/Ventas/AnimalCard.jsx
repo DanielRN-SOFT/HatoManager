@@ -10,7 +10,7 @@ const AnimalCard = ({
 
     return (
         <article
-            onClick={() => router.visit(route('sales.show', animal.id))}
+            onClick={() => router.visit(route('ecommerce.sales.show', animal.id))}
             className={`group cursor-pointer overflow-hidden rounded-xl border border-outline-variant bg-surface-container-lowest transition-all duration-300 ${
                 reservado
                     ? 'opacity-80'

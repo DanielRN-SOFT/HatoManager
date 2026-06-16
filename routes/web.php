@@ -17,8 +17,8 @@
     use Inertia\Inertia;
 
     Route::get('/', [EcommerceController::class, 'index'])->name('ecommerce.index');
-    Route::get('/sales', [EcommerceSalesController::class, 'index'])->name('sales.index');
-    Route::get('/sales/animales/{id}', [EcommerceSalesController::class, 'show'])->name('sales.show');
+    Route::get('/sales', [EcommerceSalesController::class, 'index'])->name('ecommerce.sales.index');
+    Route::get('/sales/animales/{id}', [EcommerceSalesController::class, 'show'])->name('ecommerce.sales.show');
 
 
 
@@ -122,6 +122,9 @@
         Route::put('/weight-records/{weightRecord}/restore', [WeightRecordController::class, 'restore'])
             ->name('weight-records.restore')
             ->withTrashed();
+
+        // Pedidos - Transacciones
+        Route::get('/mis-transacciones', [SalesController::class, 'index'])->name('sales.index');
     });
 
     // ─────────────────────────────────────────────

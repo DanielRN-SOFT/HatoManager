@@ -22,8 +22,10 @@ const CatalogCard = ({ animal, enCarrito, onCart }) => {
 
     return (
         <div
-            onClick={() => router.visit(route('sales.show', animal.id))}
-            className="group overflow-hidden rounded-xl border border-outline-variant bg-white transition-all duration-300 hover:shadow-lg cursor-pointer"
+            onClick={() =>
+                router.visit(route('ecommerce.sales.show', animal.id))
+            }
+            className="group cursor-pointer overflow-hidden rounded-xl border border-outline-variant bg-white transition-all duration-300 hover:shadow-lg"
         >
             <div className="relative h-56">
                 {animal.photo ? (
