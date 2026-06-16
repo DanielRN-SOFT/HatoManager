@@ -12,7 +12,7 @@ const Perfil = ({ getInitials, user, isGanadero }) => {
             </Dropdown.Trigger>
 
             <Dropdown.Content
-                width="56"
+
                 contentClasses="py-1 bg-surface border border-outline-variant"
             >
                 {/* User info header */}
@@ -48,7 +48,7 @@ const Perfil = ({ getInitials, user, isGanadero }) => {
                         <span className="material-symbols-outlined text-[17px] text-on-surface-variant">
                             receipt_long
                         </span>
-                        Historial de ventas
+                        Historial de mis pedidos
                     </Dropdown.Link>
                     {isGanadero && (
                         <Dropdown.Link

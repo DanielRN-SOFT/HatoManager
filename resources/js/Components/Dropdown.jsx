@@ -37,7 +37,7 @@ const Trigger = ({ children }) => {
 
 const Content = ({
     align = 'right',
-    width = '48',
+    width = '56',
     contentClasses = 'py-1 bg-white',
     children,
 }) => {

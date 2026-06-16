@@ -74,7 +74,7 @@ class EcommerceSalesController extends Controller
                 'price'         => $animal->price,
             ]);
 
-        return Inertia::render('Ventas/Index', [
+        return Inertia::render('EcommerceVentas/Index', [
             'animals'     => $animals,
             'breeds'      => Breed::orderBy('name')->get(['id', 'name']),
             'minWeight'   => WeightRecord::orderBy('weight', 'ASC')->limit(1)->value('weight'),
@@ -125,7 +125,7 @@ class EcommerceSalesController extends Controller
             ->whereNotNull('publication_date')
             ->findOrFail($id);
 
-        return Inertia::render('Ventas/Show', [
+        return Inertia::render('EcommerceVentas/Show', [
             'animal' => [
                 'id'               => $animal->id,
                 'name'             => $animal->name,
@@ -207,7 +207,7 @@ class EcommerceSalesController extends Controller
                 ] : null,
             ]);
 
-        return Inertia::render('Ventas/OrderHistory', [
+        return Inertia::render('EcommerceVentas/OrderHistory', [
             'orders' => $orders,
         ]);
     }
@@ -252,7 +252,7 @@ class EcommerceSalesController extends Controller
             ],
         ]);
 
-        return Inertia::render('Ventas/SellerOrders', [
+        return Inertia::render('EcommerceVentas/SellerOrders', [
             'items' => $items,
         ]);
     }
@@ -271,7 +271,7 @@ class EcommerceSalesController extends Controller
         return $this->handleAnimalOrderAction($id, 'reject', $request->user());
     }
 
-    private function handleAnimalOrderAction(int $animalOrderId, string $action, $user): \Illuminate\Http\RedirectResponse
+    private function    handleAnimalOrderAction(int $animalOrderId, string $action, $user): \Illuminate\Http\RedirectResponse
     {
         $row = \App\Models\AnimalOrder::with(['animal.farm', 'order.transaction'])->findOrFail($animalOrderId);
 
