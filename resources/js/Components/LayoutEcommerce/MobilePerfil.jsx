@@ -1,6 +1,6 @@
 import { Link } from "@inertiajs/react";
 
-const MobilePerfil = ({getInitials, user, setMenuOpen, esGanadero}) => {
+const MobilePerfil = ({getInitials, user, setMenuOpen, isGanadero}) => {
   return (
       <div className="mt-4 flex flex-col gap-1 border-t border-outline-variant pt-4">
           {/* User info */}
@@ -29,7 +29,7 @@ const MobilePerfil = ({getInitials, user, setMenuOpen, esGanadero}) => {
               Ver perfil
           </Link>
           <Link
-              href="/historial-ventas"
+              href="/my-orders"
               onClick={() => setMenuOpen(false)}
               className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-on-surface-variant no-underline transition-colors hover:bg-surface-container hover:text-primary"
           >
@@ -38,7 +38,7 @@ const MobilePerfil = ({getInitials, user, setMenuOpen, esGanadero}) => {
               </span>
               Historial de ventas
           </Link>
-          {esGanadero && (
+          {isGanadero && (
               <Link
                   href="/dashboard"
                   onClick={() => setMenuOpen(false)}
