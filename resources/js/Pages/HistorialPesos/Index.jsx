@@ -11,11 +11,16 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, router } from '@inertiajs/react';
 import { useState } from 'react';
 
+const ESTADO_OPTS = [
+    { value: '', label: 'Todos' },
+    { value: 'activo', label: 'Activos' },
+    { value: 'inactivo', label: 'Inactivos' },
+];
+
 export default function Index({
     animals,
     selectedAnimal,
     weightRecords,
-    flash,
     productiveStages,
     weightMethods,
 }) {
@@ -25,40 +30,30 @@ export default function Index({
         mode: 'create',
         record: null,
     });
-
-    const [show, setShow] = useState({
-        show: false,
-        record: null,
-    });
-
+    const [show, setShow] = useState({ show: false, record: null });
     const [toDelete, setToDelete] = useState(null);
+    const [estado, setEstado] = useState('');
 
     function openCreate() {
         setModal({ show: true, mode: 'create', record: null });
     }
-
     function openEdit(record) {
         setModal({ show: true, mode: 'edit', record });
     }
-
     function openShow(record) {
         setShow({ show: true, record });
     }
-
     function closeShow() {
         setShow({ show: false, record: null });
     }
-
     function closeModal() {
         setModal({ show: false, mode: 'create', record: null });
     }
-
     function handleDelete(record) {
         setToDelete(record);
     }
 
     function confirmRestore(toRestore) {
-        console.log(toRestore);
         router.put(route('weight-records.restore', toRestore.id));
     }
 
@@ -69,39 +64,36 @@ export default function Index({
         });
     }
 
+    // Filtro de estado en frontend
+    const rows = (weightRecords.data ?? []).filter((r) => {
+        if (estado === 'activo') return !r.deleted_at;
+        if (estado === 'inactivo') return !!r.deleted_at;
+        return true;
+    });
+
     return (
         <AuthenticatedLayout>
-            <Head title="Pesaje de animal" />
+            <Head title="Historial Pesajes" />
 
-            <div>
-                {/* Flash */}
-                <Flash flash={flash} />
+            <div className="px-4 py-6">
+                <Flash />
 
                 {/* Header */}
-                <div className="mb-6 flex items-center justify-between gap-4 p-2">
-                    <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
-                            <span className="material-symbols-outlined text-[24px] text-on-primary">
-                                balance
-                            </span>
-                        </div>
-                        <div>
-                            <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
-                                {selectedAnimal
-                                    ? selectedAnimal.ear_tag
-                                    : 'Finca'}
-                            </p>
-                            <h1 className="text-2xl font-bold text-on-surface">
-                                Historial Pesajes
-                            </h1>
-                        </div>
+                <div className="mb-6 flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-800">
+                            Historial Pesajes
+                        </h1>
+                        <p className="mt-1 text-sm text-gray-500">
+                            Registros de peso por animal en la finca activa.
+                        </p>
                     </div>
                     {isGanadero && (
                         <button
                             onClick={openCreate}
-                            className="flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
+                            className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 active:scale-95"
                         >
-                            <span className="material-symbols-outlined text-[20px]">
+                            <span className="material-symbols-outlined text-[18px]">
                                 add_circle
                             </span>
                             Nuevo registro
@@ -109,36 +101,69 @@ export default function Index({
                     )}
                 </div>
 
-                {/* Selector de animal */}
-                <div className="mb-4 flex max-w-sm items-center justify-between rounded-xl border-t-4 border-primary bg-white px-4 py-3 shadow-sm">
-                    <AnimalSelector
-                        animals={animals}
-                        selectedAnimal={selectedAnimal}
-                    />
-                    <span className="text-xs text-gray-400">
-                        {weightRecords.total}{' '}
-                        {weightRecords.total === 1 ? 'registro' : 'registros'}
-                    </span>
+                {/* Card de filtros */}
+                <div className="mb-4 rounded-xl border border-t-4 border-gray-200 border-t-secondary bg-white px-6 py-4">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                        {/* Selector animal */}
+                        <div className="flex items-center gap-3">
+                            <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                                Animal
+                            </span>
+                            <AnimalSelector
+                                animals={animals}
+                                selectedAnimal={selectedAnimal}
+                            />
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            {/* Total registros */}
+                            <span className="text-xs text-gray-400">
+                                {weightRecords.total}{' '}
+                                {weightRecords.total === 1
+                                    ? 'registro'
+                                    : 'registros'}
+                            </span>
+
+                            {/* Filtro estado */}
+                            <div className="flex gap-1">
+                                {ESTADO_OPTS.map((opt) => (
+                                    <button
+                                        key={opt.value}
+                                        onClick={() => setEstado(opt.value)}
+                                        className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
+                                            estado === opt.value
+                                                ? 'border-secondary bg-secondary text-white'
+                                                : 'border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-600'
+                                        }`}
+                                    >
+                                        {opt.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Tabla */}
-                {weightRecords.data.length === 0 ? (
-                    <div className="flex flex-col items-center gap-3 rounded-xl border-t-4 border-primary bg-white py-16 text-gray-400 shadow-sm">
+                {rows.length === 0 ? (
+                    <div className="flex flex-col items-center gap-3 rounded-xl border border-t-4 border-gray-200 border-t-secondary bg-white py-16 text-gray-400">
                         <span className="material-symbols-outlined text-5xl">
                             balance
                         </span>
                         <p className="text-sm">
-                            No hay registros de peso para este animal.
+                            No hay registros para mostrar.
                         </p>
-                        <button
-                            onClick={openCreate}
-                            className="mt-2 text-sm text-green-600 hover:underline"
-                        >
-                            Agregar el primero
-                        </button>
+                        {isGanadero && (
+                            <button
+                                onClick={openCreate}
+                                className="mt-1 text-sm text-primary hover:underline"
+                            >
+                                Agregar el primero
+                            </button>
+                        )}
                     </div>
                 ) : (
-                    <div className="overflow-hidden rounded-xl bg-white shadow-sm">
+                    <div className="overflow-hidden rounded-xl border border-t-4 border-gray-200 border-t-secondary bg-white">
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead>
@@ -146,24 +171,22 @@ export default function Index({
                                         <th className="px-4 py-3">
                                             Fecha de pesaje
                                         </th>
-                                        <th className="px-4 py-3">Peso(kg)</th>
+                                        <th className="px-4 py-3">Peso (kg)</th>
                                         <th className="px-4 py-3">
-                                            Condicion Corporal
+                                            Condición corporal
                                         </th>
                                         <th className="px-4 py-3">
-                                            Etapa Productiva
+                                            Etapa productiva
                                         </th>
                                         <th className="px-4 py-3">
-                                            Metodo de Pesaje
+                                            Método de pesaje
                                         </th>
                                         <th className="px-4 py-3">Estado</th>
-
                                         <th className="px-4 py-3">Acciones</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
-                                    {weightRecords.data.map((record) => (
+                                    {rows.map((record) => (
                                         <WeightRecordRow
                                             key={record.id}
                                             record={record}
@@ -177,9 +200,8 @@ export default function Index({
                             </table>
                         </div>
 
-                        {/* Paginación */}
                         {weightRecords.last_page > 1 && (
-                          <PaginacionTabla weightRecords={weightRecords}/>
+                            <PaginacionTabla weightRecords={weightRecords} />
                         )}
                     </div>
                 )}
@@ -191,7 +213,6 @@ export default function Index({
                 record={show.record}
             />
 
-            {/* Modal crear/editar */}
             <WeightRecordModal
                 show={modal.show}
                 mode={modal.mode}
@@ -203,7 +224,6 @@ export default function Index({
                 weightMethods={weightMethods}
             />
 
-            {/* Confirm delete */}
             <Modal
                 show={!!toDelete}
                 maxWidth="sm"
