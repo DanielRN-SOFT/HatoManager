@@ -1,3 +1,4 @@
+import Modal from '@/Components/Modal';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
 import { useState } from 'react';
@@ -86,7 +87,7 @@ function Pill({ label, map }) {
 
 function StatCard({ icon, label, value, sub, color }) {
     return (
-        <div className="flex items-start gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+        <div className="flex items-start gap-4 rounded-xl border border-t-4 border-gray-200 border-t-secondary bg-white p-5 shadow-sm">
             <div
                 className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-[22px] ${color}`}
             >
@@ -121,221 +122,206 @@ function InfoItem({ label, value, highlight }) {
 }
 
 function DetailModal({ order, mode, onClose }) {
-    if (!order) return null;
     const isSales = mode === 'ventas';
 
     return (
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
-            onClick={onClose}
-        >
-            <div
-                className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-gray-200 bg-white shadow-2xl"
-                onClick={(e) => e.stopPropagation()}
-            >
-                {/* Header */}
-                <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-100 bg-white px-6 py-4">
-                    <div>
-                        <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
-                            {isSales ? 'Detalle de venta' : 'Detalle de compra'}
-                        </p>
-                        <h2 className="font-mono text-sm font-bold text-gray-800">
-                            {order.reference ?? `#${order.id}`}
-                        </h2>
-                    </div>
-                    <button
-                        onClick={onClose}
-                        className="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100"
-                    >
-                        <PiXBold className="text-[16px]" />
-                    </button>
-                </div>
-
-                <div className="space-y-5 p-6">
-                    {/* Info general */}
-                    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                        <InfoItem
-                            label="Fecha"
-                            value={formatDate(order.date)}
-                        />
-                        <InfoItem
-                            label={isSales ? 'Comprador' : 'Vendedor'}
-                            value={order.counterpart_name ?? '—'}
-                        />
-                        <InfoItem
-                            label="Total"
-                            value={formatCOP(order.subtotal)}
-                            highlight
-                        />
-                        <InfoItem
-                            label="Estado negocio"
-                            value={
-                                <Pill
-                                    label={order.bussiness_status}
-                                    map={BIZ_STYLES}
-                                />
-                            }
-                        />
-                        <InfoItem
-                            label="Estado pago"
-                            value={
-                                <Pill
-                                    label={order.payment_status}
-                                    map={PAY_STYLES}
-                                />
-                            }
-                        />
-                        <InfoItem
-                            label="Animales"
-                            value={`${order.animals_count ?? 0} cabezas`}
-                        />
-                    </div>
-
-                    {/* Transacción */}
-                    {order.transaction && (
-                        <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
-                            <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-gray-400">
-                                Transacción Wompi
-                            </p>
-                            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                                <InfoItem
-                                    label="ID Wompi"
-                                    value={
-                                        <span className="break-all font-mono text-xs">
-                                            {order.transaction.wompi_id}
-                                        </span>
-                                    }
-                                />
-                                <InfoItem
-                                    label="Fecha"
-                                    value={formatDateTime(
-                                        order.transaction.transaction_date,
-                                    )}
-                                />
-                                <InfoItem
-                                    label="Monto"
-                                    value={formatCOP(order.transaction.amount)}
-                                    highlight
-                                />
-                                <InfoItem
-                                    label="Estado"
-                                    value={
-                                        <Pill
-                                            label={
-                                                order.transaction
-                                                    .transaction_status
-                                            }
-                                            map={TX_STYLES}
-                                        />
-                                    }
-                                />
-                                <InfoItem
-                                    label="Tipo"
-                                    value={order.transaction.transaction_type}
-                                />
-                                <InfoItem
-                                    label="Moneda"
-                                    value={order.transaction.moneda}
-                                />
+        <Modal show={!!order} maxWidth="2xl" closeable={true} onClose={onClose}>
+            {order && (
+                <>
+                    {/* Header */}
+                    <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-100 bg-white px-6 py-4">
+                        <div className="flex items-center gap-3">
+                            <div
+                                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${isSales ? 'bg-green-100' : 'bg-blue-100'}`}
+                            >
+                                <span
+                                    className={`material-symbols-outlined text-[20px] ${isSales ? 'text-primary' : 'text-blue-600'}`}
+                                >
+                                    {isSales ? 'storefront' : 'shopping_bag'}
+                                </span>
+                            </div>
+                            <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                                    {isSales
+                                        ? 'Detalle de venta'
+                                        : 'Detalle de compra'}
+                                </p>
+                                <h2 className="font-mono text-sm font-bold text-gray-800">
+                                    {order.reference ?? `#${order.id}`}
+                                </h2>
                             </div>
                         </div>
-                    )}
+                        <button
+                            onClick={onClose}
+                            className="flex h-8 w-8 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100"
+                        >
+                            <PiXBold className="text-[16px]" />
+                        </button>
+                    </div>
 
-                    {/* Animales */}
-                    {order.animals && order.animals.length > 0 && (
-                        <div>
-                            <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-gray-400">
-                                Animales incluidos
-                            </p>
-                            <div className="space-y-2">
-                                {order.animals.map((animal) => {
-                                    const sexInfo = SEX_LABELS[animal.sex] ?? {
-                                        label: animal.sex,
-                                        cls: 'bg-gray-100 text-gray-600',
-                                    };
-                                    const statusInfo = STATUS_STYLES[
-                                        animal.status
-                                    ] ?? { cls: 'bg-gray-100 text-gray-600' };
-                                    return (
+                    <div className="max-h-[80vh] space-y-5 overflow-y-auto p-6">
+                        {/* Info general */}
+                        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                            <InfoItem
+                                label="Fecha"
+                                value={formatDate(order.date)}
+                            />
+                            <InfoItem
+                                label={isSales ? 'Comprador' : 'Vendedor'}
+                                value={order.counterpart_name ?? '—'}
+                            />
+                            <InfoItem
+                                label="Total"
+                                value={formatCOP(order.subtotal)}
+                                highlight
+                            />
+                            <InfoItem
+                                label="Estado negocio"
+                                value={
+                                    <Pill
+                                        label={order.bussiness_status}
+                                        map={BIZ_STYLES}
+                                    />
+                                }
+                            />
+                            <InfoItem
+                                label="Estado pago"
+                                value={
+                                    <Pill
+                                        label={order.payment_status}
+                                        map={PAY_STYLES}
+                                    />
+                                }
+                            />
+                            <InfoItem
+                                label="Animales"
+                                value={`${order.animals_count ?? 0} cabezas`}
+                            />
+                        </div>
+
+                        {/* Transacción */}
+                        {order.transaction && (
+                            <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                                <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                                    Transacción Wompi
+                                </p>
+                                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                                    <InfoItem
+                                        label="ID Wompi"
+                                        value={
+                                            <span className="break-all font-mono text-xs">
+                                                {order.transaction.wompi_id}
+                                            </span>
+                                        }
+                                    />
+                                    <InfoItem
+                                        label="Fecha"
+                                        value={formatDateTime(
+                                            order.transaction.transaction_date,
+                                        )}
+                                    />
+                                    <InfoItem
+                                        label="Monto"
+                                        value={formatCOP(
+                                            order.transaction.amount,
+                                        )}
+                                        highlight
+                                    />
+                                    <InfoItem
+                                        label="Estado"
+                                        value={
+                                            <Pill
+                                                label={
+                                                    order.transaction
+                                                        .transaction_status
+                                                }
+                                                map={TX_STYLES}
+                                            />
+                                        }
+                                    />
+                                    <InfoItem
+                                        label="Tipo"
+                                        value={
+                                            order.transaction.transaction_type
+                                        }
+                                    />
+                                    <InfoItem
+                                        label="Moneda"
+                                        value={order.transaction.moneda}
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Animales */}
+                        {order.animals && order.animals.length > 0 && (
+                            <div>
+                                <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                                    Animales incluidos
+                                </p>
+                                <div className="space-y-2">
+                                    {order.animals.map((a) => (
                                         <div
-                                            key={animal.id}
-                                            className="flex items-center gap-3 rounded-xl border border-gray-100 bg-white p-3 transition-colors hover:bg-gray-50"
+                                            key={a.id}
+                                            className="grid grid-cols-2 gap-3 rounded-xl border border-gray-100 bg-gray-50 p-4 sm:grid-cols-3"
                                         >
-                                            {/* Foto */}
-                                            {animal.photo ? (
-                                                <img
-                                                    src={animal.photo}
-                                                    alt={animal.ear_tag}
-                                                    className="h-10 w-10 shrink-0 rounded-lg object-cover"
-                                                />
-                                            ) : (
-                                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gray-100">
-                                                    <PiCowFill className="text-[20px] text-gray-300" />
-                                                </div>
-                                            )}
-
-                                            {/* Info */}
-                                            <div className="grid min-w-0 flex-1 grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-3">
-                                                <div>
-                                                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
-                                                        Arete
-                                                    </p>
-                                                    <span className="rounded bg-green-50 px-1.5 py-0.5 font-mono text-xs font-bold text-green-700">
-                                                        {animal.ear_tag}
+                                            <InfoItem
+                                                label="Arete"
+                                                value={
+                                                    <span className="font-semibold text-primary">
+                                                        {a.ear_tag}
                                                     </span>
-                                                </div>
-                                                <div>
-                                                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
-                                                        Categoría
-                                                    </p>
-                                                    <p className="text-sm text-gray-700">
-                                                        {animal.animal_category ??
-                                                            '—'}
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
-                                                        Raza
-                                                    </p>
-                                                    <p className="text-sm text-gray-700">
-                                                        {animal.breed ?? '—'}
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
-                                                        Sexo
-                                                    </p>
+                                                }
+                                            />
+                                            <InfoItem
+                                                label="Categoría"
+                                                value={a.category}
+                                            />
+                                            <InfoItem
+                                                label="Raza"
+                                                value={a.breed}
+                                            />
+                                            <InfoItem
+                                                label="Sexo"
+                                                value={
                                                     <span
-                                                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${sexInfo.cls}`}
+                                                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${(SEX_LABELS[a.sex] ?? { cls: 'bg-gray-100 text-gray-500' }).cls}`}
                                                     >
-                                                        {sexInfo.label}
+                                                        {
+                                                            (
+                                                                SEX_LABELS[
+                                                                    a.sex
+                                                                ] ?? {
+                                                                    label: a.sex,
+                                                                }
+                                                            ).label
+                                                        }
                                                     </span>
-                                                </div>
-                                                <div>
-                                                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
-                                                        Estado
-                                                    </p>
-                                                    <span
-                                                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${statusInfo.cls}`}
-                                                    >
-                                                        {animal.status}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            {/* Precio */}
-                                            <p className="shrink-0 text-sm font-bold text-secondary">
-                                                {formatCOP(animal.price)}
-                                            </p>
+                                                }
+                                            />
+                                            <InfoItem
+                                                label="Estado"
+                                                value={
+                                                    <Pill
+                                                        label={a.status}
+                                                        map={STATUS_STYLES}
+                                                    />
+                                                }
+                                            />
+                                            <InfoItem
+                                                label="Precio"
+                                                value={formatCOP(a.pivot_price)}
+                                                highlight
+                                            />
                                         </div>
-                                    );
-                                })}
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
+                        )}
+                    </div>
+                </>
+            )}
+        </Modal>
     );
 }
 
@@ -535,49 +521,67 @@ export default function SalesIndex() {
                 />
             </div>
 
-            {/* Tabs + Tabla */}
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white">
-                <div className="flex items-center gap-1 border-b border-gray-100 px-4 pt-3">
-                    {[
-                        {
-                            key: 'ventas',
-                            label: 'Mis ventas',
-                            icon: <PiArrowUpRightBold />,
-                            count: sales.length,
-                        },
-                        {
-                            key: 'compras',
-                            label: 'Mis compras',
-                            icon: <PiArrowDownLeftBold />,
-                            count: purchases.length,
-                        },
-                    ].map(({ key, label, icon, count }) => (
-                        <button
-                            key={key}
-                            onClick={() => setTab(key)}
-                            className={[
-                                'flex items-center gap-2 rounded-t-lg px-4 py-2.5 text-sm font-medium transition-colors',
-                                tab === key
-                                    ? 'border-b-2 border-secondary text-secondary'
-                                    : 'text-gray-400 hover:text-gray-700',
-                            ].join(' ')}
+            {/* Card de tabs/filtros */}
+            <div className="mb-4 rounded-xl border border-t-4 border-gray-200 border-t-secondary bg-white px-6 py-4">
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <span
+                            className="material-symbols-outlined text-gray-500"
+                            style={{ fontSize: 20 }}
                         >
-                            <span className="text-[16px]">{icon}</span>
-                            {label}
-                            <span
-                                className={[
-                                    'rounded-full px-2 py-0.5 text-[11px] font-semibold',
+                            receipt_long
+                        </span>
+                        <h2 className="text-sm font-semibold text-gray-800">
+                            Historial de transacciones
+                        </h2>
+                    </div>
+                    <div className="flex gap-2">
+                        {[
+                            {
+                                key: 'ventas',
+                                label: 'Mis ventas',
+                                icon: <PiArrowUpRightBold />,
+                                count: sales.length,
+                            },
+                            {
+                                key: 'compras',
+                                label: 'Mis compras',
+                                icon: <PiArrowDownLeftBold />,
+                                count: purchases.length,
+                            },
+                        ].map(({ key, label, icon, count }) => (
+                            <button
+                                key={key}
+                                onClick={() => setTab(key)}
+                                className={`flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-sm font-medium transition ${
                                     tab === key
-                                        ? 'bg-secondary/10 text-secondary'
-                                        : 'bg-gray-100 text-gray-400',
-                                ].join(' ')}
+                                        ? key === 'ventas'
+                                            ? 'border-emerald-300 bg-emerald-50 text-emerald-700'
+                                            : 'border-blue-300 bg-blue-50 text-blue-700'
+                                        : 'border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-600'
+                                }`}
                             >
-                                {count}
-                            </span>
-                        </button>
-                    ))}
+                                <span className="text-[15px]">{icon}</span>
+                                {label}
+                                <span
+                                    className={`rounded-full px-1.5 py-0.5 text-xs font-bold ${
+                                        tab === key
+                                            ? key === 'ventas'
+                                                ? 'bg-emerald-100 text-emerald-700'
+                                                : 'bg-blue-100 text-blue-700'
+                                            : 'bg-gray-100 text-gray-400'
+                                    }`}
+                                >
+                                    {count}
+                                </span>
+                            </button>
+                        ))}
+                    </div>
                 </div>
+            </div>
 
+            {/* Tabla */}
+            <div className="overflow-hidden rounded-xl border border-t-4 border-gray-200 border-t-secondary bg-white">
                 <OrdersTable
                     orders={activeOrders}
                     mode={tab}
