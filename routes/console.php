@@ -2,9 +2,11 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
-use App\Jobs\CheckVacunasVencidas;
 use Illuminate\Support\Facades\Schedule;
+use App\Jobs\CancelarPedidosPendientes;
+use App\Jobs\CheckVacunasVencidas;
 
+Schedule::job(new CancelarPedidosPendientes)->hourly();
 
 Schedule::job(new CheckVacunasVencidas)->dailyAt('07:00');
 

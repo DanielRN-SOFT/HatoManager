@@ -18,10 +18,11 @@ return new class extends Migration
                 'Pendiente de pago',
                 'Pendiente de confirmacion',
                 'Cancelado por comprador',
+                'Cancelado por expiración',
                 'Rechazado por ganadero',
                 'Confirmado',
                 'Completado',
-            ])->default('Pendiente de Pago');
+            ])->default('Pendiente de pago');
             $table->enum('payment_status', [
                 'Pendiente',
                 'Aprobado',
