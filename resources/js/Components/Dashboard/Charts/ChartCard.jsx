@@ -1,6 +1,6 @@
 const ChartCard = ({ icon, title, sub, children, className = '' }) => (
     <div
-        className={`rounded-xl border border-gray-200 bg-white p-4 shadow-sm ${className}`}
+        className={`flex h-full flex-col rounded-xl border border-gray-200 bg-white p-4 shadow-sm ${className}`}
     >
         <div className="mb-0.5 flex items-center gap-1.5">
             <span className="material-symbols-outlined text-[14px] text-secondary">
@@ -11,7 +11,7 @@ const ChartCard = ({ icon, title, sub, children, className = '' }) => (
             </span>
         </div>
         {sub && <p className="mb-3 text-[11px] text-gray-400">{sub}</p>}
-        {children}
+        <div className="min-h-0 flex-1">{children}</div>
     </div>
 );
 
