@@ -7,50 +7,70 @@ export default function VetFarmCard({ farm }) {
     const hasPending = (farm.veterinarian_invitations?.length ?? 0) > 0;
 
     return (
-        <div className="rounded-2xl border border-outline-variant bg-surface p-5 shadow-sm">
+        <div className="overflow-hidden rounded-xl border border-t-4 border-gray-200 border-t-secondary bg-white">
             {/* Header */}
-            <div className="mb-1 flex items-start justify-between">
+            <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
                 <div>
-                    <h3 className="font-semibold text-on-surface">
-                        {farm.name}
-                    </h3>
-                    <p className="mt-0.5 text-xs text-on-surface-variant">
+                    <h3 className="font-semibold text-gray-800">{farm.name}</h3>
+                    <p className="mt-0.5 text-xs text-gray-500">
                         {farm.city}, {farm.department}
                     </p>
                 </div>
-                <span className="material-symbols-outlined text-[22px] text-on-surface-variant">
+                <span
+                    className="material-symbols-outlined text-gray-300"
+                    style={{ fontSize: 24 }}
+                >
                     agriculture
                 </span>
             </div>
 
-            <hr className="my-3 border-outline-variant" />
-
-            {/* Veterinarios vinculados */}
-            {hasVets ? (
-                <div className="divide-y divide-outline-variant">
-                    {farm.veterinarios.map((vet) => (
-                        <VetRow key={vet.id} vet={vet} farm={farm} />
-                    ))}
-                </div>
-            ) : (
-                <p className="py-2 text-sm text-on-surface-variant">
-                    Sin veterinarios vinculados aún.
-                </p>
-            )}
+            {/* Tabla de veterinarios */}
+            <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                    <thead>
+                        <tr className="bg-secondary text-xs font-semibold uppercase tracking-wide text-white">
+                            <th className="px-6 py-3">Veterinario</th>
+                            <th className="px-6 py-3">Correo</th>
+                            <th className="px-6 py-3"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {hasVets ? (
+                            farm.veterinarios.map((vet) => (
+                                <VetRow key={vet.id} vet={vet} farm={farm} />
+                            ))
+                        ) : (
+                            <tr>
+                                <td
+                                    colSpan={3}
+                                    className="py-8 text-center text-sm text-gray-400"
+                                >
+                                    Sin veterinarios vinculados aún.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Invitaciones pendientes */}
             {hasPending && (
-                <div className="mt-3 space-y-2">
-                    <p className="text-xs font-medium uppercase tracking-wider text-on-surface-variant">
+                <div className="border-t border-gray-100 px-6 py-4">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
                         Invitaciones pendientes
                     </p>
-                    {farm.veterinarian_invitations.map((inv) => (
-                        <PendingBadge key={inv.id} invitation={inv} />
-                    ))}
+                    <div className="flex flex-col gap-2">
+                        {farm.veterinarian_invitations.map((inv) => (
+                            <PendingBadge key={inv.id} invitation={inv} />
+                        ))}
+                    </div>
                 </div>
             )}
 
-            <InviteForm farm={farm} />
+            {/* Invitar */}
+            <div className="border-t border-gray-100 px-6 py-4">
+                <InviteForm farm={farm} />
+            </div>
         </div>
     );
 }

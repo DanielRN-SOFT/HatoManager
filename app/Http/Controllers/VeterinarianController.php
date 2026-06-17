@@ -22,21 +22,25 @@ class VeterinarianController extends Controller
     /* ══════════════════════════════════════════════════════════
      |  INDEX — Página "Mis Veterinarios"
      |  Muestra los vets vinculados e invitaciones pendientes
-     |  para todas las fincas del ganadero autenticado.
+     |  para la finca activa del ganadero autenticado.
      ╚═════════════════════════════════════════════════════════ */
     public function index(): Response
     {
         $ganadero = Auth::user();
+        $farmId = session('active_farm_id');
 
-        // Fincas del ganadero con sus veterinarios vinculados
-        $farms = $ganadero->farms()
-            ->with([
-                'veterinarios:id,name,email',
-                'veterinarianInvitations' => fn($q) => $q
-                    ->where('status', 'pending')
-                    ->select('id', 'farm_id', 'email', 'token_expires_at', 'status', 'created_at'),
-            ])
-            ->get(['farms.id', 'farms.name', 'farms.city', 'farms.department']);
+        $query = $ganadero->farms()->with([
+            'veterinarios:id,name,email',
+            'veterinarianInvitations' => fn($q) => $q
+                ->where('status', 'pending')
+                ->select('id', 'farm_id', 'email', 'token_expires_at', 'status', 'created_at'),
+        ]);
+
+        if ($farmId) {
+            $query->where('farms.id', $farmId);
+        }
+
+        $farms = $query->get(['farms.id', 'farms.name', 'farms.city', 'farms.department']);
 
         return Inertia::render('Veterinarios/MisVeterinarios', [
             'farms' => $farms,
