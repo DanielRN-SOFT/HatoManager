@@ -4,66 +4,67 @@ namespace App\Http\Controllers;
 
 use App\Models\HealthRecord;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        $user = $request->user();
+        $user   = $request->user();
         $farmId = session('active_farm_id');
+        $tab    = $request->input('tab', 'vencidas');
 
-        $alertas = ['vencidas' => [], 'proximas' => [], 'subastas' => []];
+        $totales = ['vencidas' => 0, 'proximas' => 0, 'subastas' => 0];
+        $alertas = null;
 
         if ($farmId) {
-            $hoy = now()->startOfDay();
-            $en7dias = now()->addDays(7)->endOfDay();
+            $hoy    = now()->startOfDay();
+            $en7    = now()->addDays(7)->endOfDay();
 
-            // Vacunas vencidas
-            $alertas['vencidas'] = HealthRecord::with(['animal:id,name,ear_tag'])
+            $mapRecord = fn($r) => [
+                'id'        => $r->id,
+                'animal_id' => $r->animal_id,
+                'ear_tag'   => $r->animal?->ear_tag,
+                'nombre'    => $r->animal?->name,
+                'tipo'      => $r->type,
+                'producto'  => $r->product,
+                'next_date' => $r->next_date?->toDateString(),
+                'dias'      => $tab === 'vencidas'
+                    ? (int) $r->next_date->diffInDays($hoy) * -1
+                    : (int) now()->startOfDay()->diffInDays($r->next_date),
+            ];
+
+            $baseQuery = fn() => HealthRecord::with(['animal:id,name,ear_tag'])
                 ->whereHas('animal', fn($q) => $q->where('farm_id', $farmId)->whereNull('deleted_at'))
                 ->whereNotNull('next_date')
-                ->where('next_date', '<', $hoy)
-                ->whereNull('deleted_at')
-                ->orderBy('next_date')
-                ->get(['id', 'animal_id', 'type', 'product', 'next_date'])
-                ->map(fn($r) => [
-                    'id'         => $r->id,
-                    'animal_id'  => $r->animal_id,
-                    'ear_tag'    => $r->animal?->ear_tag,
-                    'nombre'     => $r->animal?->name,
-                    'tipo'       => $r->type,
-                    'producto'   => $r->product,
-                    'next_date'  => $r->next_date?->toDateString(),
-                    'dias'       => (int) $r->next_date->diffInDays($hoy) * -1,
-                ]);
+                ->whereNull('deleted_at');
 
-            // Vacunas próximas (7 días)
-            $alertas['proximas'] = HealthRecord::with(['animal:id,name,ear_tag'])
-                ->whereHas('animal', fn($q) => $q->where('farm_id', $farmId)->whereNull('deleted_at'))
-                ->whereNotNull('next_date')
-                ->whereBetween('next_date', [$hoy, $en7dias])
-                ->whereNull('deleted_at')
-                ->orderBy('next_date')
-                ->get(['id', 'animal_id', 'type', 'product', 'next_date'])
-                ->map(fn($r) => [
-                    'id'         => $r->id,
-                    'animal_id'  => $r->animal_id,
-                    'ear_tag'    => $r->animal?->ear_tag,
-                    'nombre'     => $r->animal?->name,
-                    'tipo'       => $r->type,
-                    'producto'   => $r->product,
-                    'next_date'  => $r->next_date?->toDateString(),
-                    'dias'       => (int) now()->startOfDay()->diffInDays($r->next_date),
-                ]);
+            // Totales (para los badges de los tabs)
+            $totales['vencidas'] = (clone $baseQuery())
+                ->where('next_date', '<', $hoy)->count();
+            $totales['proximas'] = (clone $baseQuery())
+                ->whereBetween('next_date', [$hoy, $en7])->count();
 
-            // Subastas próximas a cerrar (extensible — vacío por ahora)
-            $alertas['subastas'] = [];
+            // Solo paginamos el tab activo
+            if ($tab === 'vencidas') {
+                $query = (clone $baseQuery())
+                    ->where('next_date', '<', $hoy)
+                    ->orderBy('next_date');
+            } else {
+                $query = (clone $baseQuery())
+                    ->whereBetween('next_date', [$hoy, $en7])
+                    ->orderBy('next_date');
+            }
+
+            $alertas = $query
+                ->paginate(10, ['id', 'animal_id', 'type', 'product', 'next_date'])
+                ->through($mapRecord);
         }
 
         return Inertia::render('Dashboard', [
             'alertas' => $alertas,
+            'totales' => $totales,
+            'tab'     => $tab,
         ]);
     }
 }

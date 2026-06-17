@@ -10,34 +10,113 @@ const TABS = [
         key: 'vencidas',
         label: 'Vencidas',
         icono: 'emergency',
-        colorActivo: 'border-red-500 text-red-600',
+        colorActivo: 'border-red-300 bg-red-50 text-red-600',
         colorBadge: 'bg-red-100 text-red-700',
     },
     {
         key: 'proximas',
         label: 'Próximas (7 días)',
         icono: 'schedule',
-        colorActivo: 'border-yellow-500 text-yellow-600',
+        colorActivo: 'border-yellow-300 bg-yellow-50 text-yellow-600',
         colorBadge: 'bg-yellow-100 text-yellow-700',
     },
 ];
 
-export default function AlertasDashboard({ alertas }) {
-    const { vencidas = [], proximas = [] } = alertas ?? {};
-    const total = vencidas.length + proximas.length;
-    const [tab, setTab] = useState('vencidas');
+function Paginacion({ data, tab }) {
+    const { current_page, last_page } = data;
+    if (last_page <= 1) return null;
+
+    function goTo(page) {
+        router.get(
+            route('dashboard'),
+            { tab, page },
+            { preserveState: true, replace: true },
+        );
+    }
+
+    const pages = Array.from({ length: last_page }, (_, i) => i + 1)
+        .filter(
+            (p) =>
+                p === 1 || p === last_page || Math.abs(p - current_page) <= 1,
+        )
+        .reduce((acc, p, i, arr) => {
+            if (i > 0 && p - arr[i - 1] > 1) acc.push('...');
+            acc.push(p);
+            return acc;
+        }, []);
+
+    return (
+        <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
+            <span className="text-xs text-gray-500">
+                Página {current_page} de {last_page}
+            </span>
+            <div className="flex gap-1">
+                <button
+                    onClick={() => goTo(current_page - 1)}
+                    disabled={current_page === 1}
+                    className="rounded px-3 py-1 text-xs text-gray-500 transition hover:bg-gray-100 disabled:opacity-40"
+                >
+                    &laquo;
+                </button>
+                {pages.map((p, i) =>
+                    p === '...' ? (
+                        <span
+                            key={`d-${i}`}
+                            className="px-1 text-xs text-gray-400"
+                        >
+                            …
+                        </span>
+                    ) : (
+                        <button
+                            key={p}
+                            onClick={() => goTo(p)}
+                            className={`rounded px-3 py-1 text-xs transition ${
+                                p === current_page
+                                    ? 'bg-primary text-white'
+                                    : 'text-gray-500 hover:bg-gray-100'
+                            }`}
+                        >
+                            {p}
+                        </button>
+                    ),
+                )}
+                <button
+                    onClick={() => goTo(current_page + 1)}
+                    disabled={current_page === last_page}
+                    className="rounded px-3 py-1 text-xs text-gray-500 transition hover:bg-gray-100 disabled:opacity-40"
+                >
+                    &raquo;
+                </button>
+            </div>
+        </div>
+    );
+}
+
+export default function AlertasDashboard({
+    alertas,
+    totales,
+    tab: initialTab,
+}) {
+    const [tab, setTab] = useState(initialTab ?? 'vencidas');
+    const total = (totales?.vencidas ?? 0) + (totales?.proximas ?? 0);
+    const items = alertas?.data ?? [];
 
     if (total === 0) return null;
 
-    const conteos = { vencidas: vencidas.length, proximas: proximas.length };
-    const items = tab === 'vencidas' ? vencidas : proximas;
+    function handleTabChange(newTab) {
+        setTab(newTab);
+        router.get(
+            route('dashboard'),
+            { tab: newTab },
+            { preserveState: true, replace: true },
+        );
+    }
 
     return (
         <div className="mb-6 flex flex-col gap-4">
-            {/* ── Card de filtros/tabs ── */}
+            {/* Card filtros */}
             <div className="rounded-xl border border-t-4 border-gray-200 border-t-secondary bg-white px-6 py-4">
                 <div className="flex items-center justify-between">
-                    {/* Título */}
                     <div className="flex items-center gap-2">
                         <span
                             className="material-symbols-outlined text-orange-500"
@@ -52,18 +131,14 @@ export default function AlertasDashboard({ alertas }) {
                             {total}
                         </span>
                     </div>
-
-                    {/* Tabs como botones de filtro */}
                     <div className="flex gap-2">
                         {TABS.map((t) => (
                             <button
                                 key={t.key}
-                                onClick={() => setTab(t.key)}
+                                onClick={() => handleTabChange(t.key)}
                                 className={`flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-sm font-medium transition ${
                                     tab === t.key
-                                        ? t.key === 'vencidas'
-                                            ? 'border-red-300 bg-red-50 text-red-600'
-                                            : 'border-yellow-300 bg-yellow-50 text-yellow-600'
+                                        ? t.colorActivo
                                         : 'border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-600'
                                 }`}
                             >
@@ -77,7 +152,7 @@ export default function AlertasDashboard({ alertas }) {
                                 <span
                                     className={`rounded-full px-1.5 py-0.5 text-xs font-bold ${t.colorBadge}`}
                                 >
-                                    {conteos[t.key]}
+                                    {totales?.[t.key] ?? 0}
                                 </span>
                             </button>
                         ))}
@@ -85,7 +160,7 @@ export default function AlertasDashboard({ alertas }) {
                 </div>
             </div>
 
-            {/* ── Tabla ── */}
+            {/* Tabla */}
             <div className="overflow-hidden rounded-xl border border-t-4 border-gray-200 border-t-secondary bg-white">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
@@ -117,7 +192,7 @@ export default function AlertasDashboard({ alertas }) {
                                     </td>
                                 </tr>
                             ) : (
-                                items.slice(0, 10).map((item) => (
+                                items.map((item) => (
                                     <tr
                                         key={item.id}
                                         className="border-b border-gray-100 transition hover:bg-gray-50"
@@ -168,16 +243,10 @@ export default function AlertasDashboard({ alertas }) {
                         </tbody>
                     </table>
                 </div>
-
-                {/* Footer */}
-                {conteos[tab] > 10 && (
-                    <div className="border-t border-gray-100 px-6 py-3 text-center">
-                        <span className="text-xs text-gray-400">
-                            Mostrando 10 de {conteos[tab]} — ve a Sanidad para
-                            ver todas
-                        </span>
-                    </div>
-                )}
+                <Paginacion
+                    data={alertas ?? { current_page: 1, last_page: 1 }}
+                    tab={tab}
+                />
             </div>
         </div>
     );
