@@ -26,10 +26,9 @@
         return Inertia::render('Auth/Login');
     })->name('login');
 
-    Route::get('/dashboard', function () {
-
-        return Inertia::render('Dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+        ->middleware(['auth', 'verified'])
+        ->name('dashboard');
 
     // ─────────────────────────────────────────────
     // Rutas para solo usuario autenticado
