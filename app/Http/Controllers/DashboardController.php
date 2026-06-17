@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $tab    = $request->input('tab', 'vencidas');
 
         /* ══════════════════════════════════════════
-         *  A — ALERTAS SANITARIAS (compañero)
+         *  A — ALERTAS SANITARIAS
          * ══════════════════════════════════════════ */
         $totales = ['vencidas' => 0, 'proximas' => 0];
         $alertas = null;
@@ -55,7 +55,7 @@ class DashboardController extends Controller
                 : (clone $baseQuery())->whereBetween('next_date', [$hoy, $en7])->orderBy('next_date');
 
             $alertas = $query
-                ->paginate(10, ['id', 'animal_id', 'type', 'product', 'next_date'])
+                ->paginate(7, ['id', 'animal_id', 'type', 'product', 'next_date'])
                 ->through($mapRecord);
         }
 
@@ -86,7 +86,7 @@ class DashboardController extends Controller
         $evolucionPeso        = [];
         $ventasMensuales      = [];
         $movimientosMensuales = [];
-        $ordenesRecientes     = [];
+
 
         if ($farmId) {
             /* ── Inventario por status ── */
@@ -212,25 +212,6 @@ class DashboardController extends Controller
                 $m = now()->subMonths($i)->format('Y-m');
                 return ['mes' => $m, 'ingresos' => $ingresosMes[$m]->n ?? 0, 'salidas' => $salidasMes[$m]->n ?? 0];
             })->values();
-
-            /* ── Órdenes recientes pendientes/confirmadas ── */
-            $ordenesRecientes = Order::with(['user:id,name', 'animals:id,name,ear_tag'])
-                ->where('orders.user_id', '!=', $user->id)
-                ->whereHas('animals', fn($q) => $q->whereIn('animals.id', $animalIds))
-                ->whereIn('bussiness_status', ['Pendiente de pago', 'Pendiente de confirmacion', 'Confirmado'])
-                ->latest('date')
-                ->take(6)
-                ->get()
-                ->map(fn($o) => [
-                    'id'               => $o->id,
-                    'reference'        => $o->reference,
-                    'bussiness_status' => $o->bussiness_status,
-                    'payment_status'   => $o->payment_status,
-                    'subtotal'         => $o->subtotal,
-                    'fecha'            => Carbon::parse($o->date)->format('d/m/Y'),
-                    'comprador'        => $o->user?->name,
-                    'animales'         => $o->animals->map(fn($a) => "{$a->name} (#{$a->ear_tag})")->implode(', '),
-                ]);
         }
 
         return Inertia::render('Dashboard', [
@@ -243,7 +224,6 @@ class DashboardController extends Controller
             'evolucionPeso'        => $evolucionPeso,
             'ventasMensuales'      => $ventasMensuales,
             'movimientosMensuales' => $movimientosMensuales,
-            'ordenesRecientes'     => $ordenesRecientes,
         ]);
     }
 }
