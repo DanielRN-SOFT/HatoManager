@@ -44,12 +44,6 @@ const NAV_ITEMS = [
         permission: 'gestionar ventas',
     },
     {
-        label: 'Subastas',
-        icon: <MdGavel />,
-        route: 'login',
-        permission: 'gestionar subastas',
-    },
-    {
         label: 'Mis Fincas',
         icon: <GiFarmTractor />,
         route: 'farms.index',
@@ -63,9 +57,6 @@ const NAV_ITEMS = [
     },
 ];
 
-const NAV_BOTTOM = [
-    { label: 'Configuración', icon: 'settings', route: 'login' },
-];
 
 const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
     const { can } = useRole();
@@ -135,13 +126,6 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
 
                 {/* Bottom nav */}
                 <div className="shrink-0 space-y-1 border-t border-outline-variant pt-3">
-                    {NAV_BOTTOM.map((item) => (
-                        <SidebarNavItem
-                            key={item.route + item.label}
-                            item={item}
-                            collapsed={collapsed}
-                        />
-                    ))}
 
                     {/* Botón colapsar — solo desktop */}
                     <button

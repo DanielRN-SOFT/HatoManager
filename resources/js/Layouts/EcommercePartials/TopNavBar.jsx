@@ -7,7 +7,6 @@ import { useState } from 'react';
 
 const navLinks = [
     { href: '/sales', label: 'Ventas' },
-    { href: '/subastas', label: 'Subastas' },
 ];
 
 function getInitials(name) {
