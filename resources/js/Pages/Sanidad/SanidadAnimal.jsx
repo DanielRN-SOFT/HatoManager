@@ -97,15 +97,24 @@ export default function SanidadAnimal({
                 </div>
 
                 {/* Selector de animal */}
-                <div className="mb-4 flex items-center justify-between rounded-xl border-t-4 border-primary bg-white px-4 py-3 shadow-sm">
-                    <AnimalSelector
-                        animals={animals}
-                        selectedAnimal={selectedAnimal}
-                    />
-                    <span className="text-xs text-gray-400">
-                        {records.total}{' '}
-                        {records.total === 1 ? 'registro' : 'registros'}
-                    </span>
+                <div className="mb-4 rounded-xl border border-t-4 border-gray-200 border-t-primary bg-white px-6 py-4">
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                            <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                                Animal
+                            </span>
+                            <AnimalSelector
+                                animals={animals}
+                                selectedAnimal={selectedAnimal}
+                            />
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <span className="text-xs text-gray-400">
+                                {records.total}{' '}
+                                {records.total === 1 ? 'registro' : 'registros'}
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Tabla */}
