@@ -9,7 +9,8 @@
     use App\Http\Controllers\FarmController;
     use App\Http\Controllers\HealthRecordController;
     use App\Http\Controllers\CartController;
-    use App\Http\Controllers\SalesController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SalesController;
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\TwoFactorController;
@@ -26,9 +27,6 @@
         return Inertia::render('Auth/Login');
     })->name('login');
 
-    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
-        ->middleware(['auth', 'verified'])
-        ->name('dashboard');
 
     // ─────────────────────────────────────────────
     // Rutas para solo usuario autenticado
@@ -44,6 +42,7 @@
     // Rutas para usuario autenticado y que tiene correo verificado
     // ─────────────────────────────────────────────
     Route::middleware(['auth', 'verified'])->group(function () {
+        Route::get("/dashboard", [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/my-orders', [EcommerceSalesController::class, 'showOrderHistory'])
             ->name('orders.history');
