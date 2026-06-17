@@ -1,6 +1,6 @@
 import Modal from '@/Components/Modal';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { MdPendingActions } from 'react-icons/md';
 import {
@@ -325,150 +325,182 @@ function DetailModal({ order, mode, onClose }) {
     );
 }
 
-function OrdersTable({ orders, mode, onDetail }) {
+function OrdersTable({ orders, mode, onDetail, onPageChange }) {
     const isSales = mode === 'ventas';
-
-    if (orders.length === 0) {
-        return (
-            <div className="flex flex-col items-center justify-center gap-3 py-16 text-gray-300">
-                {isSales ? (
-                    <PiArrowUpRightBold className="text-5xl" />
-                ) : (
-                    <PiArrowDownLeftBold className="text-5xl" />
-                )}
-                <p className="text-sm text-gray-400">
-                    {isSales
-                        ? 'Aún no tienes ventas registradas.'
-                        : 'Aún no tienes compras registradas.'}
-                </p>
-            </div>
-        );
-    }
+    const rows = orders?.data ?? [];
+    const { current_page, last_page } = orders ?? {};
 
     return (
-        <div className="overflow-x-auto">
-            <table className="w-full text-left">
-                <thead>
-                    <tr className="border-b border-gray-100 bg-secondary text-xs font-semibold uppercase tracking-wide text-white">
-                        {[
-                            'Referencia',
-                            'Fecha',
-                            isSales ? 'Comprador' : 'Vendedor',
-                            'Animales',
-                            'Total',
-                            'Negocio',
-                            'Pago',
-                            'Detalle',
-                        ].map((h) => (
-                            <th key={h} className="px-4 py-3">
-                                {h}
+        <div>
+            <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                    <thead>
+                        <tr className="bg-secondary text-xs font-semibold uppercase tracking-wide text-white">
+                            <th className="px-4 py-3">Referencia</th>
+                            <th className="px-4 py-3">Fecha</th>
+                            <th className="px-4 py-3">
+                                {isSales ? 'Comprador' : 'Vendedor'}
                             </th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {orders.map((order) => (
-                        <tr
-                            key={order.id}
-                            className="border-b border-gray-100 transition-colors hover:bg-gray-50"
-                        >
-                            {/* Referencia */}
-                            <td className="px-4 py-3">
-                                <span className="rounded bg-green-50 px-2 py-0.5 font-mono text-xs font-bold text-green-700">
-                                    {order.reference ?? `#${order.id}`}
-                                </span>
-                            </td>
-
-                            {/* Fecha */}
-                            <td className="px-4 py-3 text-sm tabular-nums text-gray-500">
-                                {formatDate(order.date)}
-                            </td>
-
-                            {/* Contraparte */}
-                            <td className="px-4 py-3 text-sm font-medium text-gray-800">
-                                {order.counterpart_name ?? '—'}
-                            </td>
-
-                            {/* Animales: avatares apilados */}
-                            <td className="px-4 py-3">
-                                <div className="flex items-center gap-2">
-                                    <div className="flex -space-x-2">
-                                        {(order.animals ?? [])
-                                            .slice(0, 3)
-                                            .map((a) =>
-                                                a.photo ? (
-                                                    <img
-                                                        key={a.id}
-                                                        src={a.photo}
-                                                        alt={a.ear_tag}
-                                                        className="h-7 w-7 rounded-full border-2 border-white object-cover"
-                                                    />
-                                                ) : (
-                                                    <div
-                                                        key={a.id}
-                                                        className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-gray-100"
-                                                    >
-                                                        <PiCowFill className="text-[12px] text-gray-300" />
-                                                    </div>
-                                                ),
-                                            )}
-                                    </div>
-                                    <span className="text-sm text-gray-500">
-                                        {order.animals_count ?? 0}
-                                    </span>
-                                </div>
-                            </td>
-
-                            {/* Total */}
-                            <td className="px-4 py-3 text-sm font-semibold text-secondary">
-                                {formatCOP(order.subtotal)}
-                            </td>
-
-                            {/* Estado negocio */}
-                            <td className="px-4 py-3">
-                                <span
-                                    className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${BIZ_STYLES[order.bussiness_status] ?? 'bg-gray-100 text-gray-600'}`}
-                                >
-                                    {order.bussiness_status}
-                                </span>
-                            </td>
-
-                            {/* Estado pago */}
-                            <td className="px-4 py-3">
-                                <span
-                                    className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${PAY_STYLES[order.payment_status] ?? 'bg-gray-100 text-gray-600'}`}
-                                >
-                                    {order.payment_status}
-                                </span>
-                            </td>
-
-                            {/* Detalle */}
-                            <td className="px-4 py-3">
-                                <button
-                                    onClick={() => onDetail(order)}
-                                    title="Ver detalle"
-                                    className="rounded p-1.5 text-gray-400 transition-all hover:text-secondary active:scale-90"
-                                >
-                                    <span className="material-symbols-outlined text-[18px]">
-                                        visibility
-                                    </span>
-                                </button>
-                            </td>
+                            <th className="px-4 py-3">Animales</th>
+                            <th className="px-4 py-3">Total</th>
+                            <th className="px-4 py-3">Estado negocio</th>
+                            <th className="px-4 py-3">Estado pago</th>
+                            <th className="px-4 py-3"></th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {rows.length === 0 ? (
+                            <tr>
+                                <td colSpan={8} className="py-16 text-center">
+                                    <div className="flex flex-col items-center gap-3 text-gray-400">
+                                        <span className="material-symbols-outlined text-5xl">
+                                            receipt_long
+                                        </span>
+                                        <p className="text-sm">
+                                            {isSales
+                                                ? 'Aún no tienes ventas registradas.'
+                                                : 'Aún no tienes compras registradas.'}
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : (
+                            rows.map((order) => (
+                                <tr
+                                    key={order.id}
+                                    className="cursor-pointer border-b border-gray-100 transition hover:bg-gray-50"
+                                    onClick={() => onDetail(order)}
+                                >
+                                    <td className="px-4 py-3 font-mono text-xs font-semibold text-primary">
+                                        {order.reference ?? `#${order.id}`}
+                                    </td>
+                                    <td className="px-4 py-3 text-sm text-gray-600">
+                                        {formatDate(order.date)}
+                                    </td>
+                                    <td className="px-4 py-3 text-sm text-gray-800">
+                                        {order.counterpart_name ?? '—'}
+                                    </td>
+                                    <td className="px-4 py-3 text-sm text-gray-600">
+                                        {order.animals_count} cab.
+                                    </td>
+                                    <td className="px-4 py-3 text-sm font-semibold text-gray-800">
+                                        {formatCOP(order.subtotal)}
+                                    </td>
+                                    <td className="px-4 py-3">
+                                        <Pill
+                                            label={order.bussiness_status}
+                                            map={BIZ_STYLES}
+                                        />
+                                    </td>
+                                    <td className="px-4 py-3">
+                                        <Pill
+                                            label={order.payment_status}
+                                            map={PAY_STYLES}
+                                        />
+                                    </td>
+                                    <td className="px-4 py-3 text-gray-400">
+                                        <span
+                                            className="material-symbols-outlined"
+                                            style={{ fontSize: 18 }}
+                                        >
+                                            chevron_right
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Paginación */}
+            {last_page > 1 && (
+                <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3">
+                    <span className="text-xs text-gray-500">
+                        Página {current_page} de {last_page}
+                    </span>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => onPageChange(current_page - 1)}
+                            disabled={current_page === 1}
+                            className="rounded px-3 py-1 text-xs text-gray-500 transition hover:bg-gray-100 disabled:opacity-40"
+                        >
+                            &laquo;
+                        </button>
+                        {Array.from({ length: last_page }, (_, i) => i + 1)
+                            .filter(
+                                (p) =>
+                                    p === 1 ||
+                                    p === last_page ||
+                                    Math.abs(p - current_page) <= 1,
+                            )
+                            .reduce((acc, p, i, arr) => {
+                                if (i > 0 && p - arr[i - 1] > 1)
+                                    acc.push('...');
+                                acc.push(p);
+                                return acc;
+                            }, [])
+                            .map((p, i) =>
+                                p === '...' ? (
+                                    <span
+                                        key={`dots-${i}`}
+                                        className="px-1 text-xs text-gray-400"
+                                    >
+                                        …
+                                    </span>
+                                ) : (
+                                    <button
+                                        key={p}
+                                        onClick={() => onPageChange(p)}
+                                        className={`rounded px-3 py-1 text-xs transition ${p === current_page ? 'bg-primary text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+                                    >
+                                        {p}
+                                    </button>
+                                ),
+                            )}
+                        <button
+                            onClick={() => onPageChange(current_page + 1)}
+                            disabled={current_page === last_page}
+                            className="rounded px-3 py-1 text-xs text-gray-500 transition hover:bg-gray-100 disabled:opacity-40"
+                        >
+                            &raquo;
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
 
 export default function SalesIndex() {
-    const { sales = [], purchases = [], stats = {} } = usePage().props;
-    const [tab, setTab] = useState('ventas');
+    const {
+        sales,
+        purchases,
+        stats = {},
+        tab: initialTab = 'ventas',
+    } = usePage().props;
+    const [tab, setTab] = useState(initialTab);
     const [detail, setDetail] = useState(null);
 
     const activeOrders = tab === 'ventas' ? sales : purchases;
 
+    function handleTabChange(newTab) {
+        setTab(newTab);
+        router.get(
+            route('sales.index'),
+            { tab: newTab },
+            { preserveState: true, replace: true },
+        );
+    }
+
+    function handlePageChange(page) {
+        const pageKey = tab === 'ventas' ? 'sales_page' : 'purchases_page';
+        router.get(
+            route('sales.index'),
+            { tab, [pageKey]: page },
+            { preserveState: true, replace: true },
+        );
+    }
     return (
         <AuthenticatedLayout>
             <Head title="Mis Transacciones" />
@@ -552,7 +584,7 @@ export default function SalesIndex() {
                         ].map(({ key, label, icon, count }) => (
                             <button
                                 key={key}
-                                onClick={() => setTab(key)}
+                                onClick={() => handleTabChange(key)}
                                 className={`flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-sm font-medium transition ${
                                     tab === key
                                         ? key === 'ventas'
@@ -586,6 +618,7 @@ export default function SalesIndex() {
                     orders={activeOrders}
                     mode={tab}
                     onDetail={setDetail}
+                    onPageChange={handlePageChange}
                 />
             </div>
         </AuthenticatedLayout>
