@@ -11,8 +11,7 @@ const ChartCard = ({ icon, title, sub, children, className = '' }) => (
             </span>
         </div>
         {sub && <p className="mb-3 text-[11px] text-gray-400">{sub}</p>}
-        <div className="min-h-0 flex-1">{children}</div>
+        <div className="min-h-[260px] flex-1">{children}</div>
     </div>
 );
-
 export default ChartCard;
