@@ -24,6 +24,7 @@ class HealthRecordController extends Controller
         $animalId = $request->get('animal_id', $animals->first()?->id);
 
         $records = HealthRecord::with('registeredBy:id,name')
+            ->withTrashed()
             ->where('animal_id', $animalId)
             ->latest()
             ->paginate(8)

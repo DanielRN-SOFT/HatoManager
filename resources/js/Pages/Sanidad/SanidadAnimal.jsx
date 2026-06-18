@@ -19,6 +19,13 @@ export default function SanidadAnimal({
     alertsTotal,
     flash,
 }) {
+    const ESTADO_OPTS = [
+        { value: '', label: 'Todos' },
+        { value: 'activo', label: 'Activos' },
+        { value: 'inactivo', label: 'Inactivos' },
+    ];
+
+    const [estado, setEstado] = useState(records.data);
     const [modal, setModal] = useState({
         show: false,
         mode: 'create',
@@ -49,6 +56,12 @@ export default function SanidadAnimal({
             onSuccess: () => setToDelete(null),
         });
     }
+    // Filtro de estado en frontend
+    const rows = (records.data ?? []).filter((r) => {
+        if (estado === 'activo') return !r.deleted_at;
+        if (estado === 'inactivo') return !!r.deleted_at;
+        return true;
+    });
 
     return (
         <AuthenticatedLayout>
@@ -109,16 +122,34 @@ export default function SanidadAnimal({
                             />
                         </div>
                         <div className="flex items-center gap-3">
+                            {/* Total registros */}
                             <span className="text-xs text-gray-400">
                                 {records.total}{' '}
                                 {records.total === 1 ? 'registro' : 'registros'}
                             </span>
+
+                            {/* Filtro estado */}
+                            <div className="flex gap-1">
+                                {ESTADO_OPTS.map((opt) => (
+                                    <button
+                                        key={opt.value}
+                                        onClick={() => setEstado(opt.value)}
+                                        className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
+                                            estado === opt.value
+                                                ? 'border-secondary bg-secondary text-white'
+                                                : 'border-gray-200 text-gray-400 hover:border-gray-300 hover:text-gray-600'
+                                        }`}
+                                    >
+                                        {opt.label}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Tabla */}
-                {records.data.length === 0 ? (
+                {rows.length === 0 ? (
                     <div className="flex flex-col items-center gap-3 rounded-xl border-t-4 border-primary bg-white py-16 text-gray-400 shadow-sm">
                         <span className="material-symbols-outlined text-5xl">
                             vaccines
@@ -155,7 +186,7 @@ export default function SanidadAnimal({
                                 </thead>
 
                                 <tbody>
-                                    {records.data.map((record) => (
+                                    {rows.map((record) => (
                                         <HealthRecordRow
                                             key={record.id}
                                             record={record}
