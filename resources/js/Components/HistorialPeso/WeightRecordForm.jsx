@@ -13,23 +13,18 @@ const WeightRecordForm = ({
 }) => {
     const obtenerFechaActualMax = () => {
         const ahora = new Date();
-
-        // Obtenemos el año, mes, día, hora y minuto
         const year = ahora.getFullYear();
-        // getMonth() devuelve de 0 a 11, por eso sumamos 1 y usamos padStart para los ceros
         const month = String(ahora.getMonth() + 1).padStart(2, '0');
         const day = String(ahora.getDate()).padStart(2, '0');
         const hours = String(ahora.getHours()).padStart(2, '0');
         const minutes = String(ahora.getMinutes()).padStart(2, '0');
-
-        // Combinamos la fecha y la hora separadas por una 'T'
         return `${year}-${month}-${day}T${hours}:${minutes}`;
     };
 
     return (
         <div className="grid grid-cols-1 gap-3">
-            <div className="grid grid-cols-2 gap-5">
-                {/* Animal */}
+            {/* Animal + Fecha */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
                 <div>
                     <Label label={'Animal'} />
                     <Select
@@ -54,14 +49,11 @@ const WeightRecordForm = ({
                     )}
                 </div>
 
-                {/* Fecha del pesaje */}
                 <div>
                     <Label label={'Fecha de pesaje'} />
                     <input
                         type={'datetime-local'}
-                        className={
-                            'w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-800 placeholder-gray-300 outline-none transition-all focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10'
-                        }
+                        className="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-800 placeholder-gray-300 outline-none transition-all focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/10"
                         onChange={(e) => setData('weight_date', e.target.value)}
                         value={data.weight_date}
                         disabled={processing}
@@ -75,7 +67,7 @@ const WeightRecordForm = ({
                 </div>
             </div>
 
-            {/* Etapa productiva del animal */}
+            {/* Etapa productiva */}
             <div>
                 <Label label={'Etapa Productiva'} />
                 <Select
@@ -101,8 +93,8 @@ const WeightRecordForm = ({
                 )}
             </div>
 
-            <div className="grid grid-cols-3 gap-5">
-                {/* PESO */}
+            {/* Peso + Condición corporal + Método */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-5">
                 <div>
                     <Label label={'Peso (KG)'} />
                     <Input
@@ -120,7 +112,6 @@ const WeightRecordForm = ({
                     )}
                 </div>
 
-                {/* Condicion corporal */}
                 <div>
                     <Label label={'Condicion Corporal'} />
                     <Select
@@ -132,9 +123,9 @@ const WeightRecordForm = ({
                         <option value="">Selec.. un puntaje</option>
                         <option value="1">1 - Extremadamente flaco</option>
                         <option value="2">2 - Flaco</option>
-                        <option value="3">3 - Moderado / Promedio </option>
+                        <option value="3">3 - Moderado / Promedio</option>
                         <option value="4">4 - Obeso / Gordo</option>
-                        <option value="5">5 - Excesivamente gordo </option>
+                        <option value="5">5 - Excesivamente gordo</option>
                     </Select>
                     {errors.body_condition_score && (
                         <p className="mt-1 text-xs text-red-500">
@@ -143,7 +134,6 @@ const WeightRecordForm = ({
                     )}
                 </div>
 
-                {/* Metodo de Pesaje */}
                 <div>
                     <Label label={'Metodo de Pesaje'} />
                     <Select
@@ -170,9 +160,8 @@ const WeightRecordForm = ({
                 </div>
             </div>
 
-            {/* Temperatura ambiente */}
-            <div className="grid grid-cols-2 gap-5">
-                {/* Temperatura ambiente */}
+            {/* Temperatura + Ayuno */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
                 <div>
                     <Label label={'Temperatura ambiente (C)'} />
                     <Input
@@ -192,49 +181,46 @@ const WeightRecordForm = ({
 
                 <div>
                     <Label label={'¿Ayuno Previo?'} />
-                    <div className="flex gap-5">
-                        <div className="flex gap-5">
-                            {['Si', 'No'].map((option) => (
-                                <label
-                                    key={option}
-                                    className="group flex cursor-pointer items-center gap-2"
-                                >
-                                    <input
-                                        type="radio"
-                                        name="previous_fast"
-                                        value={option}
-                                        className="peer sr-only" // oculta el input nativo
-                                        checked={
-                                            (option == 'Si' &&
-                                                data.previous_fast === 1) ||
-                                            (option === 'No' &&
-                                                data.previous_fast === 0)
-                                        }
-                                        onChange={(e) =>
-                                            setData(
-                                                'previous_fast',
-                                                option === 'Si' ? 1 : 0,
-                                            )
-                                        }
-                                    />
-                                    {/* Círculo visual personalizado */}
-                                    <div className="h-4 w-4 rounded-full border-2 border-gray-300 transition-all peer-checked:border-secondary peer-checked:bg-primary" />
-                                    <span className="text-sm text-gray-700 peer-checked:text-green-600">
-                                        {option}
-                                    </span>
-                                </label>
-                            ))}
-                            {errors.previous_fast && (
-                                <p className="mt-1 text-xs text-red-500">
-                                    {errors.previous_fast}
-                                </p>
-                            )}
-                        </div>
+                    <div className="flex items-center gap-5 py-1">
+                        {['Si', 'No'].map((option) => (
+                            <label
+                                key={option}
+                                className="group flex cursor-pointer items-center gap-2"
+                            >
+                                <input
+                                    type="radio"
+                                    name="previous_fast"
+                                    value={option}
+                                    className="peer sr-only"
+                                    checked={
+                                        (option === 'Si' &&
+                                            data.previous_fast === 1) ||
+                                        (option === 'No' &&
+                                            data.previous_fast === 0)
+                                    }
+                                    onChange={() =>
+                                        setData(
+                                            'previous_fast',
+                                            option === 'Si' ? 1 : 0,
+                                        )
+                                    }
+                                />
+                                <div className="h-4 w-4 rounded-full border-2 border-gray-300 transition-all peer-checked:border-secondary peer-checked:bg-primary" />
+                                <span className="text-sm text-gray-700 peer-checked:text-green-600">
+                                    {option}
+                                </span>
+                            </label>
+                        ))}
+                        {errors.previous_fast && (
+                            <p className="mt-1 text-xs text-red-500">
+                                {errors.previous_fast}
+                            </p>
+                        )}
                     </div>
                 </div>
             </div>
 
-            {/* Notas */}
+            {/* Observaciones */}
             <div>
                 <div className="flex items-center">
                     <Label label={'Observaciones'} />
@@ -242,7 +228,6 @@ const WeightRecordForm = ({
                         (opcional)
                     </span>
                 </div>
-
                 <textarea
                     value={data.observations}
                     onChange={(e) => setData('observations', e.target.value)}

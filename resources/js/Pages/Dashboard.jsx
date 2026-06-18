@@ -68,7 +68,6 @@ export default function Dashboard({
     evolucionPeso = [],
     ventasMensuales = [],
     movimientosMensuales = [],
-    ordenesRecientes = [],
     finca,
 }) {
     /* Preparar datos para gráficas */

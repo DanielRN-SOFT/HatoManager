@@ -67,9 +67,9 @@ export default function SanidadAnimal({
                 />
 
                 {/* Header */}
-                <div className="mb-6 flex items-center justify-between gap-4 p-2">
+                <div className="mb-6 flex flex-col gap-3 p-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                     <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-container">
                             <span className="material-symbols-outlined text-[24px] text-on-primary">
                                 vaccines
                             </span>
@@ -87,7 +87,7 @@ export default function SanidadAnimal({
                     </div>
                     <button
                         onClick={openCreate}
-                        className="flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
+                        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95 sm:w-auto"
                     >
                         <span className="material-symbols-outlined text-[20px]">
                             add_circle
@@ -189,7 +189,7 @@ export default function SanidadAnimal({
                                             }
                                             className={`rounded px-3 py-1 text-xs transition ${
                                                 link.active
-                                                    ? 'bg-green-600 text-white'
+                                                    ? 'bg-primary text-white'
                                                     : 'text-gray-500 hover:bg-gray-100 disabled:opacity-40'
                                             }`}
                                             dangerouslySetInnerHTML={{
