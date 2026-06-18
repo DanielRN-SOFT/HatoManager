@@ -167,25 +167,31 @@ export default function Index({
                         <div className="overflow-x-auto">
                             <table className="w-full text-left">
                                 <thead>
-                                    <tr className="border-b border-gray-100 bg-secondary text-xs font-semibold uppercase tracking-wide text-white">
-                                        <th className="px-4 py-3">
+                                    <tr className="border-b-2 border-green-700/20 bg-secondary text-xs font-semibold uppercase tracking-wide text-white">
+                                        <th className="px-4 py-3 font-semibold">
                                             Fecha de pesaje
                                         </th>
-                                        <th className="px-4 py-3">Peso (kg)</th>
-                                        <th className="px-4 py-3">
+                                        <th className="px-4 py-3 font-semibold">
+                                            Peso
+                                        </th>
+                                        <th className="px-4 py-3 font-semibold">
                                             Condición corporal
                                         </th>
-                                        <th className="px-4 py-3">
+                                        <th className="px-4 py-3 font-semibold">
                                             Etapa productiva
                                         </th>
-                                        <th className="px-4 py-3">
+                                        <th className="px-4 py-3 font-semibold">
                                             Método de pesaje
                                         </th>
-                                        <th className="px-4 py-3">Estado</th>
-                                        <th className="px-4 py-3">Acciones</th>
+                                        <th className="px-4 py-3 font-semibold">
+                                            Estado
+                                        </th>
+                                        <th className="px-4 py-3 font-semibold">
+                                            Acciones
+                                        </th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className="divide-y divide-gray-100">
                                     {rows.map((record) => (
                                         <WeightRecordRow
                                             key={record.id}

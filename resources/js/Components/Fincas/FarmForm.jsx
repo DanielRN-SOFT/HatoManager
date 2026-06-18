@@ -36,20 +36,14 @@ export default function FarmForm({ farm = null, onCancel, hideTitle = false }) {
     const fieldProps = { data, setData, errors };
 
     return (
-        <form
-            onSubmit={submit}
-            className="rounded-xl border border-outline-variant bg-surface-container-low p-5"
-        >
+        <form onSubmit={submit}>
             {!hideTitle && (
                 <p className="mb-4 text-sm font-semibold text-on-surface">
                     {isEditing ? `Editando: ${farm.name}` : 'Nueva Finca'}
                 </p>
             )}
-            <p className="mb-4 text-sm font-semibold text-on-surface">
-                {isEditing ? `Editando: ${farm.name}` : 'Nueva Finca'}
-            </p>
 
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
                 <FarmField
                     label="Nombre *"
                     name="name"

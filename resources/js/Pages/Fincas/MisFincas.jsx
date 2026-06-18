@@ -43,9 +43,9 @@ export default function MisFincas({ farms }) {
 
             <div>
                 {/* Título */}
-                <div className="mb-6 flex items-center justify-between gap-4 p-2">
-                    <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-container">
+                <div className="mb-6 flex flex-wrap items-center justify-between gap-3 p-2">
+                    <div className="flex items-center gap-3">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary-container">
                             <span className="material-symbols-outlined text-[24px] text-on-primary">
                                 forest
                             </span>
@@ -64,7 +64,7 @@ export default function MisFincas({ farms }) {
                     </div>
                     <button
                         onClick={() => setShowForm(true)}
-                        className="flex items-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
+                        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95 sm:w-auto sm:justify-start"
                     >
                         <span className="material-symbols-outlined text-[20px]">
                             add_circle
@@ -72,7 +72,6 @@ export default function MisFincas({ farms }) {
                         Nueva Finca
                     </button>
                 </div>
-
                 <Flash />
 
                 {/* Sin fincas */}
