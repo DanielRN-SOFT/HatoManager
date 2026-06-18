@@ -72,7 +72,7 @@ const SalesIndex = () => {
             </div>
 
             {/* Stats */}
-            <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <div className="mb-6 grid grid-cols-1 gap-3 lg:grid-cols-4">
                 <StatCard
                     icon={<PiArrowUpRightBold />}
                     label="Total en ventas"
@@ -96,7 +96,7 @@ const SalesIndex = () => {
                 />
                 <StatCard
                     icon={<PiCowFill />}
-                    label="Animales transados"
+                    label="Animales negociados"
                     value={stats.total_animals ?? 0}
                     sub="En todas las órdenes"
                     color="bg-red-100 text-red-700"

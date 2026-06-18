@@ -12,7 +12,7 @@ const TabsFiltros = ({ sales, purchases, tab, setTab }) => {
     }
 
     return (
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2">
                 <span
                     className="material-symbols-outlined text-gray-500"
@@ -24,6 +24,7 @@ const TabsFiltros = ({ sales, purchases, tab, setTab }) => {
                     Historial de transacciones
                 </h2>
             </div>
+
             <div className="flex gap-2">
                 {[
                     {
@@ -42,7 +43,7 @@ const TabsFiltros = ({ sales, purchases, tab, setTab }) => {
                     <button
                         key={key}
                         onClick={() => handleTabChange(key)}
-                        className={`flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-sm font-medium transition ${
+                        className={`flex flex-1 items-center justify-center gap-1.5 rounded-full border px-4 py-1.5 text-sm font-medium transition sm:flex-none sm:justify-start ${
                             tab === key
                                 ? key === 'ventas'
                                     ? 'border-emerald-300 bg-emerald-50 text-emerald-700'
