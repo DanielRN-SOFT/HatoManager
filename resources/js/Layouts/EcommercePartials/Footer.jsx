@@ -4,8 +4,6 @@ const footerSections = [
     {
         title: 'Explorar',
         links: [
-            { href: '/catalogo', label: 'Catálogo' },
-            { href: '/subastas', label: 'Subastas' },
             { href: '/vendedores', label: 'Vendedores Destacados' },
             { href: '/ayuda', label: 'Ayuda' },
         ],
@@ -98,7 +96,7 @@ export default function Footer() {
                                 <span className="material-symbols-outlined text-base">
                                     home_pin
                                 </span>
-                                Bogotá, Colombia
+                                Cartago, Valle del Cauca, Colombia
                             </li>
                         </ul>
                     </div>
