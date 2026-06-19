@@ -20,6 +20,7 @@ class RolesAndPermissionsSeeder extends Seeder
         app()->make(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();
 
         //* Permisos
+        $gestionarDashboard          = Permission::create(['name' => 'gestionar dashboard']);
         $gestionarUsuarios          = Permission::create(['name' => 'gestionar usuarios']);
         $gestionarVeterinarios      = Permission::create(['name' => 'gestionar veterinarios']);
         $gestionarFincas            = Permission::create(['name' => 'gestionar fincas']);
@@ -41,11 +42,11 @@ class RolesAndPermissionsSeeder extends Seeder
         //! Admin — solo gestiona la plataforma
         $admin->givePermissionTo([
             $gestionarUsuarios,
-            $gestionarFincas
         ]);
 
         //! Ganadero
         $ganadero->givePermissionTo([
+            $gestionarDashboard,
             $gestionarAnimales,
             $gestionarSanidad,
             $gestionarFincas,

@@ -2,6 +2,7 @@ import { useRole } from '@/hooks/useRole';
 import { Link } from '@inertiajs/react';
 import { FaScaleBalanced } from 'react-icons/fa6';
 import { GiFarmTractor } from 'react-icons/gi';
+import { LuUserRound } from 'react-icons/lu';
 import {
     MdGavel,
     MdOutlineDashboardCustomize,
@@ -17,7 +18,13 @@ const NAV_ITEMS = [
         label: 'Dashboard',
         icon: <MdOutlineDashboardCustomize />,
         route: 'dashboard',
-        // sin permission = visible para todos
+        permission: 'gestionar dashboard'
+    },
+    {
+        label: 'Usuarios',
+        icon: <LuUserRound/>,
+        route: 'users.index',
+        permission: 'gestionar usuarios'
     },
     {
         label: 'Animales',

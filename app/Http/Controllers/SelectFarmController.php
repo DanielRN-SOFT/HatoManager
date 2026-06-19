@@ -29,6 +29,8 @@ class SelectFarmController extends Controller
      */
     public function store(Request $request)
     {
+        $user = $request->user();
+
         $request->validate([
             'farm_id' => 'required|exists:farms,id'
         ]);
@@ -48,6 +50,11 @@ class SelectFarmController extends Controller
             'active_farm_id'   => $farm->id,
             'active_farm_name' => $farm->name,
         ]);
+
+        if($user->hasRole("veterinario")){
+            return redirect()->route('animals.index');
+        }
+
 
         return redirect()->route('dashboard');
     }

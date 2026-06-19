@@ -14,6 +14,7 @@
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\TwoFactorController;
+    use App\Http\Controllers\UserController;
     use App\Http\Controllers\WeightRecordController;
     use Inertia\Inertia;
 
@@ -43,6 +44,12 @@
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     });
 
+    Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+        Route::resource('/users', UserController::class);
+        Route::put('/usuarios/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
+    });
+
+
     Route::middleware(['auth', 'verified', 'role:comprador'])->group(function () {
         Route::get('/public/profile', [ProfileController::class, 'editPublic'])->name('public.profile.edit');
         Route::patch('/public/profile', [ProfileController::class, 'updatePublic'])->name('public.profile.update');
@@ -53,7 +60,6 @@
     // Rutas para usuario autenticado y que tiene correo verificado
     // ─────────────────────────────────────────────
     Route::middleware(['auth', 'verified'])->group(function () {
-        Route::get("/dashboard", [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/my-orders', [EcommerceSalesController::class, 'showOrderHistory'])
             ->name('orders.history');
@@ -120,6 +126,10 @@
     // Rutas para ganadero
     // ─────────────────────────────────────────────
     Route::middleware(['auth', 'verified', 'role:ganadero'])->group(function () {
+        
+        // Dashboard
+        Route::get("/dashboard", [DashboardController::class, 'index'])->name('dashboard');
+
         // animales
         Route::resource('animals', AnimalController::class)->except(['index']);
         Route::put('/animals/{animal}/restore', [AnimalController::class, 'restore'])->name('animals.restore')->withTrashed();

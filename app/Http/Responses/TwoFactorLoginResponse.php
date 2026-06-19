@@ -11,7 +11,7 @@ class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
         $user = auth()->user();
 
         if ($user->hasRole('admin')) {
-            return redirect()->route('admin');
+            return redirect()->route('users.index');
         }
         if ($user->hasRole('comprador')) {
             return redirect()->route('ecommerce.index');
