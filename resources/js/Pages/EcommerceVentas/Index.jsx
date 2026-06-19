@@ -12,7 +12,7 @@ export default function Index({
     breeds,
     categories,
     departments,
-    filters: initialFilters = {}, // ← recibir filtros activos
+    filters: initialFilters = {},
     total = 0,
     cartItems = [],
     minWeight,
@@ -34,7 +34,7 @@ export default function Index({
     }
 
     function handleFilter(updatedFilters) {
-        router.get(route('sales.index'), updatedFilters, {
+        router.get(route('ecommerce.sales.index'), updatedFilters, {
             preserveState: true,
             preserveScroll: true,
         });
@@ -43,7 +43,7 @@ export default function Index({
     function handleClear() {
         const empty = {};
         setFilters(empty);
-        router.get(route('sales.index'), empty, {
+        router.get(route('ecommerce.sales.index'), empty, {
             preserveState: true,
             preserveScroll: true,
         });
@@ -104,7 +104,7 @@ export default function Index({
                 />
                 <section>
                     {!items.length ? (
-                        <div className="flex flex-col items-center gap-4 rounded-xl border border-outline-variant bg-surface-container-lowest py-24 text-on-surface-variant">
+                        <div className="flex flex-col items-center gap-4 rounded-2xl border border-outline-variant bg-surface-container-lowest py-24 text-on-surface-variant">
                             <span className="material-symbols-outlined text-6xl text-outline">
                                 search_off
                             </span>
@@ -114,6 +114,17 @@ export default function Index({
                             <p className="text-sm text-outline">
                                 Intenta ajustar los criterios de búsqueda.
                             </p>
+                            {hayFiltros && (
+                                <button
+                                    onClick={handleClear}
+                                    className="mt-2 flex items-center gap-1.5 rounded-xl border border-outline-variant px-4 py-2 text-sm font-semibold text-on-surface transition-colors hover:border-primary hover:text-primary"
+                                >
+                                    <span className="material-symbols-outlined text-[18px]">
+                                        filter_alt_off
+                                    </span>
+                                    Limpiar filtros
+                                </button>
+                            )}
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

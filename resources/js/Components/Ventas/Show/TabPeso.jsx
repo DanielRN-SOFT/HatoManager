@@ -1,5 +1,4 @@
-import formatearDinero from "@/helpers/formatearDinero";
-
+const formatWeight = (w) => parseFloat(Number(w).toFixed(6));
 const TabPeso = ({ activeTab, weightRecords, formatDate }) => {
     const latestWeight = weightRecords[0];
     const firstWeight = weightRecords[weightRecords.length - 1];
@@ -62,7 +61,7 @@ const TabPeso = ({ activeTab, weightRecords, formatDate }) => {
                             }`}
                         >
                             {weightGain >= 0 ? '+' : ''}
-                            {formatearDinero(weightGain)} kg
+                            {formatWeight(weightGain)} kg
                         </span>
                     </div>
                 )}
