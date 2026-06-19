@@ -25,7 +25,7 @@ export default function SanidadAnimal({
         { value: 'inactivo', label: 'Inactivos' },
     ];
 
-    const [estado, setEstado] = useState(records.data);
+    const [estado, setEstado] = useState("");
     const [modal, setModal] = useState({
         show: false,
         mode: 'create',

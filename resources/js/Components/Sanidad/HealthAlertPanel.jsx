@@ -22,7 +22,7 @@ export default function HealthAlertPanel({
         .sort((a, b) => new Date(a.alert_date) - new Date(b.alert_date))
         .slice(0, 10);
     const current =
-        tab === 'proximas' ? proximas.slice(0, 10) : vencidas.slice(0, 10);
+        tab === 'proximas' ? proximas.slice(0, 5) : vencidas.slice(0, 5);
 
     return (
         <div className="mb-4 rounded-xl border border-orange-200 bg-orange-50">
