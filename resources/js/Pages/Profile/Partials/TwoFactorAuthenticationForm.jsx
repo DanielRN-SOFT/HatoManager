@@ -45,7 +45,7 @@ async function fortifyFetch(url, method = 'GET', body = null) {
     return text ? JSON.parse(text) : null;
 }
 
-export default function TwoFactorAuthenticationForm({ className = '' }) {
+export default function TwoFactorAuthenticationForm({ layout, className = '' }) {
     const { auth } = usePage().props;
     const user = auth.user;
 

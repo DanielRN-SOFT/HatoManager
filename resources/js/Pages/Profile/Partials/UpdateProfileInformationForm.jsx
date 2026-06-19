@@ -8,10 +8,13 @@ import { PiCowFill } from 'react-icons/pi';
 
 export default function UpdateProfileInformation({
     mustVerifyEmail,
+    layout,
     status,
     className = '',
 }) {
     const user = usePage().props.auth.user;
+    const rutas =
+        layout === 'sidebar' ? 'profile.update' : 'public.profile.update';
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
@@ -21,7 +24,7 @@ export default function UpdateProfileInformation({
 
     const submit = (e) => {
         e.preventDefault();
-        patch(route('profile.update'));
+        patch(route(rutas));
     };
 
     return (

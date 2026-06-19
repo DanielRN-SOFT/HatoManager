@@ -1,13 +1,12 @@
 <?php
-
+// app/Http/Responses/TwoFactorLoginResponse.php
 namespace App\Http\Responses;
 
-use Illuminate\Http\RedirectResponse;
-use Laravel\Fortify\Contracts\VerifyEmailResponse as VerifyEmailResponseContract;
+use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
 
-class VerifyEmailResponse implements VerifyEmailResponseContract
+class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
 {
-    public function toResponse($request): RedirectResponse
+    public function toResponse($request)
     {
         $user = auth()->user();
 

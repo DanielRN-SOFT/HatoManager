@@ -33,7 +33,7 @@ const Perfil = ({ getInitials, user, isGanadero }) => {
                 {/* Links */}
                 <div className="py-1">
                     <Dropdown.Link
-                        href="/perfil"
+                        href="/public/profile"
                         className="flex items-center gap-2.5"
                     >
                         <span className="material-symbols-outlined text-[17px] text-on-surface-variant">

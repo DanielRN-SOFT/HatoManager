@@ -9,8 +9,8 @@
     use App\Http\Controllers\FarmController;
     use App\Http\Controllers\HealthRecordController;
     use App\Http\Controllers\CartController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SalesController;
+    use App\Http\Controllers\DashboardController;
+    use App\Http\Controllers\SalesController;
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\TwoFactorController;
@@ -38,6 +38,17 @@ use App\Http\Controllers\SalesController;
             ->name('two-factor.show');
     });
 
+    Route::middleware(['auth', 'verified', 'role:ganadero|veterinario|admin'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    });
+
+    Route::middleware(['auth', 'verified', 'role:comprador'])->group(function () {
+        Route::get('/public/profile', [ProfileController::class, 'editPublic'])->name('public.profile.edit');
+        Route::patch('/public/profile', [ProfileController::class, 'updatePublic'])->name('public.profile.update');
+    });
+
+
     // ─────────────────────────────────────────────
     // Rutas para usuario autenticado y que tiene correo verificado
     // ─────────────────────────────────────────────
@@ -49,10 +60,6 @@ use App\Http\Controllers\SalesController;
 
         Route::post('/orders/{id}/cancel', [EcommerceSalesController::class, 'cancelOrder'])
             ->name('orders.cancel');
-
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
         Route::middleware('role:ganadero')->group(function () {
 

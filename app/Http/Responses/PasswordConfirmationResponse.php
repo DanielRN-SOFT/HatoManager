@@ -7,6 +7,10 @@ class PasswordConfirmationResponse implements PasswordConfirmedResponseContract
 {
     public function toResponse($request)
     {
-        return redirect()->intended('/profile');
+        $redirect = $request->input('redirect')
+            ?? $request->session()->pull('url.intended')
+            ?? '/profile';
+
+        return redirect($redirect);
     }
 }

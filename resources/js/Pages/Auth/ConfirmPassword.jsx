@@ -9,8 +9,14 @@ import { useState } from 'react';
 export default function ConfirmPassword() {
     const [visible, setVisible] = useState(false);
 
+    // Captura el ?redirect= de la URL actual (si viene de un 423 de Fortify)
+    const redirectTo = new URLSearchParams(window.location.search).get(
+        'redirect',
+    );
+
     const { data, setData, post, processing, errors, reset } = useForm({
         password: '',
+        redirect: redirectTo,
     });
 
     const submit = (e) => {
@@ -23,7 +29,6 @@ export default function ConfirmPassword() {
     return (
         <GuestLayout>
             <Head title="Confirmar contraseña" />
-
             <div className="flex flex-col items-center px-8 pb-6 pt-2">
                 <span className="mb-1 text-2xl font-bold tracking-tight text-primary">
                     HatoManager
@@ -35,7 +40,6 @@ export default function ConfirmPassword() {
                     Confirma tu contraseña para continuar.
                 </p>
             </div>
-
             <form onSubmit={submit} className="space-y-5 px-8 pb-8">
                 <div className="flex items-start gap-3 rounded-lg border border-outline-variant bg-surface-container-low p-3">
                     <span
@@ -49,7 +53,6 @@ export default function ConfirmPassword() {
                         contraseña antes de continuar.
                     </p>
                 </div>
-
                 <div>
                     <InputLabel htmlFor="password" value="Contraseña" />
                     <div className="relative">
@@ -81,7 +84,6 @@ export default function ConfirmPassword() {
                     </div>
                     <InputError message={errors.password} />
                 </div>
-
                 <PrimaryButton disabled={processing}>
                     {processing ? 'Verificando...' : 'Confirmar contraseña'}
                 </PrimaryButton>

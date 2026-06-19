@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use App\Http\Responses\VerifyEmailResponse;
 use Laravel\Fortify\Contracts\VerifyEmailResponse as VerifyEmailResponseContract;
+use App\Http\Responses\TwoFactorLoginResponse;
+use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
+use App\Http\Responses\PasswordConfirmationResponse;
+use Laravel\Fortify\Contracts\PasswordConfirmedResponse as PasswordConfirmedResponseContract;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
             VerifyEmailResponseContract::class,
             VerifyEmailResponse::class
         );
+        $this->app->singleton(TwoFactorLoginResponseContract::class, TwoFactorLoginResponse::class);
+        $this->app->singleton(PasswordConfirmedResponseContract::class, PasswordConfirmationResponse::class);
     }
 
     /**
