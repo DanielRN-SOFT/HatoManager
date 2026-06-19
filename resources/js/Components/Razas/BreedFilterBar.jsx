@@ -1,10 +1,9 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 
-const UserFilterBar = ({ filters, roles }) => {
+const BreedFilterBar = ({ filters }) => {
     const [form, setForm] = useState({
         search: filters.search ?? '',
-        role: filters.role ?? '',
         status: filters.status ?? '',
     });
 
@@ -13,17 +12,17 @@ const UserFilterBar = ({ filters, roles }) => {
     function handleChange(key, value) {
         const next = { ...form, [key]: value };
         setForm(next);
-        router.get(route('users.index'), next, {
+        router.get(route('breeds.index'), next, {
             preserveState: true,
             replace: true,
         });
     }
 
     function handleClear() {
-        const empty = { search: '', role: '', status: '' };
+        const empty = { search: '', status: '' };
         setForm(empty);
         router.get(
-            route('users.index'),
+            route('breeds.index'),
             {},
             { preserveState: true, replace: true },
         );
@@ -59,9 +58,9 @@ const UserFilterBar = ({ filters, roles }) => {
                 )}
             </div>
 
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {/* Búsqueda */}
-                <FilterField label="Nombre o Email" icon="search">
+                <FilterField label="Nombre" icon="search">
                     <span className="material-symbols-outlined text-[16px] text-gray-400">
                         search
                     </span>
@@ -69,7 +68,7 @@ const UserFilterBar = ({ filters, roles }) => {
                         type="text"
                         value={form.search}
                         onChange={(e) => handleChange('search', e.target.value)}
-                        placeholder="Ej. Juan o juan@..."
+                        placeholder="Ej. Holstein"
                         className="field-input"
                     />
                     {form.search && (
@@ -84,32 +83,16 @@ const UserFilterBar = ({ filters, roles }) => {
                     )}
                 </FilterField>
 
-                {/* Rol */}
-                <FilterField label="Rol" icon="shield_person">
-                    <select
-                        value={form.role}
-                        onChange={(e) => handleChange('role', e.target.value)}
-                        className="field-input cursor-pointer"
-                    >
-                        <option value="">Todos los roles</option>
-                        {roles.map((r) => (
-                            <option key={r.id} value={r.name}>
-                                {r.name}
-                            </option>
-                        ))}
-                    </select>
-                </FilterField>
-
-                {/* Estado verificación */}
-                <FilterField label="Verificación" icon="mark_email_read">
+                {/* Estado */}
+                <FilterField label="Estado" icon="circle">
                     <select
                         value={form.status}
                         onChange={(e) => handleChange('status', e.target.value)}
                         className="field-input cursor-pointer"
                     >
-                        <option value="">Todos</option>
-                        <option value="verified">Verificado</option>
-                        <option value="unverified">Sin verificar</option>
+                        <option value="">Todas</option>
+                        <option value="active">Activas</option>
+                        <option value="deleted">Eliminadas</option>
                     </select>
                 </FilterField>
             </div>
@@ -131,4 +114,4 @@ const FilterField = ({ label, icon, children }) => (
     </div>
 );
 
-export default UserFilterBar;
+export default BreedFilterBar;

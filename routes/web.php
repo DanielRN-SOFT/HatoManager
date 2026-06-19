@@ -1,7 +1,8 @@
     <?php
 
     use App\Http\Controllers\AnimalController;
-    use App\Http\Controllers\EcommerceController;
+use App\Http\Controllers\BreedController;
+use App\Http\Controllers\EcommerceController;
     use App\Http\Controllers\EcommerceSalesController;
     use App\Http\Controllers\ProfileController;
     use App\Http\Controllers\SelectFarmController;
@@ -46,11 +47,21 @@
     });
 
     Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+
+        // Usuarios
         Route::resource('/users', UserController::class);
         Route::put('/usuarios/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
 
+
+        Route::middleware(['auth', 'verified'])->group(function () {
+            Route::resource('/breeds', BreedController::class);
+            Route::put('/breeds/{id}/restore', [BreedController::class, 'restore'])->name('breeds.restore');
+        });
+
+
+        // Metodos de pesaje
         Route::resource('/weight-methods', WeightMethodController::class);
-        Route::put('/metodos-pesaje/{id}/restore', [WeightMethodController::class, 'restore'])->name('weight-methods.restore');
+        Route::put('/weight-methods/{id}/restore', [WeightMethodController::class, 'restore'])->name('weight-methods.restore');
     });
 
 

@@ -88,7 +88,7 @@ const WeightMethodFilterBar = ({ filters }) => {
                     <select
                         value={form.status}
                         onChange={(e) => handleChange('status', e.target.value)}
-                        className="field-input"
+                        className="field-input cursor-pointer"
                     >
                         <option value="">Todos</option>
                         <option value="active">Activos</option>

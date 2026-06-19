@@ -1,7 +1,7 @@
 import { useRole } from '@/hooks/useRole';
 import { Link } from '@inertiajs/react';
 import { FaScaleBalanced } from 'react-icons/fa6';
-import { GiFarmTractor } from 'react-icons/gi';
+import { GiAnimalHide, GiFarmTractor } from 'react-icons/gi';
 import { LuUserRound, LuWeight } from 'react-icons/lu';
 import {
     MdGavel,
@@ -30,6 +30,12 @@ const NAV_ITEMS = [
         label: 'Metodos de Pesaje',
         icon: <LuWeight />,
         route: 'weight-methods.index',
+        permission: 'gestionar usuarios',
+    },
+    {
+        label: 'Razas',
+        icon: <GiAnimalHide />,
+        route: 'breeds.index',
         permission: 'gestionar usuarios',
     },
     {
