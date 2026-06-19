@@ -15,6 +15,7 @@
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\TwoFactorController;
     use App\Http\Controllers\UserController;
+    use App\Http\Controllers\WeightMethodController;
     use App\Http\Controllers\WeightRecordController;
     use Inertia\Inertia;
 
@@ -47,6 +48,9 @@
     Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
         Route::resource('/users', UserController::class);
         Route::put('/usuarios/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
+
+        Route::resource('/weight-methods', WeightMethodController::class);
+        Route::put('/metodos-pesaje/{id}/restore', [WeightMethodController::class, 'restore'])->name('weight-methods.restore');
     });
 
 
@@ -126,7 +130,7 @@
     // Rutas para ganadero
     // ─────────────────────────────────────────────
     Route::middleware(['auth', 'verified', 'role:ganadero'])->group(function () {
-        
+
         // Dashboard
         Route::get("/dashboard", [DashboardController::class, 'index'])->name('dashboard');
 

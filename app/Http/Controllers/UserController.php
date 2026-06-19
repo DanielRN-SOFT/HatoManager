@@ -65,7 +65,7 @@ class UserController extends Controller
             $user->assignRole($data['role']);
         }
 
-        return back()->with('flash', ['type' => 'success', 'message' => 'Usuario creado correctamente.']);
+        return redirect()->route('users.index')->with('success', 'Usuario creado correctamente');
     }
 
     public function update(Request $request, User $user)
@@ -85,7 +85,7 @@ class UserController extends Controller
 
         $user->syncRoles($data['role'] ? [$data['role']] : []);
 
-        return back()->with('flash', ['type' => 'success', 'message' => 'Usuario actualizado correctamente.']);
+        return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente');
     }
 
     public function destroy(User $user)
@@ -94,7 +94,7 @@ class UserController extends Controller
 
         $user->delete();
 
-        return back()->with('flash', ['type' => 'success', 'message' => 'Usuario eliminado.']);
+        return redirect()->route('users.index')->with('success', 'Usuario eliminado');
     }
 
     public function restore($id)
@@ -102,6 +102,6 @@ class UserController extends Controller
         $user = User::onlyTrashed()->findOrFail($id);
         $user->restore();
 
-        return back()->with('flash', ['type' => 'success', 'message' => 'Usuario restaurado.']);
+        return redirect()->route('users.index')->with('success', 'Usuario restaurado');
     }
 }
