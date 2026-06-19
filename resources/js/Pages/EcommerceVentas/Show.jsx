@@ -1,3 +1,4 @@
+// AnimalDetalle.jsx
 import ToastEcommerce from '@/Components/ToastEcommerce';
 import AccionesButton from '@/Components/Ventas/Show/AccionesButton';
 import AnimalesGaleria from '@/Components/Ventas/Show/AnimalesGaleria';
@@ -22,7 +23,6 @@ function formatDate(value) {
 
 export default function AnimalDetalle({ animal, cartItems = [] }) {
     const photos = animal.photos?.length ? animal.photos : [];
-
     const [toast, setToast] = useState(null);
 
     const weightRecords = [...(animal.weight_records || [])].sort(
@@ -53,96 +53,126 @@ export default function AnimalDetalle({ animal, cartItems = [] }) {
         <EcommerceLayout>
             <Head title={animal.name} />
 
-            <div className="mx-auto max-w-[1440px] px-6 py-5">
-                <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
-                    {/* ---- Columna izquierda: galería + información ---- */}
-                    <div className="lg:col-span-7">
+            <div className="mx-auto max-w-[1440px]">
+                {/* ── Hero band: galería + detalle, compacta y centrada ── */}
+                <div className="mx-auto max-w-6xl px-4 lg:px-8">
+                    <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
                         {/* Galería */}
-                        <AnimalesGaleria photos={photos} animal={animal} />
-
-                        {/* Tabs: descripción / peso / salud */}
-                        {tabs.length > 0 && (
-                            <div className="mt-8">
-                                <TitulosTabs
-                                    activeTab={activeTab}
-                                    setActiveTab={setActiveTab}
-                                    tabs={tabs}
+                        <div className="lg:col-span-6">
+                            <div className="pt-4 lg:py-8">
+                                <AnimalesGaleria
+                                    photos={photos}
+                                    animal={animal}
                                 />
-
-                                <div className="pt-6">
-                                    {/* Descripción */}
-                                    {activeTab === 'descripcion' && (
-                                        <p className="text-sm leading-relaxed text-on-surface-variant">
-                                            {animal.description}
-                                        </p>
-                                    )}
-
-                                    {/* Peso */}
-                                    <TabPeso
-                                        weightRecords={weightRecords}
-                                        activeTab={activeTab}
-                                        formatDate={formatDate}
-                                    />
-
-                                    {/* Salud */}
-                                    <TabSanidad
-                                        activeTab={activeTab}
-                                        healthRecords={healthRecords}
-                                        animal={animal}
-                                        formatDate={formatDate}
-                                    />
-                                </div>
                             </div>
-                        )}
-                    </div>
+                        </div>
 
-                    {/* ---- Columna derecha: ficha de compra ---- */}
-                    <div className="lg:col-span-5">
-                        <div className="rounded-2xl border border-outline-variant bg-surface-container-lowest p-6 lg:sticky lg:top-24">
-                            {animal.animal_category && (
-                                <span className="mb-3 inline-block rounded-full bg-surface-container px-3 py-1 text-xs font-bold uppercase tracking-wider text-on-surface-variant">
-                                    {animal.animal_category.name}
-                                </span>
-                            )}
-                            <h1 className="text-3xl font-bold text-on-surface">
-                                {animal.name}
-                            </h1>
-                            <p className="mt-1 text-sm text-on-surface-variant">
-                                Arete N° {animal.ear_tag}
-                            </p>
-
-                            <div className="mt-5 flex items-baseline justify-between gap-3">
-                                <span className="text-3xl font-extrabold text-primary">
-                                    {formatearDinero(animal.price)}
-                                </span>
-                                {animal.publication_date && (
-                                    <span className="text-right text-xs leading-tight text-on-surface-variant">
-                                        Publicado
-                                        <br />
-                                        {formatDate(animal.publication_date)}
-                                    </span>
+                        {/* Panel de compra */}
+                        <div className="lg:col-span-6">
+                            <div className="lg:sticky lg:top-20 lg:self-start lg:py-4">
+                                {/* Categoría */}
+                                {animal.animal_category && (
+                                    <div className="mb-4 flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-sm text-primary">
+                                            category
+                                        </span>
+                                        <span className="text-xs font-bold uppercase tracking-widest text-primary">
+                                            {animal.animal_category.name}
+                                        </span>
+                                    </div>
                                 )}
+
+                                {/* Nombre + arete */}
+                                <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-on-surface">
+                                    {animal.name}
+                                </h1>
+                                <p className="mt-1.5 flex items-center gap-1.5 text-sm text-on-surface-variant">
+                                    <span className="material-symbols-outlined text-base">
+                                        tag
+                                    </span>
+                                    Arete N° {animal.ear_tag}
+                                </p>
+
+                                {/* Precio */}
+                                <div className="bg-primary/8 mt-3 flex items-end justify-between gap-4 rounded-2xl px-5 py-4">
+                                    <div>
+                                        <p className="mb-0.5 text-xs font-medium uppercase tracking-wider text-primary/70">
+                                            Precio de venta
+                                        </p>
+                                        <span className="text-3xl font-black text-primary">
+                                            {formatearDinero(animal.price)}
+                                        </span>
+                                    </div>
+                                    {animal.publication_date && (
+                                        <div className="text-right">
+                                            <p className="text-[10px] uppercase tracking-wider text-on-surface-variant">
+                                                Publicado
+                                            </p>
+                                            <p className="text-xs font-semibold text-on-surface-variant">
+                                                {formatDate(
+                                                    animal.publication_date,
+                                                )}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Separador */}
+                                <div className="my-2 h-px bg-outline-variant" />
+
+                                {/* Ficha técnica */}
+                                <p className="mb-3 text-xs font-bold uppercase tracking-widest text-on-surface-variant">
+                                    Ficha técnica
+                                </p>
+                                <FichaTecnica animal={animal} />
                             </div>
-
-                            <div className="my-5 h-px bg-outline-variant" />
-
-                            {/* Ficha técnica */}
-                            <FichaTecnica animal={animal} />
-
-                            {/* Finca */}
-                            <Finca animal={animal} />
-
-                            <div className="my-5 h-px bg-outline-variant" />
-
-                            {/* CTA */}
-                            <AccionesButton
-                                setToast={setToast}
-                                animal={animal}
-                                cartItems={cartItems}
-                            />
                         </div>
                     </div>
                 </div>
+
+                {/* ── Finca + Acciones, alineados bajo el panel de compra ── */}
+                <div className="mx-auto max-w-6xl px-4 lg:px-8">
+                    <div className="flex flex-col gap-3 pb-6">
+                        <Finca animal={animal} />
+                        <AccionesButton
+                            setToast={setToast}
+                            animal={animal}
+                            cartItems={cartItems}
+                        />
+                    </div>
+                </div>
+
+                {/* ── Zona de información / tabs (ancho completo) ── */}
+                {tabs.length > 0 && (
+                    <div className="border-t border-outline-variant px-4 py-8 lg:px-8 lg:py-10">
+                        <TitulosTabs
+                            activeTab={activeTab}
+                            setActiveTab={setActiveTab}
+                            tabs={tabs}
+                        />
+
+                        <div className="pt-6">
+                            {activeTab === 'descripcion' && (
+                                <p className="max-w-3xl text-base leading-relaxed text-on-surface-variant">
+                                    {animal.description}
+                                </p>
+                            )}
+
+                            <TabPeso
+                                weightRecords={weightRecords}
+                                activeTab={activeTab}
+                                formatDate={formatDate}
+                            />
+
+                            <TabSanidad
+                                activeTab={activeTab}
+                                healthRecords={healthRecords}
+                                animal={animal}
+                                formatDate={formatDate}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
 
             {toast && <ToastEcommerce toast={toast} />}
