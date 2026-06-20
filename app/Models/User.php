@@ -49,6 +49,15 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function animalSales()
+    {
+        return $this->hasMany(AnimalOrder::class, 'user_id');
+    }
 
     public function farms()
     {

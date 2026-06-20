@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 
@@ -15,7 +17,7 @@ class UserController extends Controller
     {
         $id = $request->user()->id;
         $users = User::with('roles')
-        ->where('id', "!=", $id)
+            ->where('id', "!=", $id)
             ->when(
                 $request->search,
                 fn($q) =>
@@ -51,7 +53,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', Rules\Password::defaults()],
+            'password' => ['required',  Password::min(8)->mixedCase()->symbols()->numbers()->uncompromised()],
             'role'     => ['nullable', 'string', 'exists:roles,name'],
         ]);
 
@@ -90,10 +92,26 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        abort_if($user->id === auth()->id(), 403, 'No puedes eliminarte a ti mismo.');
+        // Como comprador
+        $hasActivePurchases = $user->orders()
+            ->whereIn('bussiness_status', ['Pendiente de pago', 'Pendiente de confirmacion', 'Confirmado'])
+            ->exists();
+
+        // Como vendedor (sus animales están en pedidos activos)
+        $hasActiveSales = $user->animalSales()
+            ->whereIn('status_order', [
+                'Pendiente de pago',
+                'Pendiente de confirmacion',
+                'Confirmado',
+            ])
+            ->exists();
+
+        if ($hasActivePurchases || $hasActiveSales) {
+            return redirect()->route('users.index')
+                ->with('error', 'No se puede eliminar el usuario porque tiene compras o ventas activas');
+        }
 
         $user->delete();
-
         return redirect()->route('users.index')->with('success', 'Usuario eliminado');
     }
 
