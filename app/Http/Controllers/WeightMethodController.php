@@ -18,6 +18,7 @@ class WeightMethodController extends Controller
             )
             ->when($request->status === 'active',   fn($q) => $q->whereNull('deleted_at'))
             ->when($request->status === 'deleted',  fn($q) => $q->whereNotNull('deleted_at'))
+            ->with(['weightRecords'])
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -52,6 +53,10 @@ class WeightMethodController extends Controller
 
     public function destroy(WeightMethod $weightMethod)
     {
+        $hasWeightRecords = $weightMethod->weightRecords()->exists();
+        if ($hasWeightRecords) {
+            return redirect()->route('weight-methods.index')->with('error', 'Ese metodo de pesaje tiene registros asociados');
+        }
         $weightMethod->delete();
 
         return redirect()->route('weight-methods.index')->with('success', 'Método de pesaje eliminado');

@@ -11,4 +11,9 @@ class WeightMethod extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function weightRecords()
+    {
+        return $this->hasMany(WeightRecord::class);
+    }
 }

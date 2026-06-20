@@ -7,6 +7,7 @@ const FilaWeightMethod = ({
     setModalEliminar,
 }) => {
     const isDeleted = !!method.deleted_at;
+    const hasWeightRecords = method.weight_records.length > 0;
 
     return (
         <tr
@@ -63,9 +64,20 @@ const FilaWeightMethod = ({
                             />
                             <ActionBtn
                                 icon="delete"
-                                label="Eliminar"
-                                onClick={() => setModalEliminar(method)}
-                                cls="hover:text-red-500"
+                                label={
+                                    hasWeightRecords
+                                        ? 'No se puede eliminar: tiene registros de peso asignados'
+                                        : 'Eliminar'
+                                }
+                                onClick={() =>
+                                    !hasWeightRecords &&
+                                    setModalEliminar(method)
+                                }
+                                cls={`${
+                                    hasWeightRecords
+                                        ? 'cursor-not-allowed opacity-30'
+                                        : 'hover:text-red-500'
+                                }`}
                             />
                         </>
                     )}
