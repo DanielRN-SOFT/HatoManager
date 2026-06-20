@@ -22,6 +22,9 @@ class RolesAndPermissionsSeeder extends Seeder
         //* Permisos
         $gestionarDashboard          = Permission::create(['name' => 'gestionar dashboard']);
         $gestionarUsuarios          = Permission::create(['name' => 'gestionar usuarios']);
+        $gestionarRazas             = Permission::create(['name' => 'gestionar razas']);
+        $gestionarMetodosPesajes    = Permission::create(['name' => 'gestionar metodos de pesajes']);
+        $gestionarCategoriasAnimales = Permission::create(['name' => 'gestionar categorias de animales']);
         $gestionarVeterinarios      = Permission::create(['name' => 'gestionar veterinarios']);
         $gestionarFincas            = Permission::create(['name' => 'gestionar fincas']);
         $gestionarSanidad          = Permission::create(['name' => 'gestionar sanidad']);
@@ -42,6 +45,9 @@ class RolesAndPermissionsSeeder extends Seeder
         //! Admin — solo gestiona la plataforma
         $admin->givePermissionTo([
             $gestionarUsuarios,
+            $gestionarRazas,
+            $gestionarMetodosPesajes,
+            $gestionarCategoriasAnimales
         ]);
 
         //! Ganadero

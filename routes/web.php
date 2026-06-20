@@ -1,6 +1,7 @@
     <?php
 
-    use App\Http\Controllers\AnimalController;
+use App\Http\Controllers\AnimalCategoryController;
+use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\BreedController;
 use App\Http\Controllers\EcommerceController;
     use App\Http\Controllers\EcommerceSalesController;
@@ -52,11 +53,18 @@ use App\Http\Controllers\EcommerceController;
         Route::resource('/users', UserController::class);
         Route::put('/usuarios/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
 
-
+        // Razas
         Route::middleware(['auth', 'verified'])->group(function () {
             Route::resource('/breeds', BreedController::class);
             Route::put('/breeds/{id}/restore', [BreedController::class, 'restore'])->name('breeds.restore');
         });
+
+        // Categorias de animales
+        Route::middleware(['auth', 'verified'])->group(function () {
+            Route::resource('/animal-categories', AnimalCategoryController::class);
+            Route::put('/animal-categories/{id}/restore', [AnimalCategoryController::class, 'restore'])->name('animal-categories.restore');
+        });
+
 
 
         // Metodos de pesaje

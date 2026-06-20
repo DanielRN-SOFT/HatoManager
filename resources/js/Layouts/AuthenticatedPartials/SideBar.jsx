@@ -10,7 +10,7 @@ import {
     MdOutlineMedicalServices,
     MdOutlineSell,
 } from 'react-icons/md';
-import { PiCowFill } from 'react-icons/pi';
+import { PiCow, PiCowFill } from 'react-icons/pi';
 import { SiSwisscows } from 'react-icons/si';
 
 const NAV_ITEMS = [
@@ -30,13 +30,19 @@ const NAV_ITEMS = [
         label: 'Metodos de Pesaje',
         icon: <LuWeight />,
         route: 'weight-methods.index',
-        permission: 'gestionar usuarios',
+        permission: 'gestionar metodos de pesajes',
     },
     {
         label: 'Razas',
         icon: <GiAnimalHide />,
         route: 'breeds.index',
-        permission: 'gestionar usuarios',
+        permission: 'gestionar razas',
+    },
+    {
+        label: 'Categorias',
+        icon: <PiCow />,
+        route: 'animal-categories.index',
+        permission: 'gestionar categorias de animales',
     },
     {
         label: 'Animales',
