@@ -2,7 +2,7 @@ import { router } from '@inertiajs/react';
 
 const FilaBreed = ({ breed, index, setModalEditar, setModalEliminar }) => {
     const isDeleted = !!breed.deleted_at;
-
+    const hasAnimals = breed.animals.length > 0;
     return (
         <tr
             className={`border-b border-gray-100 transition-colors hover:bg-gray-50 ${isDeleted ? 'opacity-50' : ''}`}
@@ -59,9 +59,19 @@ const FilaBreed = ({ breed, index, setModalEditar, setModalEliminar }) => {
                             />
                             <ActionBtn
                                 icon="delete"
-                                label="Eliminar"
-                                onClick={() => setModalEliminar(breed)}
-                                cls="hover:text-red-500"
+                                label={
+                                    hasAnimals
+                                        ? 'No se puede eliminar: tiene registros de animales asignados'
+                                        : 'Eliminar'
+                                }
+                                onClick={() =>
+                                    !hasAnimals && setModalEliminar(breed)
+                                }
+                                cls={
+                                    hasAnimals
+                                        ? 'cursor-not-allowed opacity-30'
+                                        : 'hover:text-red-600'
+                                }
                             />
                         </>
                     )}

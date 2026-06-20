@@ -16,6 +16,7 @@ class BreedController extends Controller
                 fn($q) =>
                 $q->where('name', 'like', "%{$request->search}%")
             )
+            ->with(['animals'])
             ->when($request->status === 'active',  fn($q) => $q->whereNull('deleted_at'))
             ->when($request->status === 'deleted', fn($q) => $q->whereNotNull('deleted_at'))
             ->latest()
@@ -52,6 +53,10 @@ class BreedController extends Controller
 
     public function destroy(Breed $breed)
     {
+        $hasAnimals = $breed->animals()->exists();
+        if ($hasAnimals) {
+            return redirect()->route('breeds.index')->with('error', 'Error: Esa raza de animal ya esta asociada a uno ');
+        }
         $breed->delete();
 
         return redirect()->route('breeds.index')->with('success', 'Raza eliminada');
