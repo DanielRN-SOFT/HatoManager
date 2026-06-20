@@ -2,6 +2,7 @@ import { useRole } from '@/hooks/useRole';
 import { Link } from '@inertiajs/react';
 import { FaScaleBalanced } from 'react-icons/fa6';
 import { GiAnimalHide, GiFarmTractor } from 'react-icons/gi';
+import { GrSteps } from 'react-icons/gr';
 import { LuUserRound, LuWeight } from 'react-icons/lu';
 import {
     MdGavel,
@@ -43,6 +44,12 @@ const NAV_ITEMS = [
         icon: <PiCow />,
         route: 'animal-categories.index',
         permission: 'gestionar categorias de animales',
+    },
+    {
+        label: 'Etapas productivas',
+        icon: <GrSteps />,
+        route: 'productive-stages.index',
+        permission: 'gestionar etapas productivas',
     },
     {
         label: 'Animales',

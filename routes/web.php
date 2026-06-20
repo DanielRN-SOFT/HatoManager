@@ -1,9 +1,9 @@
     <?php
 
-use App\Http\Controllers\AnimalCategoryController;
-use App\Http\Controllers\AnimalController;
-use App\Http\Controllers\BreedController;
-use App\Http\Controllers\EcommerceController;
+    use App\Http\Controllers\AnimalCategoryController;
+    use App\Http\Controllers\AnimalController;
+    use App\Http\Controllers\BreedController;
+    use App\Http\Controllers\EcommerceController;
     use App\Http\Controllers\EcommerceSalesController;
     use App\Http\Controllers\ProfileController;
     use App\Http\Controllers\SelectFarmController;
@@ -12,6 +12,7 @@ use App\Http\Controllers\EcommerceController;
     use App\Http\Controllers\HealthRecordController;
     use App\Http\Controllers\CartController;
     use App\Http\Controllers\DashboardController;
+    use App\Http\Controllers\ProductiveStageController;
     use App\Http\Controllers\SalesController;
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
@@ -54,18 +55,16 @@ use App\Http\Controllers\EcommerceController;
         Route::put('/usuarios/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
 
         // Razas
-        Route::middleware(['auth', 'verified'])->group(function () {
-            Route::resource('/breeds', BreedController::class);
-            Route::put('/breeds/{id}/restore', [BreedController::class, 'restore'])->name('breeds.restore');
-        });
+        Route::resource('/breeds', BreedController::class);
+        Route::put('/breeds/{id}/restore', [BreedController::class, 'restore'])->name('breeds.restore');
 
         // Categorias de animales
-        Route::middleware(['auth', 'verified'])->group(function () {
-            Route::resource('/animal-categories', AnimalCategoryController::class);
-            Route::put('/animal-categories/{id}/restore', [AnimalCategoryController::class, 'restore'])->name('animal-categories.restore');
-        });
+        Route::resource('/animal-categories', AnimalCategoryController::class);
+        Route::put('/animal-categories/{id}/restore', [AnimalCategoryController::class, 'restore'])->name('animal-categories.restore');
 
-
+        // Etapas productivas
+        Route::resource('/productive-stages',  ProductiveStageController::class);
+        Route::put('/productive-stages/{id}/restore', [ProductiveStageController::class, 'restore'])->name('productive-stages.restore');
 
         // Metodos de pesaje
         Route::resource('/weight-methods', WeightMethodController::class);
