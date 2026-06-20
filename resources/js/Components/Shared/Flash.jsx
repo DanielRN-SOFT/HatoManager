@@ -1,45 +1,66 @@
 import { usePage } from '@inertiajs/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+const DURATION = 5000;
 
 export default function Flash() {
     const { flash } = usePage().props;
     const [visible, setVisible] = useState(false);
-    const [progress, setProgress] = useState(100);
     const [leaving, setLeaving] = useState(false);
+    const [progress, setProgress] = useState(100);
+
+    const startRef = useRef(Date.now());
+    const remainingRef = useRef(DURATION);
+    const intervalRef = useRef(null);
+    const timeoutRef = useRef(null);
+
+    const clearTimers = () => {
+        clearInterval(intervalRef.current);
+        clearTimeout(timeoutRef.current);
+    };
+
+    const runTimers = (time) => {
+        startRef.current = Date.now();
+        remainingRef.current = time;
+
+        intervalRef.current = setInterval(() => {
+            const elapsed = Date.now() - startRef.current;
+            const remaining = Math.max(0, remainingRef.current - elapsed);
+            setProgress((remaining / DURATION) * 100);
+        }, 50);
+
+        timeoutRef.current = setTimeout(handleClose, time);
+    };
+
+    const pauseTimers = () => {
+        clearTimers();
+        const elapsed = Date.now() - startRef.current;
+        remainingRef.current = Math.max(0, remainingRef.current - elapsed);
+    };
+
+    const resumeTimers = () => {
+        if (remainingRef.current <= 0) return;
+        runTimers(remainingRef.current);
+    };
+
+    const handleClose = () => {
+        clearTimers();
+        setLeaving(true);
+        setTimeout(() => {
+            setVisible(false);
+            setLeaving(false);
+        }, 350);
+    };
 
     useEffect(() => {
         if (flash?.success || flash?.error || flash?.info) {
             setLeaving(false);
             setVisible(true);
             setProgress(100);
-            const start = Date.now();
-            const duration = 5000;
-            const tick = setInterval(() => {
-                const elapsed = Date.now() - start;
-                setProgress(Math.max(0, 100 - (elapsed / duration) * 100));
-            }, 50);
-            const t = setTimeout(() => {
-                setLeaving(true);
-                setTimeout(() => {
-                    setVisible(false);
-                    setLeaving(false);
-                }, 400);
-                clearInterval(tick);
-            }, duration);
-            return () => {
-                clearTimeout(t);
-                clearInterval(tick);
-            };
+            runTimers(DURATION);
+            return clearTimers;
         }
     }, [flash]);
-
-    const handleClose = () => {
-        setLeaving(true);
-        setTimeout(() => {
-            setVisible(false);
-            setLeaving(false);
-        }, 400);
-    };
 
     if (!visible || (!flash?.success && !flash?.error && !flash?.info))
         return null;
@@ -50,71 +71,77 @@ export default function Flash() {
     const config = isSuccess
         ? {
               icon: 'check_circle',
+              accent: 'text-primary',
               bar: 'bg-primary',
-              glow: 'shadow-primary/20',
-              iconColor: 'text-primary',
-              dot: 'bg-primary',
+              chip: 'bg-primary/10',
+              ring: 'ring-primary/20',
+              glow: 'shadow-primary/15',
           }
         : isInfo
           ? {
                 icon: 'info',
+                accent: 'text-tertiary',
                 bar: 'bg-tertiary',
-                glow: 'shadow-tertiary/20',
-                iconColor: 'text-tertiary',
-                dot: 'bg-tertiary',
+                chip: 'bg-tertiary/10',
+                ring: 'ring-tertiary/20',
+                glow: 'shadow-tertiary/15',
             }
           : {
                 icon: 'error',
+                accent: 'text-error',
                 bar: 'bg-error',
-                glow: 'shadow-error/20',
-                iconColor: 'text-error',
-                dot: 'bg-error',
+                chip: 'bg-error/10',
+                ring: 'ring-error/20',
+                glow: 'shadow-error/15',
             };
 
     return (
         <div className="pointer-events-none fixed bottom-6 right-6 z-50">
             <div
-                className={`pointer-events-auto relative w-[340px] overflow-hidden rounded-2xl border border-white/10 bg-secondary-fixed-dim shadow-2xl backdrop-blur-xl ${config.glow} duration-400 transition-all ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                role="status"
+                onMouseEnter={pauseTimers}
+                onMouseLeave={resumeTimers}
+                className={`group pointer-events-auto relative w-[360px] overflow-hidden rounded-[20px] border border-black/[0.06] bg-white/95 shadow-lg backdrop-blur-2xl ${config.glow} duration-350 transition-all ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
                     leaving
-                        ? 'translate-y-3 scale-95 opacity-0'
-                        : 'translate-y-0 scale-100 opacity-100'
-                } `}
+                        ? 'translate-y-2 scale-[0.97] opacity-0 blur-[2px]'
+                        : 'translate-y-0 scale-100 opacity-100 blur-0'
+                }`}
                 style={{
                     animation: leaving
                         ? undefined
-                        : 'slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards',
+                        : 'toast-in 0.45s cubic-bezier(0.22,1,0.36,1) forwards',
                 }}
             >
-                {/* Top progress bar */}
-                <div className="absolute left-0 right-0 top-0 h-[2px] bg-white/5">
+                {/* Progress rail */}
+                <div className="absolute inset-x-0 top-0 h-[3px] bg-black/[0.05]">
                     <div
-                        className={`h-full ${config.bar} transition-none`}
+                        className={`h-full rounded-r-full ${config.bar} transition-[width] duration-75 ease-linear`}
                         style={{ width: `${progress}%` }}
                     />
                 </div>
 
-                <div className="flex items-center gap-3 px-4 pb-3.5 pt-4">
-                    {/* Icon with pulse dot */}
-                    <div className="relative shrink-0">
+                <div className="flex items-start gap-3 px-4 py-4">
+                    {/* Icon chip */}
+                    <div
+                        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ring-1 ${config.chip} ${config.ring}`}
+                    >
                         <span
-                            className={`material-symbols-outlined text-[22px] ${config.iconColor}`}
+                            className={`material-symbols-outlined text-[19px] ${config.accent}`}
                         >
                             {config.icon}
                         </span>
-                        <span
-                            className={`absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full ${config.dot} ring-2 ring-surface`}
-                        />
                     </div>
 
                     {/* Message */}
-                    <p className="flex-1 text-sm font-medium leading-snug text-on-surface">
+                    <p className="flex-1 pt-1.5 text-[13.5px] font-medium leading-snug tracking-[-0.01em] text-gray-800">
                         {flash.success ?? flash.info ?? flash.error}
                     </p>
 
                     {/* Close */}
                     <button
                         onClick={handleClose}
-                        className="hover:bg-white/8 shrink-0 rounded-lg p-1 text-on-surface-variant/50 transition-colors hover:text-on-surface"
+                        aria-label="Cerrar"
+                        className="shrink-0 rounded-lg p-1.5 text-gray-400 opacity-0 transition-all duration-200 hover:bg-black/[0.05] hover:text-gray-700 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/10 group-hover:opacity-100"
                     >
                         <span className="material-symbols-outlined text-[16px]">
                             close
@@ -124,14 +151,22 @@ export default function Flash() {
             </div>
 
             <style>{`
-                @keyframes slideUp {
+                @keyframes toast-in {
                     from {
                         opacity: 0;
-                        transform: translateY(16px) scale(0.95);
+                        transform: translateY(18px) scale(0.96);
+                        filter: blur(3px);
                     }
                     to {
                         opacity: 1;
                         transform: translateY(0) scale(1);
+                        filter: blur(0);
+                    }
+                }
+                @media (prefers-reduced-motion: reduce) {
+                    @keyframes toast-in {
+                        from { opacity: 0; }
+                        to { opacity: 1; }
                     }
                 }
             `}</style>

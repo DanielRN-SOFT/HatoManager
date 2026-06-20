@@ -1,11 +1,12 @@
 import { useRole } from '@/hooks/useRole';
 import { Link } from '@inertiajs/react';
-import { FaScaleBalanced } from 'react-icons/fa6';
+import { FaLockOpen, FaScaleBalanced } from 'react-icons/fa6';
 import { GiAnimalHide, GiFarmTractor } from 'react-icons/gi';
+import { GoShieldLock } from 'react-icons/go';
 import { GrSteps } from 'react-icons/gr';
+import { IoLockOpenOutline } from 'react-icons/io5';
 import { LuUserRound, LuWeight } from 'react-icons/lu';
 import {
-    MdGavel,
     MdOutlineDashboardCustomize,
     MdOutlineHealthAndSafety,
     MdOutlineMedicalServices,
@@ -27,6 +28,19 @@ const NAV_ITEMS = [
         route: 'users.index',
         permission: 'gestionar usuarios',
     },
+    {
+        label: 'Roles',
+        icon: <GoShieldLock />,
+        route: 'users.index',
+        permission: 'gestionar roles',
+    },
+    {
+        label: 'Permisos',
+        icon: <IoLockOpenOutline />,
+        route: 'permissions.index',
+        permission: 'gestionar permisos',
+    },
+
     {
         label: 'Metodos de Pesaje',
         icon: <LuWeight />,
@@ -88,7 +102,6 @@ const NAV_ITEMS = [
         permission: 'gestionar veterinarios',
     },
 ];
-
 
 const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
     const { can } = useRole();
@@ -158,7 +171,6 @@ const SideBar = ({ open, onClose, collapsed, onToggleCollapse }) => {
 
                 {/* Bottom nav */}
                 <div className="shrink-0 space-y-1 border-t border-outline-variant pt-3">
-
                     {/* Botón colapsar — solo desktop */}
                     <button
                         onClick={onToggleCollapse}

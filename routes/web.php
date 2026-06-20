@@ -12,6 +12,7 @@
     use App\Http\Controllers\HealthRecordController;
     use App\Http\Controllers\CartController;
     use App\Http\Controllers\DashboardController;
+    use App\Http\Controllers\PermissionController;
     use App\Http\Controllers\ProductiveStageController;
     use App\Http\Controllers\SalesController;
     use Illuminate\Foundation\Application;
@@ -69,6 +70,9 @@
         // Metodos de pesaje
         Route::resource('/weight-methods', WeightMethodController::class);
         Route::put('/weight-methods/{id}/restore', [WeightMethodController::class, 'restore'])->name('weight-methods.restore');
+
+        // Permisos
+        Route::resource('/permissions', PermissionController::class);
     });
 
 
