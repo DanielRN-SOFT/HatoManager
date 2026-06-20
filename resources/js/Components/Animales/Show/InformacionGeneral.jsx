@@ -15,7 +15,7 @@ const InformacionGeneral = ({animal, fmt}) => {
               />
               <InfoRow
                   icon="home"
-                  label="Corral"
+                  label="Potrero"
                   value={animal.paddock?.name}
               />
               <InfoRow

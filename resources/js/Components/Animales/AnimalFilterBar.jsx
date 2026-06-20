@@ -70,7 +70,7 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
             </div>
 
             {/* Fila superior: 4 columnas */}
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <FilterField label="Nombre o Arete" icon="sell">
                     <span className="material-symbols-outlined text-[16px] text-gray-400">
                         search
@@ -129,7 +129,10 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                         ))}
                     </select>
                 </FilterField>
+            </div>
 
+            {/* Fila inferior */}
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <FilterField label="Categoría" icon="category">
                     <select
                         value={form.animal_category_id}
@@ -146,10 +149,6 @@ const AnimalFilterBar = ({ filters, razas, categorias }) => {
                         ))}
                     </select>
                 </FilterField>
-            </div>
-
-            {/* Fila inferior */}
-            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <FilterField label="Nacimiento" icon="cake">
                     <input
                         type="date"
