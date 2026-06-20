@@ -55,7 +55,7 @@ class BreedController extends Controller
     {
         $hasAnimals = $breed->animals()->exists();
         if ($hasAnimals) {
-            return redirect()->route('breeds.index')->with('error', 'Error: Esa raza de animal ya esta asociada a uno ');
+            return redirect()->route('breeds.index')->with('error', 'No se puede eliminar: esa raza de animal ya esta asociada a uno ');
         }
         $breed->delete();
 

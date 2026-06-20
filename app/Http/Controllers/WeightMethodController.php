@@ -55,7 +55,7 @@ class WeightMethodController extends Controller
     {
         $hasWeightRecords = $weightMethod->weightRecords()->exists();
         if ($hasWeightRecords) {
-            return redirect()->route('weight-methods.index')->with('error', 'Ese metodo de pesaje tiene registros asociados');
+            return redirect()->route('weight-methods.index')->with('error', 'No se puede eliminar: ese metodo de pesaje tiene registros asociados');
         }
         $weightMethod->delete();
 

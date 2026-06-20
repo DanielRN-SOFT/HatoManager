@@ -7,6 +7,7 @@ const FilaAnimalCategory = ({
     setModalEliminar,
 }) => {
     const isDeleted = !!category.deleted_at;
+    const hasAnimals = category.animals.length > 0;
 
     return (
         <tr
@@ -47,7 +48,8 @@ const FilaAnimalCategory = ({
 
             {/* Creado */}
             <td className="px-4 py-3 text-sm tabular-nums text-gray-400">
-                {new Date(category.created_at).toLocaleDateString()} - {new Date(category.created_at).toLocaleTimeString()}
+                {new Date(category.created_at).toLocaleDateString()} -{' '}
+                {new Date(category.created_at).toLocaleTimeString()}
             </td>
 
             {/* Acciones */}
@@ -63,9 +65,19 @@ const FilaAnimalCategory = ({
                             />
                             <ActionBtn
                                 icon="delete"
-                                label="Eliminar"
-                                onClick={() => setModalEliminar(category)}
-                                cls="hover:text-red-500"
+                                label={
+                                    hasAnimals
+                                        ? 'No se puede eliminar: esta categoria de animales tiene asociada a un animal'
+                                        : 'Eliminar'
+                                }
+                                onClick={() =>
+                                    !hasAnimals && setModalEliminar(category)
+                                }
+                                cls={
+                                    hasAnimals
+                                        ? 'cursor-not-allowed opacity-50'
+                                        : 'hover:text-red-600'
+                                }
                             />
                         </>
                     )}

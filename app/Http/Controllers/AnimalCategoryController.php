@@ -18,6 +18,7 @@ class AnimalCategoryController extends Controller
             )
             ->when($request->status === 'active',  fn($q) => $q->whereNull('deleted_at'))
             ->when($request->status === 'deleted', fn($q) => $q->whereNotNull('deleted_at'))
+            ->with(['animals'])
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -52,6 +53,10 @@ class AnimalCategoryController extends Controller
 
     public function destroy(AnimalCategory $animalCategory)
     {
+        $hasAnimals = $animalCategory->animals()->exists();
+        if($hasAnimals){
+            return redirect()->route('animal-categories.index')->with('error', 'No se puede eliminar: esa categoria de animales tiene asociado a uno');
+        }
         $animalCategory->delete();
 
         return redirect()->route('animal-categories.index')->with('success', 'Categorias eliminada');
