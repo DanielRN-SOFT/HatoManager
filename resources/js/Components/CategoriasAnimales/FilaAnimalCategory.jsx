@@ -67,7 +67,7 @@ const FilaAnimalCategory = ({
                                 icon="delete"
                                 label={
                                     hasAnimals
-                                        ? 'No se puede eliminar: esta categoria de animales tiene asociada a un animal'
+                                        ? 'No se puede eliminar: tiene registros de animales asociados'
                                         : 'Eliminar'
                                 }
                                 onClick={() =>

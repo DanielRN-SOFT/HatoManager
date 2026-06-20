@@ -18,6 +18,7 @@ class ProductiveStageController extends Controller
             )
             ->when($request->status === 'active',  fn($q) => $q->whereNull('deleted_at'))
             ->when($request->status === 'deleted', fn($q) => $q->whereNotNull('deleted_at'))
+            ->with('weightRecords')
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -56,6 +57,11 @@ class ProductiveStageController extends Controller
 
     public function destroy(ProductiveStage $productiveStage)
     {
+        $hasWeightRecords = $productiveStage->weightRecords()->exists();
+
+        if ($hasWeightRecords) {
+            return redirect()->route('productive-stages.index')->with('error', 'No se puede eliminar: esta etapa productiva esta asociado a un registro de peso.');
+        }
         $productiveStage->delete();
 
         return redirect()->route('productive-stages.index')->with('success', 'Etapa productiva eliminada.');

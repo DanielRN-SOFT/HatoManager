@@ -13,4 +13,9 @@ class ProductiveStage extends Model
         'lactation_days',
         'number_of_births'
     ];
+
+    public function weightRecords()
+    {
+        return $this->hasMany(WeightRecord::class);
+    }
 }

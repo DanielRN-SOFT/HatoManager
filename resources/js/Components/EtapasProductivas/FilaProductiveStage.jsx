@@ -7,6 +7,7 @@ const FilaProductiveStage = ({
     setModalEliminar,
 }) => {
     const isDeleted = !!stage.deleted_at;
+    const hasActiveWeightRecords = stage.weight_records.length > 0;
 
     return (
         <tr
@@ -68,9 +69,13 @@ const FilaProductiveStage = ({
                             />
                             <ActionBtn
                                 icon="delete"
-                                label="Eliminar"
-                                onClick={() => setModalEliminar(stage)}
-                                cls="hover:text-red-500"
+                                label={hasActiveWeightRecords ? "No se puede eliminar: tiene asociados registro de pesos" : "Eliminar"}
+                                onClick={() => !hasActiveWeightRecords && setModalEliminar(stage)}
+                                cls={
+                                    hasActiveWeightRecords
+                                        ? 'cursor-not-allowed opacity-50'
+                                        : 'hover:text-red-600'
+                                }
                             />
                         </>
                     )}
