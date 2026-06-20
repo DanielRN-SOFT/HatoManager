@@ -60,9 +60,9 @@ const ModalFormPermission = ({ permission = null, onClose }) => {
                         type="text"
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
-                        placeholder="Ej. animals.edit, users.delete..."
+                        placeholder="Ej. gestionar usuarios, gestionar razas..."
                         autoFocus
-                        className={`w-full rounded-xl border px-3 py-2 font-mono text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary ${
+                        className={`w-full rounded-xl border px-3 py-2 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary ${
                             errors.name ? 'border-red-400' : 'border-gray-200'
                         }`}
                     />
@@ -72,7 +72,8 @@ const ModalFormPermission = ({ permission = null, onClose }) => {
                         </p>
                     )}
                     <p className="mt-1 text-[11px] text-gray-400">
-                        Usa convención punto: módulo.acción (ej. users.create)
+                        Usa el formato "gestionar [módulo]" en minúsculas (ej.
+                        gestionar sanidad)
                     </p>
                 </div>
 

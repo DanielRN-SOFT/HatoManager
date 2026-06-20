@@ -1,7 +1,7 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 
-const PermissionFilterBar = ({ filters }) => {
+const RoleFilterBar = ({ filters }) => {
     const [form, setForm] = useState({
         search: filters.search ?? '',
     });
@@ -11,7 +11,7 @@ const PermissionFilterBar = ({ filters }) => {
     function handleChange(key, value) {
         const next = { ...form, [key]: value };
         setForm(next);
-        router.get(route('permissions.index'), next, {
+        router.get(route('roles.index'), next, {
             preserveState: true,
             replace: true,
         });
@@ -21,7 +21,7 @@ const PermissionFilterBar = ({ filters }) => {
         const empty = { search: '' };
         setForm(empty);
         router.get(
-            route('permissions.index'),
+            route('roles.index'),
             {},
             { preserveState: true, replace: true },
         );
@@ -59,7 +59,7 @@ const PermissionFilterBar = ({ filters }) => {
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {/* Búsqueda */}
-                <FilterField label="Nombre del permiso" icon="search">
+                <FilterField label="Nombre del rol" icon="search">
                     <span className="material-symbols-outlined text-[16px] text-gray-400">
                         search
                     </span>
@@ -67,7 +67,7 @@ const PermissionFilterBar = ({ filters }) => {
                         type="text"
                         value={form.search}
                         onChange={(e) => handleChange('search', e.target.value)}
-                        placeholder="Ej. gestionar usuarios"
+                        placeholder="Ej. admin, ganadero..."
                         className="field-input"
                     />
                     {form.search && (
@@ -100,4 +100,4 @@ const FilterField = ({ label, icon, children }) => (
     </div>
 );
 
-export default PermissionFilterBar;
+export default RoleFilterBar;

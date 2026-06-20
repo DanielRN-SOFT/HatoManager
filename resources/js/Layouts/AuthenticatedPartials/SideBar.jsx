@@ -31,7 +31,7 @@ const NAV_ITEMS = [
     {
         label: 'Roles',
         icon: <GoShieldLock />,
-        route: 'users.index',
+        route: 'roles.index',
         permission: 'gestionar roles',
     },
     {

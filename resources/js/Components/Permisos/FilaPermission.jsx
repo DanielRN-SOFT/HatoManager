@@ -14,14 +14,12 @@ const FilaPermission = ({
             </td>
 
             {/* Nombre */}
-            <td className="px-4 py-3 text-sm font-medium text-gray-800">
+            <td className="px-4 py-3 text-sm font-medium capitalize text-gray-800">
                 <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-[18px] text-primary">
                         key
                     </span>
-                    <code className="rounded bg-gray-50 px-1.5 py-0.5 text-xs text-gray-700">
-                        {permission.name}
-                    </code>
+                    {permission.name}
                 </div>
             </td>
 
