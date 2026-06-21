@@ -49,6 +49,11 @@ class Farm extends Model
         return $this->hasMany(Animal::class);
     }
 
+    public function paddocks()
+    {
+        return $this->hasMany(Paddock::class);
+    }
+
     /* ─── Helpers ────────────────────────────────────────────── */
 
     public function isActive(): bool
