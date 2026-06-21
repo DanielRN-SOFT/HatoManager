@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('type_of_grass');
             $table->integer('capacity');
             $table->foreignId('farm_id')->constrained()->restrictOnDelete();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

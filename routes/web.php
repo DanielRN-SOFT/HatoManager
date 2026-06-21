@@ -12,10 +12,11 @@
     use App\Http\Controllers\HealthRecordController;
     use App\Http\Controllers\CartController;
     use App\Http\Controllers\DashboardController;
+    use App\Http\Controllers\PaddockController;
     use App\Http\Controllers\PermissionController;
     use App\Http\Controllers\ProductiveStageController;
-use App\Http\Controllers\RoleController;
-use App\Http\Controllers\SalesController;
+    use App\Http\Controllers\RoleController;
+    use App\Http\Controllers\SalesController;
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\TwoFactorController;
@@ -102,6 +103,10 @@ use App\Http\Controllers\SalesController;
             // Listado general (todas las fincas del ganadero)
             Route::get('/my-veterinarians', [VeterinarianController::class, 'index'])
                 ->name('veterinarians.index');
+
+            // Lotes
+            Route::resource('/paddocks', PaddockController::class);
+            Route::put("/paddock/{id}/restore")->name('paddock.restore');
 
             // Invitar a un veterinario a una finca específica
             Route::post('/fincas/{farm}/veterinarians/invitar', [VeterinarianController::class, 'invite'])

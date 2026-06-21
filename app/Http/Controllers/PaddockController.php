@@ -14,7 +14,8 @@ class PaddockController extends Controller
      */
     public function index(Request $request)
     {
-        $paddoks = Paddock::withTrashed()
+        $farm_id = session('active_farm_id');
+        $paddoks = Paddock::where('farm_id', $farm_id)->withTrashed()
             ->when(
                 $request->search,
                 fn($q) => $q->where('name', 'like', "%{$request->name}%")
@@ -39,7 +40,7 @@ class PaddockController extends Controller
 
         $farms = Farm::all();
 
-        return Inertia::render('Potreros/Index', [
+        return Inertia::render('Lotes/Index', [
             'paddocks' => $paddoks,
             'filters' => $request->only(['search', 'status']),
             'farms' => $farms
@@ -53,7 +54,7 @@ class PaddockController extends Controller
     {
         $farm_id = session('active_farm_id');
         $data = $request->validate([
-            'name' => 'required|string|max:255|unique:paddocks, name',
+            'name' => 'required|string|max:255|unique:paddocks,name',
             'area' => 'required|numeric',
             'type_of_grass' => 'required|string',
             'capacity' => 'required|numeric|integer'
@@ -64,7 +65,7 @@ class PaddockController extends Controller
             'farm_id' => $farm_id
         ]);
 
-        return redirect()->route('paddocks.index')->with('success', 'Potrero creado correctamente');
+        return redirect()->route('paddocks.index')->with('success', 'Lote creado correctamente');
     }
 
     /**
@@ -80,7 +81,7 @@ class PaddockController extends Controller
         ]);
 
         $paddock->update($data);
-        return redirect()->route('paddocks.index')->with('success', 'Potrero actualizado correctamente');
+        return redirect()->route('paddocks.index')->with('success', 'Lote actualizado correctamente');
     }
 
     /**
@@ -89,12 +90,13 @@ class PaddockController extends Controller
     public function destroy(Paddock $paddock)
     {
         $paddock->delete();
-        return redirect()->route('paddocks.index')->with('success', 'Potrero eliminado');
+        return redirect()->route('paddocks.index')->with('success', 'Lote eliminado');
     }
 
-    public function restore($id){
+    public function restore($id)
+    {
         $paddock = Paddock::onlyTrashed()->findOrFail($id);
         $paddock->restore();
-        return redirect()->route('paddocks.index')->with('success', 'Potrero restaurado');
+        return redirect()->route('paddocks.index')->with('success', 'Lote restaurado');
     }
 }

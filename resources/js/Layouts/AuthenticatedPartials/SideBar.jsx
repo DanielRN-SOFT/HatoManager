@@ -1,12 +1,13 @@
 import { useRole } from '@/hooks/useRole';
 import { Link } from '@inertiajs/react';
-import { FaLockOpen, FaScaleBalanced } from 'react-icons/fa6';
+import { FaScaleBalanced } from 'react-icons/fa6';
 import { GiAnimalHide, GiFarmTractor } from 'react-icons/gi';
 import { GoShieldLock } from 'react-icons/go';
 import { GrSteps } from 'react-icons/gr';
 import { IoLockOpenOutline } from 'react-icons/io5';
 import { LuUserRound, LuWeight } from 'react-icons/lu';
 import {
+    MdLocationPin,
     MdOutlineDashboardCustomize,
     MdOutlineHealthAndSafety,
     MdOutlineMedicalServices,
@@ -70,6 +71,12 @@ const NAV_ITEMS = [
         icon: <SiSwisscows />,
         route: 'animals.index',
         permission: 'gestionar animales',
+    },
+    {
+        label: 'Lotes',
+        icon: <MdLocationPin />,
+        route: 'paddocks.index',
+        permission: 'gestionar lotes',
     },
     {
         label: 'Sanidad',
