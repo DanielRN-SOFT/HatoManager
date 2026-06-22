@@ -75,7 +75,7 @@ export default function Index({
 
     function handlePage(page) {
         router.get(
-            route('sales.index'),
+            route('ecommerce.sales.index'),
             { ...filters, page },
             { preserveState: true, preserveScroll: false },
         );

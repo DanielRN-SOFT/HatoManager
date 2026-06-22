@@ -28,122 +28,122 @@ class AnimalSeeder extends Seeder
         ],
         'Cebú' => [
             'M' => [
-                'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=400&h=300&fit=crop',
+                'https://blog.agrocampo.com.co/wp-content/uploads/2020/05/cual-es-el-ganado-cebu.jpg',
+                'https://a.storyblok.com/f/160385/8fd3b6be12/cebu.jpg',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1484557052118-f32bd25b45b5?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?w=400&h=300&fit=crop',
+                'https://lh6.googleusercontent.com/XMTv0dw1vf8HeYrNwyluYONqJXccoXk5QOidrxx5W_pOrXQ1nz7JWai6C12nmCV9v2DnsCEzo26htsfzJmiZrq69fFYeTyGFhf1DJ2hR4tWCbIj6P7NQ1JNRP0fuN2fYF9w9-gGTY_cqWH-Kh7kKTvI',
+                'https://d2yoo3qu6vrk5d.cloudfront.net/pulzo-lite/images-resized/PP4527251-h-o.jpg',
             ],
         ],
         'Angus' => [
             'M' => [
-                'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1597200381847-30ec200eeb9a?w=400&h=300&fit=crop',
+                'https://a.storyblok.com/f/160385/325df3c7bc/imagen-reportaje-angus.jpg/m/filters:quality(70)/',
+                'https://media.istockphoto.com/id/1333215540/es/foto/toro-angus-negro.jpg?s=612x612&w=0&k=20&c=sUI0M74hDCYy_YwkPBeX7HfqikGuwsCJ1ZBZJTl2H6E=',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400&h=300&fit=crop',
+                'https://carneorganiq.com/img/cms/BLOG/RazaANgus1.jpg',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgeDcHfKMJOOcjq4-a6zXUKLLWwCsbkx5V7WY_i601UZgBBX3Cd8W14Ec&s=10',
             ],
         ],
         'Hereford' => [
             'M' => [
-                'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?w=400&h=300&fit=crop',
+                'https://www.pecuarios.club/razas/Raza699db688d85cb_24022026.webp',
+                'https://blog.agrocampo.com.co/wp-content/uploads/2024/11/raza-de-ganado-hereford.jpg',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop',
+                'https://blog.agrocampo.com.co/wp-content/uploads/2024/11/caracteristicas-fisicas-de-la-raza-hereford.jpg',
+                'https://media.istockphoto.com/id/2212806160/es/foto/poderoso-toro-hereford-mirando-a-la-c%C3%A1mara-en-un-campo-de-hierba-perfil.jpg?s=612x612&w=0&k=20&c=DeLn9C9JhTykew1rl1U2GqZNwKzKNrQEyv_G-itgcjw=',
             ],
         ],
         'Simmental' => [
             'M' => [
-                'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=400&h=300&fit=crop',
+                'https://i0.wp.com/centraldecarnes.com/wp-content/uploads/2022/01/simmental-vacuno-carne.jpg?fit=1000%2C800&ssl=1',
+                'https://blog.agrocampo.com.co/wp-content/uploads/2023/12/origen-ganado-simmental.jpg',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop',
+                'https://i0.wp.com/centraldecarnes.com/wp-content/uploads/2022/01/simmental-vacuno-carne.jpg?fit=1000%2C800&ssl=1',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnkpYygDYP0pW-PsNRnW5g3XCDgs2qgllhe1HLzyOTD4tjE9zUmoBoKIU&s=10',
             ],
         ],
         'Charolais' => [
             'M' => [
-                'https://images.unsplash.com/photo-1484557052118-f32bd25b45b5?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1597200381847-30ec200eeb9a?w=400&h=300&fit=crop',
+                'https://agroregion.com/files/image/CHAROLAIS.jpg',
+                'https://blog.agrocampo.com.co/wp-content/uploads/2025/07/raza-de-ganado-charolais.jpg',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=400&h=300&fit=crop',
+                'https://www.pecuarios.club/magazine/Magazine5ace3926d93d3_11042018.jpg',
+                'https://blog.agrocampo.com.co/wp-content/uploads/2025/07/raza-de-ganado-charolais.jpg',
             ],
         ],
         'Limousin' => [
             'M' => [
-                'https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=400&h=300&fit=crop',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ115DNAZ5CrBpPiNzI8wxCgH1A022Wl8MSCaogoS_8ZDKR-fK9S-dVc22g&s=10',
+                'https://www.miguelvergara.com/actualidad/wp-content/uploads/2021/06/raza-limousin-destacada-listado.jpg',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop',
+                'https://www.miguelvergara.com/actualidad/wp-content/uploads/2021/06/limousin-raza.jpg',
+                'https://zoovetesmipasion.com/wp-content/uploads/2017/07/Limousin-3.jpg',
             ],
         ],
         'Holstein' => [
             'M' => [
-                'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=400&h=300&fit=crop',
+                'https://www.australiaslivestockexporters.com/wp-content/uploads/2024/11/holstein-fresians-1.jpg',
+                'https://licnz.com/wp-content/uploads/2020/10/Holstein-Friesian-bull-Mint-Edition-Front-on.jpg',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?w=400&h=300&fit=crop',
+                'https://blog.agrocampo.com.co/wp-content/uploads/2024/06/ganado-holstein-en-colombia.jpg',
+                'https://zoovetesmipasion.com/wp-content/uploads/2024/07/Raza-de-vacas-Holsteing.webp',
             ],
         ],
         'Gyr' => [
             'M' => [
-                'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=400&h=300&fit=crop',
+                'https://revistageneticabovina.com/wp-content/uploads/2020/06/g3.jpg',
+                'https://revistageneticabovina.com/wp-content/uploads/2021/08/GYR4.png',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1484557052118-f32bd25b45b5?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1597200381847-30ec200eeb9a?w=400&h=300&fit=crop',
+                'https://genexcolombia.com/wp-content/uploads/2017/04/GYR-EDANK-1.jpg',
+                'https://subastar.com.co/wp-content/uploads/2020/08/31-9-ESTRELLA-scaled-1.jpg',
             ],
         ],
         'Romosinuano' => [
             'M' => [
-                'https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400&h=300&fit=crop',
+                'https://i0.wp.com/www.asocriollanos.com/wp-content/uploads/2023/10/Romo-Nicolas-Wills-scaled.jpeg?resize=1080%2C810&ssl=1',
+                'https://blog.agrocampo.com.co/wp-content/uploads/2025/07/raza-de-ganado-romosinuano.jpg',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?w=400&h=300&fit=crop',
+                'https://blog.agrocampo.com.co/wp-content/uploads/2025/07/caracteristicas-raza-de-ganado-romosinuano.jpg',
+                'https://diariolaeconomia.com/media/k2/items/cache/7711a45117871d45debc77935b774627_XL.jpg',
             ],
         ],
         'Blanco Orejinegro' => [
             'M' => [
-                'https://images.unsplash.com/photo-1484557052118-f32bd25b45b5?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=400&h=300&fit=crop',
+                'https://www.agrosavia.co/media/6670/bon_tibaitata_agrosavia.jpg',
+                'https://a.storyblok.com/f/160385/1080x810/c3da9121a8/blanco-orejinegro-bon-interna.jpeg',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1516467508483-a7212febe31a?w=400&h=300&fit=crop',
+                'https://www.agrosavia.co/media/6670/bon_tibaitata_agrosavia.jpg',
+                'https://www.agrosavia.co/media/6673/bon_tibaitata_16_agrosavia.jpg',
             ],
         ],
         'Costeño con Cuernos' => [
             'M' => [
-                'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1597200381847-30ec200eeb9a?w=400&h=300&fit=crop',
+                'https://www.agrosavia.co/media/10252/fotograf%C3%ADa-5-autora-griselda-g%C3%B3mez-g%C3%A1mez-2019-ci-motilinia-cesar.jpg',
+                'https://i0.wp.com/www.asocriollanos.com/wp-content/uploads/2023/01/Toro-1-CCC-scaled-e1672862606137.jpg?resize=1080%2C707&ssl=1',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400&h=300&fit=crop',
+                'https://a.storyblok.com/f/160385/890x605/027c1a04ef/raza-costeno-cuernos.webp',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQ1Dq40bNAeAlptWuq1LdtUoDN0wn7M0MWVMWxS5Y_97ef1H8wD7FkXATp&s=10',
             ],
         ],
         'Sanmartinero' => [
             'M' => [
-                'https://images.unsplash.com/photo-1602491453631-e2a5ad90a131?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=400&h=300&fit=crop',
+                'https://a.storyblok.com/f/160385/ee8e9e7e16/raza-sanmartinero.jpg',
+                'https://a.storyblok.com/f/160385/2e688bfc6d/raza-sanmartinero.jpg',
             ],
             'H' => [
-                'https://images.unsplash.com/photo-1484557052118-f32bd25b45b5?w=400&h=300&fit=crop',
-                'https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?w=400&h=300&fit=crop',
+                'https://a.storyblok.com/f/160385/e37805f8d8/raza_sanmartinero.jpg',
+                'https://www.agrosavia.co/media/11995/subastarazascriollas_2021_agrosavia.jpeg',
             ],
         ],
         // Fallback genérico para razas no listadas

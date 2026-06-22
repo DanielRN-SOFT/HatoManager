@@ -24,10 +24,10 @@ const HeroSection = () => {
                     </p>
                     <Link
                         href={'/sales'}
-                        className="flex max-w-xs items-center gap-2 rounded-xl bg-primary px-8 py-4 text-lg font-bold text-on-primary transition-all hover:bg-primary-container"
+                        className="flex w-fit items-center gap-2 rounded-xl bg-primary px-8 py-4 text-lg font-bold text-on-primary transition-all hover:bg-primary-container"
                     >
                         Explorar Catálogo
-                        <MdOutlineArrowForward className="text-2xl"/>
+                        <MdOutlineArrowForward className="text-2xl" />
                     </Link>
                 </div>
             </div>

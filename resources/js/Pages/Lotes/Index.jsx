@@ -18,11 +18,11 @@ export default function Index({ paddocks, filters }) {
             <div className="mb-6 flex items-center justify-between">
                 <div>
                     <h1 className="text-xl font-bold text-gray-800">
-                        Métodos de Pesaje
+                        Lotes
                     </h1>
                     <p className="mt-0.5 text-xs text-gray-500">
-                        Administra los métodos disponibles para registrar
-                        pesajes
+                        Administra los lotes disponibles para registrar
+                        animales
                     </p>
                 </div>
                 <button
