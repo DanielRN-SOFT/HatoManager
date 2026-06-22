@@ -3,6 +3,7 @@ import { router } from '@inertiajs/react';
 import { useState } from 'react';
 import ModalFormLote from './ModalFormLote';
 import FilaLote from './FilaLote';
+import LoteModalEliminar from './LoteModalEliminar';
 
 const LoteTable = ({ paddocks }) => {
     const [modalEditar, setModalEditar] = useState(null);
@@ -42,10 +43,10 @@ const LoteTable = ({ paddocks }) => {
                 closeable
                 maxWidth="sm"
             >
-                {/* <ModalEliminarWeightMethod
-                    method={modalEliminar}
+                <LoteModalEliminar
+                    paddock={modalEliminar}
                     onClose={() => setModalEliminar(null)}
-                /> */}
+                />
             </Modal>
 
             <div className="overflow-x-auto">

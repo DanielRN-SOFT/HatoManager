@@ -106,7 +106,7 @@
 
             // Lotes
             Route::resource('/paddocks', PaddockController::class);
-            Route::put("/paddock/{id}/restore")->name('paddock.restore');
+            Route::put("/paddock/{id}/restore", [PaddockController::class, 'restore'])->name('paddock.restore');
 
             // Invitar a un veterinario a una finca específica
             Route::post('/fincas/{farm}/veterinarians/invitar', [VeterinarianController::class, 'invite'])
