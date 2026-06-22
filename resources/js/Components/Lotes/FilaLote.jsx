@@ -1,6 +1,7 @@
 import { router } from '@inertiajs/react';
 
 const FilaLote = ({ paddock, index, setModalEditar, setModalEliminar }) => {
+    console.log(paddock);
     const isDeleted = !!paddock.deleted_at;
 
     return (

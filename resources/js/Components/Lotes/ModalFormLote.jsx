@@ -2,9 +2,13 @@ import { useForm } from '@inertiajs/react';
 
 const ModalFormLote = ({ paddock = null, onClose }) => {
     const isEdit = !!paddock;
+    console.log(paddock);
 
     const { data, setData, post, put, processing, errors, reset } = useForm({
         name: paddock?.name ?? '',
+        type_of_grass: paddock?.type_of_grass ?? '',
+        area: paddock?.area ?? '',
+        capacity: paddock?.capacity ?? '',
     });
 
     function handleSubmit(e) {
@@ -87,7 +91,6 @@ const ModalFormLote = ({ paddock = null, onClose }) => {
                             setData('type_of_grass', e.target.value)
                         }
                         placeholder="Ej. Corral 23"
-                        autoFocus
                         className={`w-full rounded-xl border px-3 py-2 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary ${
                             errors.type_of_grass
                                 ? 'border-red-400'
@@ -114,7 +117,6 @@ const ModalFormLote = ({ paddock = null, onClose }) => {
                             value={data.area}
                             onChange={(e) => setData('area', e.target.value)}
                             placeholder="100"
-                            autoFocus
                             className={`w-full rounded-xl border px-3 py-2 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary ${
                                 errors.area
                                     ? 'border-red-400'
@@ -136,13 +138,12 @@ const ModalFormLote = ({ paddock = null, onClose }) => {
                             Capacidad
                         </label>
                         <input
-                            type="text"
+                            type="number"
                             value={data.capacity}
                             onChange={(e) =>
                                 setData('capacity', e.target.value)
                             }
                             placeholder="Ej. Corral 23"
-                            autoFocus
                             className={`w-full rounded-xl border px-3 py-2 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary ${
                                 errors.capacity
                                     ? 'border-red-400'

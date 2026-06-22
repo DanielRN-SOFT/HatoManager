@@ -55,12 +55,12 @@ class PaddockController extends Controller
         $farm_id = session('active_farm_id');
         $data = $request->validate([
             'name' => 'required|string|max:255|unique:paddocks,name',
-            'area' => 'required|numeric',
+            'area' => 'required|numeric|min:0|max:9999.99',
             'type_of_grass' => 'required|string',
-            'capacity' => 'required|numeric|integer'
+            'capacity' => 'required|integer|min:0|max:2147483647',
         ]);
 
-        $animal = Paddock::create([
+        Paddock::create([
             ...$data,
             'farm_id' => $farm_id
         ]);
@@ -74,11 +74,11 @@ class PaddockController extends Controller
     public function update(Request $request, Paddock $paddock)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255|unique:paddocks,name',
-            'area' => 'required|numeric',
+            'name' => 'required|string|max:255|unique:paddocks,name,' . $paddock->id,
+            'area' => 'required|numeric|min:0|max:9999.99',
             'type_of_grass' => 'required|string',
-            'capacity' => 'required|numeric'
-        ]);
+            'capacity' => 'required|integer|min:0|max:2147483647',
+        ], [], ["capacity" => "capacidad", "type_of_grass" => "tipo de pasto"]);
 
         $paddock->update($data);
         return redirect()->route('paddocks.index')->with('success', 'Lote actualizado correctamente');

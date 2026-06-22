@@ -30,7 +30,7 @@ const LoteTable = ({ paddocks }) => {
                 maxWidth="sm"
             >
                 <ModalFormLote
-                    paddocks={modalEditar}
+                    paddock={modalEditar}
                     onClose={() => setModalEditar(null)}
                 />
             </Modal>
