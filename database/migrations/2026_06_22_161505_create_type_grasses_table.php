@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paddocks', function (Blueprint $table) {
+        Schema::create('type_grasses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->decimal('area', 6, 2);
-            $table->text('type_of_grass_id');
-            $table->integer('capacity');
-            $table->foreignId('farm_id')->constrained()->restrictOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paddocks');
+        Schema::dropIfExists('type_grasses');
     }
 };

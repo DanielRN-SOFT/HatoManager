@@ -11,7 +11,7 @@ class Paddock extends Model
     protected $fillable = [
         'name',
         'area',
-        'type_of_grass',
+        'type_grass_id',
         'capacity',
         'farm_id'
     ];
@@ -19,5 +19,9 @@ class Paddock extends Model
     public function farm()
     {
         return $this->belongsTo(Farm::class);
+    }
+
+    public function typeGrass(){
+        return $this->belongsTo(TypeGrass::class);
     }
 }
