@@ -62,13 +62,25 @@ const SalesIndex = () => {
             />
 
             {/* Header */}
-            <div className="mb-6">
-                <h1 className="text-xl font-bold text-gray-800">
-                    Mis Transacciones
-                </h1>
-                <p className="mt-0.5 text-sm text-gray-400">
-                    Panel privado — ventas de tu ganado y compras realizadas
-                </p>
+            <div className="mb-6 flex flex-col gap-4 p-2 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-container sm:h-12 sm:w-12">
+                        <span className="material-symbols-outlined text-[20px] text-on-primary sm:text-[24px]">
+                            sell
+                        </span>
+                    </div>
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
+                            Panel privado
+                        </p>
+                        <h1 className="text-xl font-bold text-on-surface sm:text-2xl">
+                            Mis Transacciones
+                        </h1>
+                        <p className="mt-0.5 text-xs text-on-surface-variant">
+                            Ventas de tu ganado y compras realizadas
+                        </p>
+                    </div>
+                </div>
             </div>
 
             {/* Stats */}
@@ -105,7 +117,12 @@ const SalesIndex = () => {
 
             {/* Card de tabs/filtros */}
             <div className="mb-4 rounded-xl border border-t-4 border-gray-200 border-t-secondary bg-white px-6 py-4">
-               <TabsFiltros setTab={setTab} tab={tab} sales={sales} purchases={purchases}/>
+                <TabsFiltros
+                    setTab={setTab}
+                    tab={tab}
+                    sales={sales}
+                    purchases={purchases}
+                />
             </div>
 
             {/* Tabla */}
@@ -121,6 +138,6 @@ const SalesIndex = () => {
             </div>
         </AuthenticatedLayout>
     );
-}
+};
 
 export default SalesIndex;

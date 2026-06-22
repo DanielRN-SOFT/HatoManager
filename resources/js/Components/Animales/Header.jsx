@@ -21,6 +21,9 @@ const Header = ({finca}) => {
                     <h1 className="text-xl font-bold text-on-surface sm:text-2xl">
                         Inventario del hato
                     </h1>
+                    <p className="mt-0.5 text-xs text-on-surface-variant">
+                        Administra los animales disponibles
+                    </p>
                 </div>
             </div>
             <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">

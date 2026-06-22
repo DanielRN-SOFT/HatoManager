@@ -25,7 +25,7 @@ export default function SanidadAnimal({
         { value: 'inactivo', label: 'Inactivos' },
     ];
 
-    const [estado, setEstado] = useState("");
+    const [estado, setEstado] = useState('');
     const [modal, setModal] = useState({
         show: false,
         mode: 'create',
@@ -96,6 +96,11 @@ export default function SanidadAnimal({
                             <h1 className="text-2xl font-bold text-on-surface">
                                 Sanidad Animal
                             </h1>
+                            <p className="mt-0.5 text-xs text-on-surface-variant">
+                                Administra los registros sanitarios para darle
+                                seguimiento a los animales registrados en el
+                                sistema
+                            </p>
                         </div>
                     </div>
                     <button

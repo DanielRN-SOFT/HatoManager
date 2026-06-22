@@ -75,25 +75,35 @@ export default function Index({
         <AuthenticatedLayout>
             <Head title="Historial Pesajes" />
 
-            <div className="px-4 py-6">
+            <div className="">
                 <Flash />
 
                 {/* Header */}
-                <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h1 className="text-xl font-bold text-gray-800 sm:text-2xl">
-                            Historial Pesajes
-                        </h1>
-                        <p className="mt-1 text-sm text-gray-500">
-                            Registros de peso por animal en la finca activa.
-                        </p>
+                <div className="mb-6 flex flex-col gap-4 p-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-container sm:h-12 sm:w-12">
+                            <span className="material-symbols-outlined text-[20px] text-on-primary sm:text-[24px]">
+                                balance
+                            </span>
+                        </div>
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant">
+                                Registros
+                            </p>
+                            <h1 className="text-xl font-bold text-on-surface sm:text-2xl">
+                                Historial de Pesajes
+                            </h1>
+                            <p className="mt-0.5 text-xs text-on-surface-variant">
+                                Registros de peso por animal en la finca activa.
+                            </p>
+                        </div>
                     </div>
                     {isGanadero && (
                         <button
                             onClick={openCreate}
-                            className="flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 active:scale-95 sm:self-auto"
+                            className="flex items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
                         >
-                            <span className="material-symbols-outlined text-[18px]">
+                            <span className="material-symbols-outlined text-[20px]">
                                 add_circle
                             </span>
                             Nuevo registro
