@@ -15,24 +15,18 @@ class PaddockController extends Controller
     public function index(Request $request)
     {
         $farm_id = session('active_farm_id');
-        $paddoks = Paddock::where('farm_id', $farm_id)->withTrashed()
-            ->when(
-                $request->search,
-                fn($q) => $q->where('name', 'like', "%{$request->name}%")
-            )
-            ->when(
-                $request->search,
-                fn($q) => $q->where('area', 'like', "%{$request->area}%")
-            )
-            ->when(
-                $request->search,
-                fn($q) => $q->where('type_of_grass', 'like', "%{$request->type_of_grass}%")
-            )->when(
-                $request->search,
-                fn($q) => $q->where('capacity', 'like', "%{$request->capacity}%")
-            )
-            ->when($request->status === 'active',  fn($q) => $q->whereNull('deleted_at'))
-            ->when($request->status === "deleted", fn($q) => $q->whereNotNull('deleted_at'))
+        $paddoks = Paddock::where('farm_id', $farm_id)
+            ->withTrashed()
+            ->when($request->search, function ($q) use ($request) {
+                $q->where(function ($query) use ($request) {
+                    $query->where('name', 'like', "%{$request->search}%")
+                        ->orWhere('area', 'like', "%{$request->search}%")
+                        ->orWhere('type_of_grass', 'like', "%{$request->search}%")
+                        ->orWhere('capacity', 'like', "%{$request->search}%");
+                });
+            })
+            ->when($request->status === 'active', fn($q) => $q->whereNull('deleted_at'))
+            ->when($request->status === 'deleted', fn($q) => $q->whereNotNull('deleted_at'))
             ->with('farm')
             ->latest()
             ->paginate(15)

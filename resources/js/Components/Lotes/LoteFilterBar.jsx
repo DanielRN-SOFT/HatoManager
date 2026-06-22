@@ -12,7 +12,7 @@ const LoteFilterBar = ({ filters }) => {
     function handleChange(key, value) {
         const next = { ...form, [key]: value };
         setForm(next);
-        router.get(route('weight-methods.index'), next, {
+        router.get(route('paddocks.index'), next, {
             preserveState: true,
             replace: true,
         });
@@ -22,7 +22,7 @@ const LoteFilterBar = ({ filters }) => {
         const empty = { search: '', status: '' };
         setForm(empty);
         router.get(
-            route('weight-methods.index'),
+            route('paddocks.index'),
             {},
             { preserveState: true, replace: true },
         );
@@ -60,7 +60,7 @@ const LoteFilterBar = ({ filters }) => {
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {/* Búsqueda */}
-                <FilterField label="Nombre" icon="search">
+                <FilterField label="Nombre - Area - Capacidad" icon="search">
                     <span className="material-symbols-outlined text-[16px] text-gray-400">
                         search
                     </span>
