@@ -1,12 +1,13 @@
 import { useRole } from '@/hooks/useRole';
 import { Link } from '@inertiajs/react';
 import { FaScaleBalanced } from 'react-icons/fa6';
-import { GiAnimalHide, GiFarmTractor } from 'react-icons/gi';
+import { GiAnimalHide, GiFarmTractor, GiGrass } from 'react-icons/gi';
 import { GoShieldLock } from 'react-icons/go';
 import { GrSteps } from 'react-icons/gr';
 import { IoLockOpenOutline } from 'react-icons/io5';
 import { LuUserRound, LuWeight } from 'react-icons/lu';
 import {
+    MdGrass,
     MdLocationPin,
     MdOutlineDashboardCustomize,
     MdOutlineHealthAndSafety,
@@ -58,6 +59,12 @@ const NAV_ITEMS = [
         label: 'Categorias',
         icon: <PiCow />,
         route: 'animal-categories.index',
+        permission: 'gestionar categorias de animales',
+    },
+    {
+        label: 'Tipos de pasto',
+        icon: <GiGrass />,
+        route: 'type-grasses.index',
         permission: 'gestionar categorias de animales',
     },
     {

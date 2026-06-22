@@ -20,12 +20,12 @@
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\TwoFactorController;
-use App\Http\Controllers\TypeGrassController;
-use App\Http\Controllers\UserController;
+    use App\Http\Controllers\TypeGrassController;
+    use App\Http\Controllers\UserController;
     use App\Http\Controllers\WeightMethodController;
     use App\Http\Controllers\WeightRecordController;
-use App\Models\TypeGrass;
-use Inertia\Inertia;
+    use App\Models\TypeGrass;
+    use Inertia\Inertia;
 
     Route::get('/', [EcommerceController::class, 'index'])->name('ecommerce.index');
     Route::get('/sales', [EcommerceSalesController::class, 'index'])->name('ecommerce.sales.index');
@@ -77,7 +77,7 @@ use Inertia\Inertia;
 
         // Tipos de pasto
         Route::resource('/type-grasses', TypeGrassController::class);
-        Route::put("/type-grasses/{id}/restore", [TypeGrassController::class, 'restore'])->name('type-grasess.restore');
+        Route::put("/type-grasses/{id}/restore", [TypeGrassController::class, 'restore'])->name('type-grasses.restore');
 
         // Permisos
         Route::resource('/permissions', PermissionController::class);

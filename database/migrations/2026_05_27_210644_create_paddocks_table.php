@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('area', 6, 2);
-            $table->text('type_of_grass_id');
+            $table->text('type_grass_id');
             $table->integer('capacity');
             $table->foreignId('farm_id')->constrained()->restrictOnDelete();
             $table->softDeletes();

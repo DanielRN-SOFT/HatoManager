@@ -23,7 +23,7 @@ class TypeGrassController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return Inertia::render('TypeGrasses/Index', [
+        return Inertia::render('TiposPasto/Index', [
             'grasses' => $grasses,
             'filters' => $request->only(['search', 'status']),
         ]);
