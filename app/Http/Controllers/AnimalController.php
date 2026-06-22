@@ -79,11 +79,12 @@ class AnimalController extends Controller
 
     public function create()
     {
+        $farm_id = session('active_farm_id');
         $farm = Farm::find(session('active_farm_id'));
         return Inertia::render('Animales/Create', [
             'razas' => Breed::all(),
             'categoriasAnimales' => AnimalCategory::all(),
-            'lotes' => Paddock::all(),
+            'lotes' => Paddock::where('farm_id', $farm_id)->get(),
             'farmDefaults'       => [
                 'target_weight' => $farm?->target_weight,
                 'price_weight'  => $farm?->price_weight,
@@ -100,7 +101,7 @@ class AnimalController extends Controller
             ],
             'razas' => Breed::all(),
             'categoriasAnimales' => AnimalCategory::all(),
-            'lotes' => Paddock::all()
+            'lotes' => Paddock::where('farm_id', $farm_id)->get(),
         ]);
     }
 
@@ -109,7 +110,17 @@ class AnimalController extends Controller
      */
     public function show(Animal $animal)
     {
-        $animal->load(['animalCategory', 'breed', 'healthRecords', 'paddock', 'weightRecords']);
+        if ($animal->farm_id != session('active_farm_id')) {
+            abort(404);
+        }
+
+        $animal->load([
+            'animalCategory',
+            'breed',
+            'healthRecords',
+            'paddock',
+            'weightRecords'
+        ]);
 
         $proyeccion = $this->calcularProyeccion($animal);
 
