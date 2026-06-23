@@ -2,6 +2,9 @@ import { router } from '@inertiajs/react';
 
 const FilaLote = ({ paddock, index, setModalEditar, setModalEliminar }) => {
     const isDeleted = !!paddock.deleted_at;
+    const hasActiveAnimals = paddock.animals.length > 0;
+    const animalCount = paddock.animals.length;
+    console.log(hasActiveAnimals);
 
     return (
         <tr
@@ -70,6 +73,18 @@ const FilaLote = ({ paddock, index, setModalEditar, setModalEliminar }) => {
                 )}
             </td>
 
+            {/* Potreros */}
+            <td className="px-4 py-3">
+                {animalCount > 0 ? (
+                    <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700">
+                        {animalCount}{' '}
+                        {animalCount === 1 ? 'animal' : 'animales'}
+                    </span>
+                ) : (
+                    <span className="text-xs text-gray-400">Sin animalaes</span>
+                )}
+            </td>
+
             {/* Acciones */}
             <td className="px-4 py-3">
                 <div className="flex items-center gap-1">
@@ -83,9 +98,16 @@ const FilaLote = ({ paddock, index, setModalEditar, setModalEliminar }) => {
                             />
                             <ActionBtn
                                 icon="delete"
-                                label={'Eliminar'}
-                                onClick={() => setModalEliminar(paddock)}
-                                cls={`${'hover:text-red-500'}`}
+                                label={
+                                    hasActiveAnimals
+                                        ? 'No se puede eliminar, tiene animales asociados'
+                                        : 'Eliminar'
+                                }
+                                onClick={() =>
+                                    !hasActiveAnimals &&
+                                    setModalEliminar(paddock)
+                                }
+                                cls={`${hasActiveAnimals ? 'cursor-not-allowed opacity-50' : 'hover:text-red-500'}`}
                             />
                         </>
                     )}

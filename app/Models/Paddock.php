@@ -21,7 +21,13 @@ class Paddock extends Model
         return $this->belongsTo(Farm::class);
     }
 
-    public function typeGrass(){
+    public function animals()
+    {
+        return $this->hasMany(Animal::class);
+    }
+
+    public function typeGrass()
+    {
         return $this->belongsTo(TypeGrass::class);
     }
 }

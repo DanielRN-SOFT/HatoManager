@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Animal;
 use App\Models\Farm;
 use App\Models\Paddock;
 use App\Models\TypeGrass;
@@ -28,7 +29,7 @@ class PaddockController extends Controller
             })
             ->when($request->status === 'active', fn($q) => $q->whereNull('deleted_at'))
             ->when($request->status === 'deleted', fn($q) => $q->whereNotNull('deleted_at'))
-            ->with('farm', 'typeGrass')
+            ->with('farm', 'typeGrass', 'animals')
             ->latest()
             ->paginate(15)
             ->withQueryString();
@@ -85,6 +86,10 @@ class PaddockController extends Controller
      */
     public function destroy(Paddock $paddock)
     {
+        $hasActiveAnimals = Animal::where('paddock_id', $paddock->id)->exists();
+        if ($hasActiveAnimals) {
+            return redirect()->route('paddocks.index')->with('error', 'No se puede eliminar: Ese lote tiene animales registrados');
+        }
         $paddock->delete();
         return redirect()->route('paddocks.index')->with('success', 'Lote eliminado');
     }

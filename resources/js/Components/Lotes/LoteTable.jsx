@@ -61,6 +61,7 @@ const LoteTable = ({ paddocks, typeGrasses }) => {
                                 'Tipo de pasto',
                                 'Capacidad',
                                 'Estado',
+                                'Cantidad de animales',
                                 'Acciones',
                             ].map((h) => (
                                 <th key={h} className="px-4 py-3">
