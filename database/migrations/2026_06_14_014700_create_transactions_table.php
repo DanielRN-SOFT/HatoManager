@@ -15,13 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('deposit_id', 100)->nullable();
             $table->foreignId('transaction_id')->nullable()->constrained()->restrictOnDelete();
-            $table->string('wompi_id', 255)->unique();
+            $table->string('wompi_id', 255)->unique()->nullable();
             $table->string('internal_reference', 100);
             $table->dateTime('transaction_date')->useCurrent();
             $table->string('moneda', 10)->default('COP');
             $table->decimal('amount', 10, 2);
             $table->enum('transaction_status', ["reembolsada", 'expirada', 'pendiente', 'aprobada', 'rechazada',]);
             $table->enum('transaction_type', ["reembolso", 'pago_subasta', 'deposito_subasta', 'compra']);
+            $table->string('motivo_reembolso')->nullable();
             $table->timestamps();
         });
     }
