@@ -59,7 +59,7 @@ class EcommerceSalesController extends Controller
                 fn($q) => $q->where('price', '<=', (int) $request->precio)
             )
             ->orderBy('created_at', 'desc')
-            ->paginate(12)
+            ->paginate(20)
             ->through(fn($animal) => [
                 'id'            => $animal->id,
                 'name'          => $animal->name,

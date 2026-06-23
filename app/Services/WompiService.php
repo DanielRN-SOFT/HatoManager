@@ -24,7 +24,7 @@ class WompiService
     public function solicitarReembolso(
         Transaction $original,
         string $motivo,
-        float $montoParciaal // para reembolsos parciales por animal
+        float $monto // para reembolsos parciales por animal
     ): Transaction {
         // Crear registro de reembolso en BD primero (optimistic, sin wompi_id aún)
         $reembolso = Transaction::create([

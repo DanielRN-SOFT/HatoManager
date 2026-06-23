@@ -17,6 +17,7 @@
     use App\Http\Controllers\ProductiveStageController;
     use App\Http\Controllers\RoleController;
     use App\Http\Controllers\SalesController;
+    use App\Http\Controllers\TransactionController;
     use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\TwoFactorController;
@@ -84,6 +85,10 @@
 
         // Roles
         Route::resource('/roles', RoleController::class);
+
+        // Transacciones
+        Route::get('/transacciones', [TransactionController::class, 'index'])
+            ->name('transactions.index');
     });
 
 
