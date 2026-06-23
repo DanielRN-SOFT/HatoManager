@@ -88,7 +88,7 @@ const StatusKPI = ({ kpis }) => {
             {items.map(({ key, icon, label, val, cfg }) => (
                 <div
                     key={key}
-                    className={`flex flex-col items-center justify-center gap-1 rounded-xl border px-3 py-4 text-center transition-all duration-150 hover:brightness-95 ${cfg.bg} ${cfg.border}`}
+                    className={`flex flex-col items-center justify-center gap-1 rounded-xl border px-3 py-4 text-center transition-all duration-150 hover:brightness-95 shadow-md ${cfg.bg} ${cfg.border}`}
                 >
                     <span
                         className={`material-symbols-outlined text-[20px] ${cfg.text}`}

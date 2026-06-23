@@ -60,6 +60,9 @@ export default function MisFincas({ farms }) {
                             <h1 className="text-2xl font-bold text-on-surface">
                                 Mis Fincas
                             </h1>
+                            <p className="mt-0.5 text-xs text-on-surface-variant">
+                                Administra los fincas disponibles para administrar el sistema
+                            </p>
                         </div>
                     </div>
                     <button

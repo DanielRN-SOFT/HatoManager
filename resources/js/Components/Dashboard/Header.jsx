@@ -16,6 +16,9 @@ const Header = ({finca}) => {
                     <h1 className="text-xl font-bold leading-tight text-on-surface">
                         Dashboard
                     </h1>
+                    <p className="mt-0.5 text-xs text-on-surface-variant">
+                        Visualiza todas las estadisticas y observa una vista general
+                    </p>
                 </div>
             </div>
             <button
