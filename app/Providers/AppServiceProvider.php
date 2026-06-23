@@ -14,6 +14,7 @@ use App\Http\Responses\TwoFactorLoginResponse;
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
 use App\Http\Responses\PasswordConfirmationResponse;
 use Laravel\Fortify\Contracts\PasswordConfirmedResponse as PasswordConfirmedResponseContract;
+use App\Services\WompiService;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
         );
         $this->app->singleton(TwoFactorLoginResponseContract::class, TwoFactorLoginResponse::class);
         $this->app->singleton(PasswordConfirmedResponseContract::class, PasswordConfirmationResponse::class);
+        $this->app->singleton(WompiService::class);
     }
 
     /**
