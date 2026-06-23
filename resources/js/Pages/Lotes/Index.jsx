@@ -7,9 +7,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function Index({ paddocks, filters }) {
+export default function Index({ paddocks, filters, typeGrasses }) {
+    console.log(paddocks);
     const [showModalCrear, setShowModalCrear] = useState(false);
-
     return (
         <AuthenticatedLayout>
             <Head title="Métodos de Pesaje" />
@@ -19,7 +19,7 @@ export default function Index({ paddocks, filters }) {
                 <div className="flex items-center gap-3 sm:gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-container sm:h-12 sm:w-12">
                         <span className="material-symbols-outlined text-[20px] text-on-primary sm:text-[24px]">
-                          location_on
+                            location_on
                         </span>
                     </div>
                     <div>
@@ -54,12 +54,15 @@ export default function Index({ paddocks, filters }) {
                 closeable
                 maxWidth="lg"
             >
-                <ModalFormLote onClose={() => setShowModalCrear(false)} />
+                <ModalFormLote
+                    typeGrasses={typeGrasses}
+                    onClose={() => setShowModalCrear(false)}
+                />
             </Modal>
 
             <div className="space-y-4">
                 <LoteFilterBar filters={filters} />
-                <LoteTable paddocks={paddocks} />
+                <LoteTable typeGrasses={typeGrasses} paddocks={paddocks} />
             </div>
         </AuthenticatedLayout>
     );

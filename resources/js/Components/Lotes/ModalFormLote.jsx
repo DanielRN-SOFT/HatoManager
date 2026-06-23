@@ -1,12 +1,10 @@
 import { useForm } from '@inertiajs/react';
 
-const ModalFormLote = ({ paddock = null, onClose }) => {
+const ModalFormLote = ({ paddock = null, onClose, typeGrasses }) => {
     const isEdit = !!paddock;
-    console.log(paddock);
-
     const { data, setData, post, put, processing, errors, reset } = useForm({
         name: paddock?.name ?? '',
-        type_of_grass: paddock?.type_of_grass ?? '',
+        type_grass_id: paddock?.type_grass_id ?? '',
         area: paddock?.area ?? '',
         capacity: paddock?.capacity ?? '',
     });
@@ -84,19 +82,26 @@ const ModalFormLote = ({ paddock = null, onClose }) => {
                         </span>
                         Tipo de pasto
                     </label>
-                    <input
-                        type="text"
-                        value={data.type_of_grass}
+                    <select
+                        value={data.type_grass_id}
                         onChange={(e) =>
-                            setData('type_of_grass', e.target.value)
+                            setData('type_grass_id', e.target.value)
                         }
-                        placeholder="Ej. Corral 23"
                         className={`w-full rounded-xl border px-3 py-2 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary ${
                             errors.type_of_grass
                                 ? 'border-red-400'
                                 : 'border-gray-200'
                         }`}
-                    />
+                    >
+                        <option value="">Seleccione un tipo de pasto</option>
+                        {typeGrasses.map((typeGrass) => {
+                            return (
+                                <option key={typeGrass.id} value={typeGrass.id}>
+                                    {typeGrass.name}
+                                </option>
+                            );
+                        })}
+                    </select>
                     {errors.type_of_grass && (
                         <p className="mt-1 text-xs text-red-500">
                             {errors.type_of_grass}

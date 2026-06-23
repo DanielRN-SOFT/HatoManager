@@ -1,7 +1,6 @@
 import { router } from '@inertiajs/react';
 
 const FilaLote = ({ paddock, index, setModalEditar, setModalEliminar }) => {
-    console.log(paddock);
     const isDeleted = !!paddock.deleted_at;
 
     return (
@@ -44,7 +43,7 @@ const FilaLote = ({ paddock, index, setModalEditar, setModalEliminar }) => {
                     <span className="material-symbols-outlined text-[18px] text-primary">
                         grass
                     </span>
-                    {paddock.type_of_grass}
+                    {paddock.type_grass?.name}
                 </div>
             </td>
 

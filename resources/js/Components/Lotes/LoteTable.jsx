@@ -5,7 +5,7 @@ import ModalFormLote from './ModalFormLote';
 import FilaLote from './FilaLote';
 import LoteModalEliminar from './LoteModalEliminar';
 
-const LoteTable = ({ paddocks }) => {
+const LoteTable = ({ paddocks, typeGrasses }) => {
     const [modalEditar, setModalEditar] = useState(null);
     const [modalEliminar, setModalEliminar] = useState(null);
 
@@ -31,6 +31,7 @@ const LoteTable = ({ paddocks }) => {
                 maxWidth="sm"
             >
                 <ModalFormLote
+                typeGrasses={typeGrasses}
                     paddock={modalEditar}
                     onClose={() => setModalEditar(null)}
                 />

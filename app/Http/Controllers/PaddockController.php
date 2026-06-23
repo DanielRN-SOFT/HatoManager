@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Farm;
 use App\Models\Paddock;
+use App\Models\TypeGrass;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -27,17 +28,18 @@ class PaddockController extends Controller
             })
             ->when($request->status === 'active', fn($q) => $q->whereNull('deleted_at'))
             ->when($request->status === 'deleted', fn($q) => $q->whereNotNull('deleted_at'))
-            ->with('farm')
+            ->with('farm', 'typeGrass')
             ->latest()
             ->paginate(15)
             ->withQueryString();
 
-        $farms = Farm::all();
+
+        $typeGrasses = TypeGrass::all();
 
         return Inertia::render('Lotes/Index', [
             'paddocks' => $paddoks,
             'filters' => $request->only(['search', 'status']),
-            'farms' => $farms
+            'typeGrasses' => $typeGrasses
         ]);
     }
 
@@ -50,9 +52,9 @@ class PaddockController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255|unique:paddocks,name',
             'area' => 'required|numeric|min:0|max:9999.99',
-            'type_of_grass' => 'required|string',
+            'type_grass_id' => 'required|exists:type_grasses,id',
             'capacity' => 'required|integer|min:0|max:2147483647',
-        ]);
+        ], [], ["capacity" => "capacidad", "type_of_grass" => "tipo de pasto"]);
 
         Paddock::create([
             ...$data,
@@ -70,7 +72,7 @@ class PaddockController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255|unique:paddocks,name,' . $paddock->id,
             'area' => 'required|numeric|min:0|max:9999.99',
-            'type_of_grass' => 'required|string',
+            'type_grass_id' => 'required|exists:type_grasses,id',
             'capacity' => 'required|integer|min:0|max:2147483647',
         ], [], ["capacity" => "capacidad", "type_of_grass" => "tipo de pasto"]);
 
