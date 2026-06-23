@@ -52,6 +52,9 @@
     Route::middleware(['auth', 'verified', 'role:ganadero|veterinario|admin'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+        Route::get('/animals/search', [AnimalController::class, 'search'])
+            ->name('animals.search');
     });
 
     Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
