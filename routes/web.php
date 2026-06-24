@@ -19,7 +19,6 @@
     use App\Http\Controllers\RoleController;
     use App\Http\Controllers\SalesController;
     use App\Http\Controllers\TransactionController;
-    use Illuminate\Foundation\Application;
     use Illuminate\Support\Facades\Route;
     use App\Http\Controllers\TwoFactorController;
     use App\Http\Controllers\TypeGrassController;
