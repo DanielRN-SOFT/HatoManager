@@ -6,6 +6,7 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 const navLinks = [
+    { href: '/about-us', label: 'Sobre nosotros' },
     { href: '/sales', label: 'Ventas' },
 ];
 

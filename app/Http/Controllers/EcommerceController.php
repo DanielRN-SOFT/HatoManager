@@ -40,6 +40,11 @@ class EcommerceController extends Controller
             ->toArray()
             : [],]);
     }
+
+    public function aboutUs()
+    {
+        return Inertia::render('SobreNosotros/Index');
+    }
     /**
      * Show the form for creating a new resource.
      */

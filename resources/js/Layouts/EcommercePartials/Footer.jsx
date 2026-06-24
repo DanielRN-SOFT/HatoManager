@@ -4,14 +4,14 @@ const footerSections = [
     {
         title: 'Explorar',
         links: [
-            { href: '/vendedores', label: 'Vendedores Destacados' },
+            { href: '/sales', label: 'Ventas' },
             { href: '/ayuda', label: 'Ayuda' },
         ],
     },
     {
         title: 'Compañía',
         links: [
-            { href: '/nosotros', label: 'Sobre Nosotros' },
+            { href: '/about-us', label: 'Sobre Nosotros' },
             { href: '/contacto', label: 'Contacto' },
             { href: '/terminos', label: 'Términos de Uso' },
             { href: '/privacidad', label: 'Privacidad' },

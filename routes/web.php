@@ -29,6 +29,7 @@
     use Inertia\Inertia;
 
     Route::get('/', [EcommerceController::class, 'index'])->name('ecommerce.index');
+    Route::get("/about-us", [EcommerceController::class, 'aboutUs'])->name('ecommerce.aboutUs');
     Route::get('/sales', [EcommerceSalesController::class, 'index'])->name('ecommerce.sales.index');
     Route::get('/sales/animales/{id}', [EcommerceSalesController::class, 'show'])->name('ecommerce.sales.show');
 
