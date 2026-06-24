@@ -68,6 +68,10 @@ export default function SobreNosotros() {
                     <h1 className="max-w-2xl text-5xl font-extrabold leading-tight text-white md:text-6xl">
                         El mercado ganadero que Colombia necesitaba
                     </h1>
+
+                    <p className="mt-3 text-sm text-white/80">
+                       Descubre nuestra historia y misión
+                    </p>
                 </div>
             </section>
 

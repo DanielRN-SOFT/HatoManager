@@ -93,6 +93,9 @@ export default function Contacto() {
                     <h1 className="text-5xl font-extrabold text-white md:text-6xl">
                         Contáctanos
                     </h1>
+                    <p className="mt-3 text-sm text-white/80">
+                      Recibe más información sobre nosotros
+                    </p>
                 </div>
             </section>
 

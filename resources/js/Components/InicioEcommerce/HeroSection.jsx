@@ -6,9 +6,9 @@ const HeroSection = () => {
         <section className="relative flex h-[500px] items-center overflow-hidden">
             <div className="absolute inset-0 z-0">
                 <img
-                    src="/ganado-hero.png"
+                    src="/home.webp"
                     alt="Ganado de alta calidad"
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-fill"
                 />
                 <div className="absolute inset-0 bg-black/70" />
             </div>
