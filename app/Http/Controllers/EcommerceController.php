@@ -47,9 +47,7 @@ class EcommerceController extends Controller
     }
 
 
-    public function contact(){
-        return Inertia::render('Contacto/Index');
-    }
+  
     /**
      * Show the form for creating a new resource.
      */

@@ -11,6 +11,7 @@
     use App\Http\Controllers\FarmController;
     use App\Http\Controllers\HealthRecordController;
     use App\Http\Controllers\CartController;
+    use App\Http\Controllers\ContactController;
     use App\Http\Controllers\DashboardController;
     use App\Http\Controllers\PaddockController;
     use App\Http\Controllers\PermissionController;
@@ -25,12 +26,14 @@
     use App\Http\Controllers\UserController;
     use App\Http\Controllers\WeightMethodController;
     use App\Http\Controllers\WeightRecordController;
+    use App\Models\Contact;
     use App\Models\TypeGrass;
     use Inertia\Inertia;
 
     Route::get('/', [EcommerceController::class, 'index'])->name('ecommerce.index');
     Route::get("/about-us", [EcommerceController::class, 'aboutUs'])->name('ecommerce.aboutUs');
-    Route::get("/contact", [EcommerceController::class, 'contact']);
+    Route::get("/contact", [ContactController::class, 'index'])->name('contact.index');
+    Route::post("/contact", [ContactController::class, 'store'])->name('contact.store');
     Route::get('/sales', [EcommerceSalesController::class, 'index'])->name('ecommerce.sales.index');
     Route::get('/sales/animales/{id}', [EcommerceSalesController::class, 'show'])->name('ecommerce.sales.show');
 

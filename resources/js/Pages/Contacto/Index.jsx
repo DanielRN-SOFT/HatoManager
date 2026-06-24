@@ -1,5 +1,6 @@
+import ToastEcommerce from '@/Components/ToastEcommerce';
 import EcommerceLayout from '@/Layouts/EcommerceLayout';
-import { Head } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { useState } from 'react';
 
 const contactInfo = [
@@ -33,28 +34,44 @@ const topics = [
 ];
 
 export default function Contacto() {
-    const [form, setForm] = useState({
+    const { data, setData, post, processing, reset } = useForm({
         name: '',
         email: '',
         phone: '',
         topic: '',
         message: '',
     });
-    const [sent, setSent] = useState(false);
+    const [toast, setToast] = useState(null);
+    const [submitted, setSubmitted] = useState(false);
 
     function handleChange(e) {
-        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+        setData(e.target.name, e.target.value);
     }
 
     function handleSubmit(e) {
         e.preventDefault();
-        // Aquí iría router.post('/contacto', form, { ... })
-        setSent(true);
+        post(route('contact.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                setSubmitted(true);
+                setToast({
+                    type: 'success',
+                    message: 'Mensaje enviado correctamente',
+                });
+            },
+        });
     }
 
     return (
         <EcommerceLayout>
             <Head title="Contacto — HatoManager" />
+
+            {toast && (
+                <ToastEcommerce
+                    toast={toast}
+                    onDismiss={() => setToast(null)}
+                />
+            )}
 
             {/* ── Hero ── */}
             <section className="relative flex h-[400px] items-end overflow-hidden pb-14">
@@ -167,11 +184,11 @@ export default function Contacto() {
 
                     {/* Formulario */}
                     <div className="lg:col-span-2">
-                        {sent ? (
+                        {submitted ? (
                             <div className="flex h-full flex-col items-center justify-center rounded-2xl border border-outline-variant bg-white px-12 py-20 text-center">
                                 <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary-container">
                                     <span
-                                        className="material-symbols-outlined text-5xl text-primary"
+                                        className="material-symbols-outlined text-5xl text-white"
                                         style={{
                                             fontVariationSettings: "'FILL' 1",
                                         }}
@@ -185,24 +202,19 @@ export default function Contacto() {
                                 <p className="max-w-sm text-on-surface-variant">
                                     Gracias por escribirnos,{' '}
                                     <span className="font-semibold text-on-surface">
-                                        {form.name}
+                                        {data.name}
                                     </span>
                                     . Te responderemos a{' '}
                                     <span className="font-semibold text-on-surface">
-                                        {form.email}
+                                        {data.email}
                                     </span>{' '}
                                     en menos de 24 horas hábiles.
                                 </p>
                                 <button
                                     onClick={() => {
-                                        setSent(false);
-                                        setForm({
-                                            name: '',
-                                            email: '',
-                                            phone: '',
-                                            topic: '',
-                                            message: '',
-                                        });
+                                        reset();
+                                        setData({});
+                                        setSubmitted(false);
                                     }}
                                     className="mt-8 rounded-xl border border-outline-variant px-6 py-3 text-sm font-semibold text-on-surface transition-all hover:bg-surface-container"
                                 >
@@ -223,7 +235,7 @@ export default function Contacto() {
                                             <input
                                                 type="text"
                                                 name="name"
-                                                value={form.name}
+                                                value={data.name}
                                                 onChange={handleChange}
                                                 placeholder="Tu nombre"
                                                 required
@@ -237,7 +249,7 @@ export default function Contacto() {
                                             <input
                                                 type="email"
                                                 name="email"
-                                                value={form.email}
+                                                value={data.email}
                                                 onChange={handleChange}
                                                 placeholder="correo@ejemplo.com"
                                                 required
@@ -254,7 +266,7 @@ export default function Contacto() {
                                             <input
                                                 type="tel"
                                                 name="phone"
-                                                value={form.phone}
+                                                value={data.phone}
                                                 onChange={handleChange}
                                                 placeholder="+57 300 000 0000"
                                                 className="rounded-xl border border-outline-variant bg-surface-container px-4 py-3 text-sm text-on-surface placeholder:text-outline focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -266,7 +278,7 @@ export default function Contacto() {
                                             </label>
                                             <select
                                                 name="topic"
-                                                value={form.topic}
+                                                value={data.topic}
                                                 onChange={handleChange}
                                                 required
                                                 className="rounded-xl border border-outline-variant bg-surface-container px-4 py-3 text-sm text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -289,7 +301,7 @@ export default function Contacto() {
                                         </label>
                                         <textarea
                                             name="message"
-                                            value={form.message}
+                                            value={data.message}
                                             onChange={handleChange}
                                             rows={5}
                                             placeholder="Cuéntanos en qué podemos ayudarte..."
@@ -301,17 +313,20 @@ export default function Contacto() {
                                     <button
                                         onClick={handleSubmit}
                                         disabled={
-                                            !form.name ||
-                                            !form.email ||
-                                            !form.topic ||
-                                            !form.message
+                                            !data.name ||
+                                            !data.email ||
+                                            !data.topic ||
+                                            !data.message ||
+                                            processing
                                         }
                                         className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-on-primary shadow-sm shadow-primary/20 transition-all duration-150 hover:bg-primary-container hover:text-on-primary active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
                                     >
                                         <span className="material-symbols-outlined text-[18px]">
                                             send
                                         </span>
-                                        Enviar mensaje
+                                        {processing
+                                            ? 'Enviando...'
+                                            : 'Enviar mensaje'}
                                     </button>
 
                                     <p className="text-center text-xs text-on-surface-variant">
