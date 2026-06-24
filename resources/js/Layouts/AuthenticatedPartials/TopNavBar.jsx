@@ -2,7 +2,7 @@ import AnimalSearch from '@/Components/Shared/AnimalSearch';
 import NotificationBell from '@/Components/Shared/NotificationBell';
 import { router, usePage } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
-import { GiFarmTractor } from 'react-icons/gi';
+import { MdAgriculture } from 'react-icons/md';
 import UserDropdown from './UserDropDown';
 
 /* ══════════════════════════════════════════════════════════════
@@ -72,7 +72,7 @@ function FarmSelector() {
                 className="group flex items-center gap-1.5 rounded-lg px-2 py-1 transition-colors hover:bg-surface-container"
             >
                 <span className="text-[30px] text-primary">
-                    <GiFarmTractor />
+                    <MdAgriculture />
                 </span>
                 <h2 className="max-w-[180px] truncate text-base font-semibold text-on-surface">
                     {activeFarm ? activeFarm.name : 'Seleccionar finca'}
