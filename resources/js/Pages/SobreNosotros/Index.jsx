@@ -58,10 +58,11 @@ export default function SobreNosotros() {
                     <div className="absolute inset-0 bg-black/70" />
                 </div>
                 <div className="relative z-10 mx-auto w-full max-w-[1440px] px-8">
-                    <div className="flex w-1/6 items-center justify-center rounded-full bg-primary px-2 py-4 mb-2">
-                        <p className="font-bold uppercase tracking-widest text-white">
+                    <div className="inline-flex items-center gap-1.5 rounded-full border border-green-200 bg-green-50 px-4 py-1.5">
+                        <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                        <span className="whitespace-nowrap text-xs font-medium uppercase tracking-widest text-primary">
                             ¿Quiénes somos?
-                        </p>
+                        </span>
                     </div>
 
                     <h1 className="max-w-2xl text-5xl font-extrabold leading-tight text-white md:text-6xl">
