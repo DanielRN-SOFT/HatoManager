@@ -23,7 +23,7 @@ const HeroSection = () => {
                         país. Venta directa y segura para fortalecer tu hato.
                     </p>
                     <Link
-                        href={'/sales'}
+                        href={'/ventas'}
                         className="flex w-fit items-center gap-2 rounded-xl bg-primary px-8 py-4 text-lg font-bold text-on-primary transition-all hover:bg-primary-container"
                     >
                         Explorar Catálogo

@@ -4,7 +4,7 @@ const footerSections = [
     {
         title: 'Explorar',
         links: [
-            { href: '/sales', label: 'Ventas' },
+            { href: '/ventas', label: 'Ventas' },
             { href: '/ayuda', label: 'Ayuda' },
         ],
     },
