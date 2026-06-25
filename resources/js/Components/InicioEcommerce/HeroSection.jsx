@@ -3,12 +3,12 @@ import { MdOutlineArrowForward } from "react-icons/md";
 
 const HeroSection = () => {
     return (
-        <section className="relative flex h-[500px] items-center overflow-hidden">
+        <section className="relative flex h-[440px] items-center overflow-hidden">
             <div className="absolute inset-0 z-0">
                 <img
                     src="/home.webp"
                     alt="Ganado de alta calidad"
-                    className="h-full w-full object-fill"
+                    className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black/70" />
             </div>

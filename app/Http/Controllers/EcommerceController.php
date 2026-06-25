@@ -46,8 +46,12 @@ class EcommerceController extends Controller
         return Inertia::render('SobreNosotros/Index');
     }
 
+    public function termsUse()
+    {
+        return Inertia::render('TerminosUso/Index');
+    }
 
-  
+
     /**
      * Show the form for creating a new resource.
      */

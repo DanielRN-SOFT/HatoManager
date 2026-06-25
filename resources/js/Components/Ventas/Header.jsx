@@ -1,6 +1,6 @@
 const Header = ({ total = 0 }) => {
     return (
-        <section className="relative -mx-8 -mt-16 mb-12 flex h-[360px] items-end overflow-hidden pb-12">
+        <section className="relative -mx-8 -mt-16 mb-12 flex h-[400px] items-end overflow-hidden pb-12">
             <div className="absolute inset-0 z-0">
                 <img
                     src="/sales.jpg"

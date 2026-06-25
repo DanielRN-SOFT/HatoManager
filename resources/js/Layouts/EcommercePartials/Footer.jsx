@@ -13,7 +13,7 @@ const footerSections = [
         links: [
             { href: '/about-us', label: 'Sobre Nosotros' },
             { href: '/contacto', label: 'Contacto' },
-            { href: '/terminos', label: 'Términos de Uso' },
+            { href: '/terms-of-use', label: 'Términos de Uso' },
             { href: '/privacidad', label: 'Privacidad' },
         ],
     },

@@ -31,6 +31,7 @@
 
     Route::get('/', [EcommerceController::class, 'index'])->name('ecommerce.index');
     Route::get("/about-us", [EcommerceController::class, 'aboutUs'])->name('ecommerce.aboutUs');
+    Route::get("/terms-of-use", [EcommerceController::class, 'termsUse'])->name('ecommerce.termUse');
     Route::get("/contact", [ContactController::class, 'create'])->name('contact.create');
     Route::post("/contact", [ContactController::class, 'store'])->name('contact.store');
     Route::get('/sales', [EcommerceSalesController::class, 'index'])->name('ecommerce.sales.index');

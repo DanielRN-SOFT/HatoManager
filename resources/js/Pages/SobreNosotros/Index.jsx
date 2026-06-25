@@ -48,7 +48,7 @@ export default function SobreNosotros() {
             <Head title="Sobre Nosotros — HatoManager" />
 
             {/* ── Hero ── */}
-            <section className="relative flex h-[460px] items-end overflow-hidden pb-16">
+            <section className="relative flex h-[400px] items-end overflow-hidden pb-16">
                 <div className="absolute inset-0 z-0">
                     <img
                         src="/about-us.jpg"
