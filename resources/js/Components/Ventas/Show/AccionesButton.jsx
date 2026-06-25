@@ -72,7 +72,7 @@ const AccionesButton = ({ setToast, animal, cartItems }) => {
             )}
             {/* Botón secundario */}
             <Link
-                href="/sales"
+                href="/ventas"
                 className="flex w-full items-center justify-center gap-2 rounded-xl border border-outline-variant px-4 py-2.5 text-sm font-medium text-on-surface-variant transition-all duration-200 hover:border-outline hover:bg-surface-container hover:text-on-surface"
             >
                 <span className="material-symbols-outlined text-[18px]">

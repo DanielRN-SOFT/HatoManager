@@ -156,22 +156,28 @@ export default function Privacidad() {
             <Head title="Política de Privacidad — HatoManager" />
 
             {/* Hero */}
-            <section className="relative flex h-[300px] items-end overflow-hidden pb-14">
+            <section className="relative flex h-[400px] items-end overflow-hidden pb-14">
                 <div className="absolute inset-0 z-0">
                     <img
-                        src="/ganado-hero.png"
+                        src="/privacidad.jpg"
                         alt="Política de privacidad HatoManager"
                         className="h-full w-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/20" />
+                    <div className="absolute inset-0 bg-black/70" />
                 </div>
                 <div className="relative z-10 mx-auto w-full max-w-[1440px] px-8">
-                    <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-primary">
-                        Legal
-                    </p>
+                    <div className="inline-flex items-center gap-1.5 rounded-full border border-green-200 bg-green-50 px-4 py-1.5">
+                        <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary" />
+                        <span className="whitespace-nowrap text-xs font-medium uppercase tracking-widest text-primary">
+                            Legal
+                        </span>
+                    </div>
                     <h1 className="text-5xl font-extrabold text-white md:text-6xl">
                         Política de Privacidad
                     </h1>
+                    <p className="mt-3 text-sm text-white/80">
+                        Detalles de privacidad a tomar en cuenta en HatoManger
+                    </p>
                 </div>
             </section>
 

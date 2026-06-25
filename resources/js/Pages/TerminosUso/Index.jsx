@@ -273,8 +273,8 @@ export default function TerminosUso() {
                                 respondemos en menos de 24 horas hábiles.
                             </p>
                             <Link
-                                href="/contact"
-                                className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-primary transition-all hover:bg-primary-container"
+                                href="/contacto"
+                                className="inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-primary transition-all hover:bg-inverse-primary"
                             >
                                 <span className="material-symbols-outlined text-[18px]">
                                     mail

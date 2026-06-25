@@ -56,6 +56,10 @@ class EcommerceController extends Controller
         return Inertia::render('Privacidad/Index');
     }
 
+    public function help(){
+        return Inertia::render("Ayuda/Index");
+    }
+
 
     /**
      * Show the form for creating a new resource.
