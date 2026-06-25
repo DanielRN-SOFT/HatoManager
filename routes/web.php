@@ -30,8 +30,9 @@
     use Inertia\Inertia;
 
     Route::get('/', [EcommerceController::class, 'index'])->name('ecommerce.index');
-    Route::get("/sobre-nosotros", [EcommerceController::class, 'aboutUs'])->name('ecommerce.aboutUs');
-    Route::get("/terminos-de-uso", [EcommerceController::class, 'termsUse'])->name('ecommerce.termUse');
+    Route::get("/sobre-nosotros", [EcommerceController::class, 'aboutUs'])->name('ecommerce.about.us');
+    Route::get("/terminos-de-uso", [EcommerceController::class, 'termsUse'])->name('ecommerce.terms.use');
+    Route::get("/privacidad", [EcommerceController::class, 'privacity'])->name('ecommerce.privacity');
     Route::get("/contacto", [ContactController::class, 'create'])->name('contact.create');
     Route::post("/contact", [ContactController::class, 'store'])->name('contact.store');
     Route::get('/ventas', [EcommerceSalesController::class, 'index'])->name('ecommerce.sales.index');

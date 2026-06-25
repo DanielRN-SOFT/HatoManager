@@ -51,6 +51,11 @@ class EcommerceController extends Controller
         return Inertia::render('TerminosUso/Index');
     }
 
+    public function privacity()
+    {
+        return Inertia::render('Privacidad/Index');
+    }
+
 
     /**
      * Show the form for creating a new resource.
