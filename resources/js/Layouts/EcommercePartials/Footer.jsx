@@ -11,9 +11,9 @@ const footerSections = [
     {
         title: 'Compañía',
         links: [
-            { href: '/about-us', label: 'Sobre Nosotros' },
+            { href: '/sobre-nosotros', label: 'Sobre Nosotros' },
             { href: '/contacto', label: 'Contacto' },
-            { href: '/terms-of-use', label: 'Términos de Uso' },
+            { href: '/terminos-de-uso', label: 'Términos de Uso' },
             { href: '/privacidad', label: 'Privacidad' },
         ],
     },
