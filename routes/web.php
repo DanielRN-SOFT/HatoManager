@@ -31,7 +31,7 @@
 
     Route::get('/', [EcommerceController::class, 'index'])->name('ecommerce.index');
     Route::get("/about-us", [EcommerceController::class, 'aboutUs'])->name('ecommerce.aboutUs');
-    Route::get("/contact", [ContactController::class, 'index'])->name('contact.index');
+    Route::get("/contact", [ContactController::class, 'create'])->name('contact.create');
     Route::post("/contact", [ContactController::class, 'store'])->name('contact.store');
     Route::get('/sales', [EcommerceSalesController::class, 'index'])->name('ecommerce.sales.index');
     Route::get('/sales/animales/{id}', [EcommerceSalesController::class, 'show'])->name('ecommerce.sales.show');
@@ -86,6 +86,10 @@
         // Tipos de pasto
         Route::resource('/type-grasses', TypeGrassController::class);
         Route::put("/type-grasses/{id}/restore", [TypeGrassController::class, 'restore'])->name('type-grasses.restore');
+
+        // Informacion de contacto de clientes
+        Route::get('/admin/contact', [ContactController::class, 'index'])->name('contacts.index');
+        Route::delete('/admin/contact/{contact}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 
         // Permisos
         Route::resource('/permissions', PermissionController::class);

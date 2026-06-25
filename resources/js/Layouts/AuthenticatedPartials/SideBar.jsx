@@ -12,6 +12,7 @@ import {
     MdOutlineDashboardCustomize,
     MdOutlineHealthAndSafety,
     MdOutlineMedicalServices,
+    MdOutlineMessage,
     MdOutlineSell,
 } from 'react-icons/md';
 import { PiCow, PiCowFill } from 'react-icons/pi';
@@ -41,6 +42,12 @@ const NAV_ITEMS = [
         icon: <IoLockOpenOutline />,
         route: 'permissions.index',
         permission: 'gestionar permisos',
+    },
+    {
+        label: 'Contacto',
+        icon: <MdOutlineMessage />,
+        route: 'contacts.index',
+        permission: 'gestionar mensajes',
     },
 
     {
