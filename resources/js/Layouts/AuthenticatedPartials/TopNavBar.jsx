@@ -3,7 +3,7 @@ import NotificationBell from '@/Components/Shared/NotificationBell';
 import { router, usePage } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 import { MdAgriculture } from 'react-icons/md';
-import UserDropdown from './UserDropDown';
+import UserDropdown from './UserDropdown';
 
 /* ══════════════════════════════════════════════════════════════
  |  FarmSelector — dropdown para cambiar finca activa
