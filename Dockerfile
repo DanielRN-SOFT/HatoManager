@@ -1,99 +1,43 @@
-# ─── Stage 1: Node build (Vite + React) ─────────────────────────────────────
-FROM node:20-alpine AS node_builder
+FROM php:8.2-apache
 
-WORKDIR /app
+# Instala dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    git curl zip unzip libpng-dev libonig-dev libxml2-dev
 
-COPY package.json package-lock.json ./
-RUN npm ci --frozen-lockfile
+# Instala extensiones PHP que Laravel necesita
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-COPY . .
-RUN npm run build
+# Apuntar Apache a la carpeta public de Laravel
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
+# Habilitar mod_rewrite para que funcionen las rutas de Laravel
+RUN a2enmod rewrite
 
-# ─── Stage 2: PHP application ────────────────────────────────────────────────
-FROM php:8.2-fpm-alpine
+# Instala Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# ── System dependencies ──────────────────────────────────────────────────────
-RUN apk add --no-cache \
-    bash \
-    curl \
-    git \
-    unzip \
-    zip \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
-    freetype-dev \
-    libzip-dev \
-    oniguruma-dev \
-    icu-dev \
-    supervisor \
-    # Para spatie/laravel-medialibrary (optimización de imágenes)
-    jpegoptim \
-    optipng \
-    pngquant \
-    gifsicle \
-    # Para barryvdh/laravel-dompdf
-    fontconfig \
-    ttf-freefont
-
-# ── Extensiones PHP ──────────────────────────────────────────────────────────
-RUN docker-php-ext-configure gd \
-        --with-freetype \
-        --with-jpeg \
-        --with-webp \
-    && docker-php-ext-install -j$(nproc) \
-        bcmath \
-        exif \
-        gd \
-        intl \
-        mbstring \
-        opcache \
-        pdo \
-        pdo_mysql \
-        pcntl \
-        zip
-
-# ── Composer ─────────────────────────────────────────────────────────────────
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# ── Directorio de trabajo ─────────────────────────────────────────────────────
+# Directorio de trabajo
 WORKDIR /var/www/html
 
-# ── Dependencias PHP (solo producción) ───────────────────────────────────────
-COPY composer.json composer.lock ./
-RUN composer install \
-    --no-dev \
-    --no-scripts \
-    --no-autoloader \
-    --prefer-dist \
-    --optimize-autoloader
+# Copia el proyecto
+COPY . /var/www/html/
 
-# ── Código fuente ─────────────────────────────────────────────────────────────
-COPY . .
+# Instala Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
-# ── Assets compilados desde el stage Node ────────────────────────────────────
-COPY --from=node_builder /app/public/build ./public/build
+# Instala dependencias de Laravel
+RUN composer install --optimize-autoloader
 
-# ── Autoloader final + optimizaciones Laravel ────────────────────────────────
-RUN composer dump-autoload --optimize \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
-    && php artisan event:cache
+# Compila assets de Vite
+RUN npm install && npm run build
 
-# ── Permisos ─────────────────────────────────────────────────────────────────
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+# Permisos
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# ── Supervisor: PHP-FPM + Queue Worker + Reverb ──────────────────────────────
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# Entrypoint: crea symlink y ajusta permisos en cada arranque
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# ── PHP-FPM config (escuchar en socket TCP para Nginx externo) ───────────────
-RUN sed -i 's|listen = 127.0.0.1:9000|listen = 9000|g' \
-    /usr/local/etc/php-fpm.d/www.conf
-
-EXPOSE 9000
-
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["apache2-foreground"]
