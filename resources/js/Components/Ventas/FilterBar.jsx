@@ -43,19 +43,47 @@ const FilterBar = ({
     }
 
     const selectClass =
-        'w-full bg-surface-container border border-outline-variant rounded-xl text-sm py-2 px-3 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer';
+        'w-full rounded-xl border border-outline-variant bg-surface-container px-4 py-3 text-sm text-on-surface focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer';
 
     const labelClass =
-        'block text-xs font-semibold text-on-surface-variant mb-1.5 uppercase tracking-wider';
+        'mb-1.5 block text-xs font-semibold uppercase tracking-wider text-on-surface-variant';
 
     const pesoActivo = filters.peso && Number(filters.peso) < Number(maxWeight);
     const precioActivo =
         filters.precio && Number(filters.precio) < Number(maxPrice);
 
     return (
-        <section className="mb-8 rounded-2xl border border-outline-variant bg-surface-container-lowest p-5">
+        <section className="mb-5 rounded-2xl border border-outline-variant bg-white p-8">
+            <div className="mb-2 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container text-on-primary-container">
+                        <span
+                            className="material-symbols-outlined text-xl"
+                            style={{ fontVariationSettings: "'FILL' 1" }}
+                        >
+                            tune
+                        </span>
+                    </div>
+                    <h2 className="text-lg font-bold text-on-surface">
+                        Filtrar resultados
+                    </h2>
+                </div>
+
+                {hayFiltros && (
+                    <button
+                        onClick={onClear}
+                        className="flex items-center gap-1.5 rounded-xl border border-outline-variant px-4 py-2 text-sm font-semibold text-on-surface transition-colors hover:border-error hover:bg-error-container hover:text-on-error-container"
+                    >
+                        <span className="material-symbols-outlined text-[18px]">
+                            filter_alt_off
+                        </span>
+                        Limpiar filtros
+                    </button>
+                )}
+            </div>
+
             {/* Fila 1: selects */}
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 <div>
                     <label className={labelClass}>Raza</label>
                     <select
@@ -122,10 +150,13 @@ const FilterBar = ({
                 </div>
             </div>
 
-            {/* Fila 2: sliders + botón limpiar */}
-            <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end">
+            {/* Separador */}
+            <div className="my-6 h-px bg-outline-variant" />
+
+            {/* Fila 2: sliders */}
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
                 {/* Peso */}
-                <div className="flex-1">
+                <div>
                     <label className={labelClass}>
                         Peso máx:{' '}
                         <span className="text-primary">
@@ -143,14 +174,14 @@ const FilterBar = ({
                         onTouchEnd={commitPeso}
                         className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-surface-container-high accent-primary"
                     />
-                    <div className="mt-1 flex justify-between text-[10px] text-outline">
+                    <div className="mt-1.5 flex justify-between text-[10px] text-outline">
                         <span>{minWeight} kg</span>
                         <span>{maxWeight} kg</span>
                     </div>
                 </div>
 
                 {/* Precio */}
-                <div className="flex-1">
+                <div>
                     <label className={labelClass}>
                         Precio máx:{' '}
                         <span className="text-primary">
@@ -170,23 +201,11 @@ const FilterBar = ({
                         onTouchEnd={commitPrecio}
                         className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-surface-container-high accent-primary"
                     />
-                    <div className="mt-1 flex justify-between text-[10px] text-outline">
+                    <div className="mt-1.5 flex justify-between text-[10px] text-outline">
                         <span>${Number(minPrice).toLocaleString('es-CO')}</span>
                         <span>${Number(maxPrice).toLocaleString('es-CO')}</span>
                     </div>
                 </div>
-
-                {/* Botón limpiar */}
-                {hayFiltros && (
-                    <div className="sm:w-40">
-                        <button
-                            onClick={onClear}
-                            className="w-full rounded-xl border border-outline-variant bg-surface-container px-4 py-2 text-sm font-medium text-on-surface transition-colors hover:border-error hover:bg-error-container hover:text-on-error-container"
-                        >
-                            Limpiar filtros
-                        </button>
-                    </div>
-                )}
             </div>
         </section>
     );

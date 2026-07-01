@@ -3,10 +3,10 @@ import { MdOutlineArrowForward } from "react-icons/md";
 
 const HeroSection = () => {
     return (
-        <section className="relative flex h-[500px] items-center overflow-hidden">
+        <section className="relative flex h-[440px] items-center overflow-hidden">
             <div className="absolute inset-0 z-0">
                 <img
-                    src="/ganado-hero.png"
+                    src="/home.webp"
                     alt="Ganado de alta calidad"
                     className="h-full w-full object-cover"
                 />
@@ -23,7 +23,7 @@ const HeroSection = () => {
                         país. Venta directa y segura para fortalecer tu hato.
                     </p>
                     <Link
-                        href={'/sales'}
+                        href={'/ventas'}
                         className="flex w-fit items-center gap-2 rounded-xl bg-primary px-8 py-4 text-lg font-bold text-on-primary transition-all hover:bg-primary-container"
                     >
                         Explorar Catálogo

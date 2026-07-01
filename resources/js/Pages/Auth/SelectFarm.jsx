@@ -1,6 +1,7 @@
 import CardFarm from '@/Components/Auth/CardFarm';
 import { Head, useForm } from '@inertiajs/react';
 import { useState } from 'react';
+import { IoSearch } from 'react-icons/io5';
 
 const SelectFarm = ({ farms }) => {
     const [selectedFarm, setSelectedFarm] = useState(null);
@@ -42,7 +43,7 @@ const SelectFarm = ({ farms }) => {
             {/* Search input */}
             <div className="relative mb-6 w-full">
                 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">
-                    search
+                    <IoSearch/>
                 </span>
                 <input
                     type="text"

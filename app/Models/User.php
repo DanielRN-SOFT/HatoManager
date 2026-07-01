@@ -7,7 +7,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\URL;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -62,5 +65,63 @@ class User extends Authenticatable implements MustVerifyEmail
     public function farms()
     {
         return $this->belongsToMany(Farm::class);
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $url = route('password.reset', [
+            'token' => $token,
+            'email' => $this->getEmailForPasswordReset(),
+        ]);
+
+        $this->notify(new class($url) extends Notification {
+            public function __construct(public string $url) {}
+
+            public function via($notifiable): array
+            {
+                return ['mail'];
+            }
+
+            public function toMail($notifiable): MailMessage
+            {
+                return (new MailMessage)
+                    ->subject('Restablecer contraseña — HatoManager')
+                    ->view('emails.reset-password', [
+                        'notifiable' => $notifiable,
+                        'url'        => $this->url,
+                    ]);
+            }
+        });
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $url = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id'   => $this->getKey(),
+                'hash' => sha1($this->getEmailForVerification()),
+            ]
+        );
+
+        $this->notify(new class($url) extends Notification {
+            public function __construct(public string $url) {}
+
+            public function via($notifiable): array
+            {
+                return ['mail'];
+            }
+
+            public function toMail($notifiable): MailMessage
+            {
+                return (new MailMessage)
+                    ->subject('Verifica tu correo electrónico — HatoManager')
+                    ->view('emails.verify-email', [
+                        'notifiable' => $notifiable,
+                        'url'        => $this->url,
+                    ]);
+            }
+        });
     }
 }

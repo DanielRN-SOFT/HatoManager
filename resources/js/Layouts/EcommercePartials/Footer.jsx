@@ -4,16 +4,16 @@ const footerSections = [
     {
         title: 'Explorar',
         links: [
-            { href: '/vendedores', label: 'Vendedores Destacados' },
+            { href: '/ventas', label: 'Ventas' },
             { href: '/ayuda', label: 'Ayuda' },
         ],
     },
     {
         title: 'Compañía',
         links: [
-            { href: '/nosotros', label: 'Sobre Nosotros' },
+            { href: '/sobre-nosotros', label: 'Sobre Nosotros' },
             { href: '/contacto', label: 'Contacto' },
-            { href: '/terminos', label: 'Términos de Uso' },
+            { href: '/terminos-de-uso', label: 'Términos de Uso' },
             { href: '/privacidad', label: 'Privacidad' },
         ],
     },

@@ -6,7 +6,9 @@ import { Link, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 const navLinks = [
-    { href: '/sales', label: 'Ventas' },
+    { href: '/sobre-nosotros', label: 'Sobre nosotros' },
+    { href: '/contacto', label: 'Contacto' },
+    { href: '/ventas', label: 'Ventas' },
 ];
 
 function getInitials(name) {

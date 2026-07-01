@@ -1,3 +1,5 @@
+import { MdAgriculture } from "react-icons/md";
+
 const CardFarm = ({ farm, selected, onSelect, animals }) => {
     const { name, city, department } = farm;
 
@@ -8,9 +10,7 @@ const CardFarm = ({ farm, selected, onSelect, animals }) => {
         >
             <div className="flex items-center gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-surface-container text-primary">
-                    <span className="material-symbols-outlined text-3xl">
-                        agriculture
-                    </span>
+                   <MdAgriculture className="text-3xl"/>
                 </div>
                 <div>
                     <h3 className="text-lg font-bold leading-tight text-primary">

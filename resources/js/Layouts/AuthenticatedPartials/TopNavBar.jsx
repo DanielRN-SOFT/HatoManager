@@ -1,8 +1,9 @@
+import AnimalSearch from '@/Components/Shared/AnimalSearch';
 import NotificationBell from '@/Components/Shared/NotificationBell';
 import { router, usePage } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
-import { GiFarmTractor } from 'react-icons/gi';
-import UserDropdown from './UserDropDown';
+import { MdAgriculture } from 'react-icons/md';
+import UserDropdown from './UserDropdown';
 
 /* ══════════════════════════════════════════════════════════════
  |  FarmSelector — dropdown para cambiar finca activa
@@ -71,7 +72,7 @@ function FarmSelector() {
                 className="group flex items-center gap-1.5 rounded-lg px-2 py-1 transition-colors hover:bg-surface-container"
             >
                 <span className="text-[30px] text-primary">
-                    <GiFarmTractor />
+                    <MdAgriculture />
                 </span>
                 <h2 className="max-w-[180px] truncate text-base font-semibold text-on-surface">
                     {activeFarm ? activeFarm.name : 'Seleccionar finca'}
@@ -173,18 +174,7 @@ const TopNavBar = ({ user, onMenuOpen, sidebarWidth }) => {
             <FarmSelector />
 
             {/* Search */}
-            <div className="mx-4 hidden max-w-sm flex-1 sm:block">
-                <div className="relative flex items-center">
-                    <span className="material-symbols-outlined absolute left-3 text-[18px] text-on-surface-variant">
-                        search
-                    </span>
-                    <input
-                        type="text"
-                        placeholder="Buscar animal, arete o lote…"
-                        className="w-full rounded-full border border-transparent bg-surface-container-low py-2 pl-9 pr-4 text-sm transition-all duration-200 placeholder:text-on-surface-variant/60 focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
-                </div>
-            </div>
+            <AnimalSearch />
 
             {/* Right actions */}
             <div className="flex items-center gap-2">

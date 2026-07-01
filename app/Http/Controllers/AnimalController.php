@@ -232,4 +232,26 @@ class AnimalController extends Controller
             'precio_por_kg'    => (float) $animal->price_weight,
         ];
     }
+
+    public function search(Request $request)
+    {
+        $farm_id = session('active_farm_id');
+        $q = $request->input('q', '');
+
+        if (blank($q)) {
+            return response()->json([]);
+        }
+
+        $animals = Animal::query()
+            ->where('farm_id', $farm_id)
+            ->where(function ($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                    ->orWhere('ear_tag', 'like', "%{$q}%");  // ← era 'tag', debe ser 'ear_tag'
+            })
+            ->select('id', 'name', 'ear_tag', 'status')  // ← columnas reales
+            ->limit(8)
+            ->get();
+
+        return response()->json($animals);
+    }
 }

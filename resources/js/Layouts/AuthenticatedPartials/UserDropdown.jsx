@@ -1,6 +1,5 @@
 import { Link } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
-import { IoSettings } from 'react-icons/io5';
 import { MdOutlineLocalGroceryStore, MdOutlineManageAccounts, MdOutlineSettings } from 'react-icons/md';
 const UserDropdown = ({ user }) => {
     const [open, setOpen] = useState(false);

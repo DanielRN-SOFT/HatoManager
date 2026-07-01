@@ -1,11 +1,11 @@
 import CatalogCard from '@/Components/InicioEcommerce/CatalogoCard';
 import HeroSection from '@/Components/InicioEcommerce/HeroSection';
-import NewsLetter from '@/Components/InicioEcommerce/NewsLetter';
 import TrustSection from '@/Components/InicioEcommerce/TrustSection';
 import ToastEcommerce from '@/Components/ToastEcommerce';
 import EcommerceLayout from '@/Layouts/EcommerceLayout';
 import { Head, router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import WhyChooseUs from '@/Components/InicioEcommerce/WhyChooseUs';
 
 export default function Index({ animals, cartItems = [] }) {
     const { auth } = usePage().props;
@@ -76,7 +76,7 @@ export default function Index({ animals, cartItems = [] }) {
             <TrustSection />
 
             {/* ── Newsletter ── */}
-            <NewsLetter />
+            <WhyChooseUs />
 
             {toast && (
               <ToastEcommerce toast={toast}/>
