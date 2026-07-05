@@ -157,6 +157,7 @@ function FarmSelector() {
 const TopNavBar = ({ user, onMenuOpen, sidebarWidth }) => {
     const { auth } = usePage().props;
     const role = auth.user?.roles?.[0]?.name ?? null;
+    console.log(role);
     return (
         <header
             className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between border-b border-outline-variant bg-surface px-4 sm:px-6"
@@ -176,7 +177,7 @@ const TopNavBar = ({ user, onMenuOpen, sidebarWidth }) => {
                 <FarmSelector />
 
                 {/* Search */}
-                {role === 'Ganadero' && <AnimalSearch />}
+                {role === 'ganadero' && <AnimalSearch />}
             </div>
 
             {/* Right actions: siempre pegado al extremo derecho */}
