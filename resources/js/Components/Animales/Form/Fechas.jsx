@@ -19,6 +19,7 @@ const Fechas = ({ errors, data, setData, inputCls }) => {
                     error={errors.birth_date}
                 >
                     <input
+                        max={new Date().toISOString().split('T')[0]}
                         type="date"
                         value={data.birth_date?.split('T')[0] ?? ''}
                         onChange={(e) => setData('birth_date', e.target.value)}

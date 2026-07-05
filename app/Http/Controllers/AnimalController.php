@@ -94,6 +94,7 @@ class AnimalController extends Controller
 
     public function edit(Animal $animal)
     {
+        $farm_id = session('active_farm_id');
         return Inertia::render('Animales/Edit', [
             'animal' => [
                 ...$animal->load('breed', 'animalCategory')->toArray(),
