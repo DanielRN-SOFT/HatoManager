@@ -85,7 +85,7 @@ export default function AnimalSearch() {
         setQuery('');
         router.visit(route('animals.show', animal.id));
     }
-    
+
     const statusColors = {
         activo: 'bg-green-50 text-green-700',
         vendido: 'bg-surface-container text-on-surface-variant',

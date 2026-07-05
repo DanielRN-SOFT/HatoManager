@@ -18,7 +18,6 @@ function FarmSelector() {
     const role = auth.user?.roles?.[0]?.name ?? null;
     const canSelect = role === 'ganadero' || role === 'veterinario';
 
-    // Cerrar al hacer clic fuera
     useEffect(() => {
         function handleClickOutside(e) {
             if (ref.current && !ref.current.contains(e.target)) {
@@ -30,7 +29,6 @@ function FarmSelector() {
             document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // Cargar fincas del usuario al abrir
     async function handleOpen() {
         if (open) {
             setOpen(false);
@@ -157,27 +155,32 @@ function FarmSelector() {
  |  TopNavBar
  ╚═════════════════════════════════════════════════════════════ */
 const TopNavBar = ({ user, onMenuOpen, sidebarWidth }) => {
+    const { auth } = usePage().props;
+    const role = auth.user?.roles?.[0]?.name ?? null;
     return (
         <header
             className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between border-b border-outline-variant bg-surface px-4 sm:px-6"
             style={{ paddingLeft: sidebarWidth }}
         >
-            {/* Mobile hamburger */}
-            <button
-                onClick={onMenuOpen}
-                className="rounded-lg p-2 text-on-surface-variant transition-colors hover:bg-surface-container lg:hidden"
-            >
-                <span className="material-symbols-outlined">menu</span>
-            </button>
+            {/* Lado izquierdo: hamburguesa + selector de finca + búsqueda */}
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+                {/* Mobile hamburger */}
+                <button
+                    onClick={onMenuOpen}
+                    className="rounded-lg p-2 text-on-surface-variant transition-colors hover:bg-surface-container lg:hidden"
+                >
+                    <span className="material-symbols-outlined">menu</span>
+                </button>
 
-            {/* Farm selector */}
-            <FarmSelector />
+                {/* Farm selector */}
+                <FarmSelector />
 
-            {/* Search */}
-            <AnimalSearch />
+                {/* Search */}
+                {role === 'Ganadero' && <AnimalSearch />}
+            </div>
 
-            {/* Right actions */}
-            <div className="flex items-center gap-2">
+            {/* Right actions: siempre pegado al extremo derecho */}
+            <div className="flex shrink-0 items-center gap-2">
                 <NotificationBell />
                 <UserDropdown user={user} />
             </div>

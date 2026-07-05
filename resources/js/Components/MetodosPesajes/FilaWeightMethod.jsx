@@ -48,7 +48,8 @@ const FilaWeightMethod = ({
 
             {/* Creado */}
             <td className="px-4 py-3 text-sm tabular-nums text-gray-400">
-                {method.created_at}
+                {new Date(method.created_at).toLocaleDateString()} -{' '}
+                {new Date(method.created_at).toLocaleTimeString()}
             </td>
 
             {/* Acciones */}
