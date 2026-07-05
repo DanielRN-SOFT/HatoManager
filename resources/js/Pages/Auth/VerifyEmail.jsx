@@ -29,7 +29,7 @@ export default function VerifyEmail({ status }) {
 
             {/* Descripción */}
             <div className="mx-8 mb-5 rounded-lg bg-gray-100 px-4 py-3 text-sm text-on-secondary-container shadow-sm">
-                ¡Gracias por registrarte como <span className='font-bold'>comprador</span>! Antes de
+                ¡Gracias por registrarte. Antes de
                 comenzar, verifica tu correo electrónico haciendo clic en el
                 enlace que te enviamos. Si no lo recibiste, con gusto te
                 enviaremos otro.

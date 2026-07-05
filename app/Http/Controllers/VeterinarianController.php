@@ -240,13 +240,22 @@ class VeterinarianController extends Controller
      |  CANCEL INVITATION — Ganadero cancela una invitación pendiente
      |  DELETE /invitaciones/{invitation}/cancelar
      ╚═════════════════════════════════════════════════════════ */
-    public function cancelInvitation(VeterinarianInvitation $invitation): RedirectResponse
+
+
+    public function cancelInvitation(VeterinarianInvitation $invitation)
     {
         $ganadero = Auth::user();
 
         // Solo el ganadero que la creó puede cancelarla
         abort_unless($invitation->invited_by === $ganadero->id, 403);
-        abort_unless($invitation->isPending(), 422, 'Esta invitación ya fue procesada.');
+
+        // Si ya fue procesada, mostramos una vista dedicada en vez de abortar feo
+        if (! $invitation->isPending()) {
+            return Inertia::render('Invitations/AlreadyProcessed', [
+                'email'  => $invitation->email,
+                'status' => $invitation->status,
+            ]);
+        }
 
         $invitation->update(['status' => 'expired']);
 
