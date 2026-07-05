@@ -1,15 +1,35 @@
 import Dropdown from '@/Components/Dropdown';
 import { useRole } from '@/hooks/useRole';
+
 const Perfil = ({ getInitials, user, isGanadero }) => {
-    const { isComprador } = useRole();
+    const { isComprador, isVeterinario } = useRole();
+
     return (
         <Dropdown>
             <Dropdown.Trigger>
                 <button
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-on-primary ring-2 ring-transparent transition-all hover:opacity-90 hover:ring-primary/30"
+                    className="group flex items-center gap-2.5 rounded-lg border-l border-outline-variant px-2 py-1.5 pl-4 transition-colors duration-150 hover:bg-surface-container"
                     aria-label="Menú de usuario"
                 >
-                    {getInitials(user.name)}
+                    <div className="hidden text-right sm:block">
+                        <p className="text-sm font-semibold leading-none text-on-surface">
+                            {user.name}
+                        </p>
+                        <p className="mt-0.5 text-xs text-on-surface-variant">
+                            {user.email}
+                        </p>
+                    </div>
+
+                    <div
+                        className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-on-primary ring-2 ring-transparent transition-all group-hover:opacity-90"
+                        aria-hidden="true"
+                    >
+                        {getInitials(user.name)}
+                    </div>
+
+                    <span className="material-symbols-outlined text-[18px] text-on-surface-variant transition-transform duration-300">
+                        expand_more
+                    </span>
                 </button>
             </Dropdown.Trigger>
 
@@ -40,6 +60,18 @@ const Perfil = ({ getInitials, user, isGanadero }) => {
                                 dashboard
                             </span>
                             Dashboard
+                        </Dropdown.Link>
+                    )}
+
+                    {isVeterinario && (
+                        <Dropdown.Link
+                            href="/animals"
+                            className="flex items-center gap-2.5"
+                        >
+                            <span className="material-symbols-outlined text-[17px] text-on-surface-variant">
+                                pets
+                            </span>
+                            Animales
                         </Dropdown.Link>
                     )}
 

@@ -1,11 +1,24 @@
 import { Link } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
-import { MdOutlineLocalGroceryStore, MdOutlineManageAccounts, MdOutlineSettings } from 'react-icons/md';
+import {
+    MdOutlineLocalGroceryStore,
+    MdOutlineManageAccounts,
+    MdOutlineSettings,
+} from 'react-icons/md';
+
+const getInitials = (name = '') => {
+    return name
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((part) => part[0]?.toUpperCase())
+        .join('');
+};
+
 const UserDropdown = ({ user }) => {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
 
-    // Cerrar al hacer click fuera
     useEffect(() => {
         function handleClickOutside(e) {
             if (ref.current && !ref.current.contains(e.target)) setOpen(false);
@@ -29,14 +42,14 @@ const UserDropdown = ({ user }) => {
                         {user.email}
                     </p>
                 </div>
-                <div className="relative">
-                    <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-primary-fixed ring-2 ring-primary-fixed">
-                        <span className="material-symbols-outlined text-[20px] text-primary">
-                            person
-                        </span>
-                    </div>
-                    <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-surface bg-green-500" />
+
+                <div
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-bold text-on-primary ring-2 ring-transparent transition-all group-hover:opacity-90"
+                    aria-hidden="true"
+                >
+                    {getInitials(user.name)}
                 </div>
+
                 <span
                     className={[
                         'material-symbols-outlined text-[18px] text-on-surface-variant',
