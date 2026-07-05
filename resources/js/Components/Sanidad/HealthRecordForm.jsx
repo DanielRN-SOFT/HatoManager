@@ -99,6 +99,7 @@ export default function HealthRecordForm({
                         Fecha de aplicación
                     </label>
                     <input
+                        max={new Date().toISOString().split('T')[0]}
                         type="date"
                         value={data.applied_at}
                         onChange={(e) => setData('applied_at', e.target.value)}
@@ -119,6 +120,13 @@ export default function HealthRecordForm({
                         </span>
                     </label>
                     <input
+                        min={
+                            new Date(
+                                new Date().setDate(new Date().getDate() + 1),
+                            )
+                                .toISOString()
+                                .split('T')[0]
+                        }
                         type="date"
                         value={data.next_date}
                         onChange={(e) => setData('next_date', e.target.value)}
