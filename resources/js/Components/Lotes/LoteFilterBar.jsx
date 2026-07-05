@@ -1,10 +1,11 @@
 import { router } from '@inertiajs/react';
 import { useState } from 'react';
 
-const LoteFilterBar = ({ filters }) => {
+const LoteFilterBar = ({ filters, typeGrasses = [] }) => {
     const [form, setForm] = useState({
         search: filters.search ?? '',
         status: filters.status ?? '',
+        type_grass_id: filters.type_grass_id ?? '',
     });
 
     const hasActiveFilters = Object.values(form).some(Boolean);
@@ -19,7 +20,7 @@ const LoteFilterBar = ({ filters }) => {
     }
 
     function handleClear() {
-        const empty = { search: '', status: '' };
+        const empty = { search: '', status: '', type_grass_id: '' };
         setForm(empty);
         router.get(
             route('paddocks.index'),
@@ -58,7 +59,7 @@ const LoteFilterBar = ({ filters }) => {
                 )}
             </div>
 
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 {/* Búsqueda */}
                 <FilterField label="Nombre - Area - Capacidad" icon="search">
                     <span className="material-symbols-outlined text-[16px] text-gray-400">
@@ -93,6 +94,24 @@ const LoteFilterBar = ({ filters }) => {
                         <option value="">Todos</option>
                         <option value="active">Activos</option>
                         <option value="deleted">Eliminados</option>
+                    </select>
+                </FilterField>
+
+                {/* Tipo de pasto */}
+                <FilterField label="Tipo de Pasto" icon="grass">
+                    <select
+                        value={form.type_grass_id}
+                        onChange={(e) =>
+                            handleChange('type_grass_id', e.target.value)
+                        }
+                        className="field-input cursor-pointer"
+                    >
+                        <option value="">Todos</option>
+                        {typeGrasses.map((tg) => (
+                            <option key={tg.id} value={tg.id}>
+                                {tg.name}
+                            </option>
+                        ))}
                     </select>
                 </FilterField>
             </div>

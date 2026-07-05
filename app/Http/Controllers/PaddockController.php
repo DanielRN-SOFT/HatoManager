@@ -17,15 +17,21 @@ class PaddockController extends Controller
     public function index(Request $request)
     {
         $farm_id = session('active_farm_id');
+
         $paddoks = Paddock::where('farm_id', $farm_id)
             ->withTrashed()
             ->when($request->search, function ($q) use ($request) {
                 $q->where(function ($query) use ($request) {
                     $query->where('name', 'like', "%{$request->search}%")
                         ->orWhere('area', 'like', "%{$request->search}%")
-                        ->orWhere('type_of_grass', 'like', "%{$request->search}%")
-                        ->orWhere('capacity', 'like', "%{$request->search}%");
+                        ->orWhere('capacity', 'like', "%{$request->search}%")
+                        ->orWhereHas('typeGrass', function ($tg) use ($request) {
+                            $tg->where('name', 'like', "%{$request->search}%");
+                        });
                 });
+            })
+            ->when($request->type_grass_id, function ($q) use ($request) {
+                $q->where('type_grass_id', $request->type_grass_id);
             })
             ->when($request->status === 'active', fn($q) => $q->whereNull('deleted_at'))
             ->when($request->status === 'deleted', fn($q) => $q->whereNotNull('deleted_at'))
@@ -34,12 +40,11 @@ class PaddockController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-
         $typeGrasses = TypeGrass::all();
 
         return Inertia::render('Lotes/Index', [
             'paddocks' => $paddoks,
-            'filters' => $request->only(['search', 'status']),
+            'filters' => $request->only(['search', 'status', 'type_grass_id']),
             'typeGrasses' => $typeGrasses
         ]);
     }

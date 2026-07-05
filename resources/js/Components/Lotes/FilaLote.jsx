@@ -81,7 +81,7 @@ const FilaLote = ({ paddock, index, setModalEditar, setModalEliminar }) => {
                         {animalCount === 1 ? 'animal' : 'animales'}
                     </span>
                 ) : (
-                    <span className="text-xs text-gray-400">Sin animalaes</span>
+                    <span className="text-xs text-gray-400">Sin animales</span>
                 )}
             </td>
 

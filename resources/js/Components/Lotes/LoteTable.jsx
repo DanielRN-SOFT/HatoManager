@@ -79,7 +79,7 @@ const LoteTable = ({ paddocks, typeGrasses }) => {
                                             search_off
                                         </span>
                                         <p className="text-sm">
-                                            No hay métodos de pesaje que
+                                            No hay lotes que
                                             coincidan con los filtros.
                                         </p>
                                     </div>

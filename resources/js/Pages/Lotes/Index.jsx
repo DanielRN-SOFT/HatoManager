@@ -61,7 +61,7 @@ export default function Index({ paddocks, filters, typeGrasses }) {
             </Modal>
 
             <div className="space-y-4">
-                <LoteFilterBar filters={filters} />
+                <LoteFilterBar typeGrasses={typeGrasses} filters={filters} />
                 <LoteTable typeGrasses={typeGrasses} paddocks={paddocks} />
             </div>
         </AuthenticatedLayout>
