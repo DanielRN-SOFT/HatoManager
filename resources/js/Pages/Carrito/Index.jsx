@@ -234,7 +234,7 @@ export default function CartIndex({ grupos, total, count }) {
                             Tu carrito está vacío
                         </p>
                         <button
-                            onClick={() => router.visit('/sales')}
+                            onClick={() => router.visit('/ventas')}
                             className="rounded-xl bg-primary px-6 py-2.5 text-sm font-bold text-on-primary transition-all hover:bg-primary-container"
                         >
                             Ver animales en venta
