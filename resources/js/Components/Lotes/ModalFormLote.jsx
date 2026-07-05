@@ -140,7 +140,7 @@ const ModalFormLote = ({ paddock = null, onClose, typeGrasses }) => {
                             <span className="material-symbols-outlined text-[13px] text-primary">
                                 high_density
                             </span>
-                            Capacidad
+                            Capacidad de animales
                         </label>
                         <input
                             type="number"
@@ -148,7 +148,7 @@ const ModalFormLote = ({ paddock = null, onClose, typeGrasses }) => {
                             onChange={(e) =>
                                 setData('capacity', e.target.value)
                             }
-                            placeholder="Ej. Corral 23"
+                            placeholder="Ej. 20"
                             className={`w-full rounded-xl border px-3 py-2 text-sm outline-none transition focus:border-primary focus:ring-1 focus:ring-primary ${
                                 errors.capacity
                                     ? 'border-red-400'
