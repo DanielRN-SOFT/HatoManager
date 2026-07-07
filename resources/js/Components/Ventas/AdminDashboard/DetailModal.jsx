@@ -1,12 +1,28 @@
 import Modal from '@/Components/Modal';
 import formatearDinero from '@/helpers/formatearDinero';
-import formatDate from '@/helpers/formatearFecha';
+import formatDateTime from '@/helpers/formatearFechaHora';
+import { router } from '@inertiajs/react';
+import { useState } from 'react';
 import { PiXBold } from 'react-icons/pi';
 import InfoItem from './InfoItem';
 import Pill from './Pill';
-import formatDateTime from '@/helpers/formatearFechaHora';
 
 const DetailModal = ({ order, mode, onClose, BIZ_STYLES, PAY_STYLES }) => {
+    const [loading, setLoading] = useState(null); // `${animal_order_id}-confirm|reject`
+
+    function act(animalOrderId, action) {
+        setLoading(`${animalOrderId}-${action}`);
+        router.post(
+            `/seller/animal-order/${animalOrderId}/${action}`,
+            {},
+            {
+                preserveScroll: true,
+                preserveState: true,
+                onFinish: () => setLoading(null),
+            },
+        );
+    }
+
     const TX_STYLES = {
         aprobada: 'bg-emerald-50 text-emerald-700',
         pendiente: 'bg-amber-50 text-amber-700',
@@ -165,63 +181,140 @@ const DetailModal = ({ order, mode, onClose, BIZ_STYLES, PAY_STYLES }) => {
                                     Animales incluidos
                                 </p>
                                 <div className="space-y-2">
-                                    {order.animals.map((a) => (
-                                        <div
-                                            key={a.id}
-                                            className="grid grid-cols-2 gap-3 rounded-xl border border-gray-100 bg-gray-50 p-4 sm:grid-cols-3"
-                                        >
-                                            <InfoItem
-                                                label="Arete"
-                                                value={
-                                                    <span className="font-semibold text-primary">
-                                                        {a.ear_tag}
-                                                    </span>
-                                                }
-                                            />
-                                            <InfoItem
-                                                label="Categoría"
-                                                value={a.category}
-                                            />
-                                            <InfoItem
-                                                label="Raza"
-                                                value={a.breed}
-                                            />
-                                            <InfoItem
-                                                label="Sexo"
-                                                value={
-                                                    <span
-                                                        className={`rounded-full px-2 py-0.5 text-xs font-semibold ${(SEX_LABELS[a.sex] ?? { cls: 'bg-gray-100 text-gray-500' }).cls}`}
-                                                    >
-                                                        {
-                                                            (
-                                                                SEX_LABELS[
-                                                                    a.sex
-                                                                ] ?? {
-                                                                    label: a.sex,
-                                                                }
-                                                            ).label
+                                    {order.animals.map((a) => {
+                                        const isPending =
+                                            isSales &&
+                                            a.status_order ===
+                                                'Pendiente de confirmacion';
+
+                                        return (
+                                            <div
+                                                key={a.id}
+                                                className="rounded-xl border border-gray-100 bg-gray-50 p-4"
+                                            >
+                                                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                                                    <InfoItem
+                                                        label="Arete"
+                                                        value={
+                                                            <span className="font-semibold text-primary">
+                                                                {a.ear_tag}
+                                                            </span>
                                                         }
-                                                    </span>
-                                                }
-                                            />
-                                            <InfoItem
-                                                label="Estado"
-                                                value={
-                                                    <Pill
-                                                        label={a.status}
-                                                        map={STATUS_STYLES}
                                                     />
-                                                }
-                                            />
-                                            <InfoItem
-                                                label="Precio"
-                                                value={formatearDinero(
-                                                    a.pivot_price,
+                                                    <InfoItem
+                                                        label="Categoría"
+                                                        value={a.category}
+                                                    />
+                                                    <InfoItem
+                                                        label="Raza"
+                                                        value={a.breed}
+                                                    />
+                                                    <InfoItem
+                                                        label="Sexo"
+                                                        value={
+                                                            <span
+                                                                className={`rounded-full px-2 py-0.5 text-xs font-semibold ${(SEX_LABELS[a.sex] ?? { cls: 'bg-gray-100 text-gray-500' }).cls}`}
+                                                            >
+                                                                {
+                                                                    (
+                                                                        SEX_LABELS[
+                                                                            a
+                                                                                .sex
+                                                                        ] ?? {
+                                                                            label: a.sex,
+                                                                        }
+                                                                    ).label
+                                                                }
+                                                            </span>
+                                                        }
+                                                    />
+                                                    <InfoItem
+                                                        label="Estado"
+                                                        value={
+                                                            <Pill
+                                                                label={
+                                                                    a.status
+                                                                }
+                                                                map={
+                                                                    STATUS_STYLES
+                                                                }
+                                                            />
+                                                        }
+                                                    />
+                                                    <InfoItem
+                                                        label="Precio"
+                                                        value={formatearDinero(
+                                                            a.pivot_price,
+                                                        )}
+                                                        highlight
+                                                    />
+                                                </div>
+
+                                                {isSales && a.status_order && (
+                                                    <div className="mt-3 flex items-center justify-between border-t border-gray-200 pt-3">
+                                                        <span
+                                                            className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${
+                                                                a.status_order ===
+                                                                'Confirmado'
+                                                                    ? 'border-green-200 bg-green-50 text-green-700'
+                                                                    : a.status_order ===
+                                                                        'Rechazado'
+                                                                      ? 'border-red-200 bg-red-50 text-red-600'
+                                                                      : 'border-amber-200 bg-amber-50 text-amber-700'
+                                                            }`}
+                                                        >
+                                                            {a.status_order}
+                                                        </span>
+
+                                                        {isPending && (
+                                                            <div className="flex gap-2">
+                                                                <button
+                                                                    disabled={
+                                                                        !!loading
+                                                                    }
+                                                                    onClick={() =>
+                                                                        act(
+                                                                            a.animal_order_id,
+                                                                            'confirm',
+                                                                        )
+                                                                    }
+                                                                    className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold text-on-primary transition-all hover:opacity-90 disabled:opacity-50"
+                                                                >
+                                                                    <span className="material-symbols-outlined text-[15px]">
+                                                                        check_circle
+                                                                    </span>
+                                                                    {loading ===
+                                                                    `${a.animal_order_id}-confirm`
+                                                                        ? 'Confirmando...'
+                                                                        : 'Confirmar'}
+                                                                </button>
+                                                                <button
+                                                                    disabled={
+                                                                        !!loading
+                                                                    }
+                                                                    onClick={() =>
+                                                                        act(
+                                                                            a.animal_order_id,
+                                                                            'reject',
+                                                                        )
+                                                                    }
+                                                                    className="flex items-center gap-1.5 rounded-lg border border-red-300 px-3 py-1.5 text-xs font-bold text-red-600 transition-all hover:bg-red-50 disabled:opacity-50"
+                                                                >
+                                                                    <span className="material-symbols-outlined text-[15px]">
+                                                                        cancel
+                                                                    </span>
+                                                                    {loading ===
+                                                                    `${a.animal_order_id}-reject`
+                                                                        ? 'Rechazando...'
+                                                                        : 'Rechazar'}
+                                                                </button>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 )}
-                                                highlight
-                                            />
-                                        </div>
-                                    ))}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         )}

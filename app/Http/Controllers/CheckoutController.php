@@ -166,19 +166,31 @@ class CheckoutController extends Controller
      * ───────────────────────────────────────────── */
     public function webhook(Request $request)
     {
-        $payload   = $request->all();
-        $event     = $payload['event'] ?? '';
-        $timestamp = $payload['timestamp'] ?? '';
-        $signature = $payload['signature']['checksum'] ?? '';
-        $secret    = config('services.wompi.events_secret');
+        $payload    = $request->all();
+        $event      = $payload['event'] ?? '';
+        $timestamp  = $payload['timestamp'] ?? '';
+        $signature  = $payload['signature']['checksum'] ?? '';
+        $properties = $payload['signature']['properties'] ?? [];
+        $secret     = config('services.wompi.events_secret');
 
-        $expectedSignature = hash(
-            'sha256',
-            ($payload['data']['transaction']['id'] ?? '') . $timestamp . $secret
-        );
+        // Wompi concatena, EN ORDEN, los valores de cada campo listado en
+        // signature.properties (rutas dentro de "data", ej. "transaction.id",
+        // "transaction.status", "transaction.amount_in_cents"), luego el
+        // timestamp, y luego el secreto de eventos. NO es un formato fijo:
+        // hay que recorrer "properties" dinámicamente, tal cual las manda Wompi.
+        $concat = '';
+        foreach ($properties as $path) {
+            $concat .= data_get($payload['data'] ?? [], $path);
+        }
+        $concat .= $timestamp . $secret;
 
-        if (! hash_equals($expectedSignature, $signature)) {
-            Log::warning('Wompi webhook: firma inválida', compact('payload'));
+        $expectedSignature = hash('sha256', $concat);
+
+        if (empty($properties) || ! hash_equals(strtoupper($expectedSignature), strtoupper($signature))) {
+            Log::warning('Wompi webhook: firma inválida', [
+                'properties' => $properties,
+                'payload'    => $payload,
+            ]);
             return response()->json(['ok' => false], 401);
         }
 
@@ -252,10 +264,8 @@ class CheckoutController extends Controller
     {
         DB::transaction(function () use ($order, $wompiTx) {
             // 1. Crear la transacción
-            $amountCents = $wompiTx['amount_in_cents'] ?? ($wompiTx['amount'] ?? 0);
-            $amountPesos = is_int($amountCents) && $amountCents > 999999
-                ? $amountCents / 100
-                : $amountCents;
+            // Wompi siempre reporta amount_in_cents; no hay que adivinar por tamaño.
+            $amountPesos = ($wompiTx['amount_in_cents'] ?? 0) / 100;
 
             $transaction = Transaction::create([
                 'wompi_id'           => $wompiTx['id'],

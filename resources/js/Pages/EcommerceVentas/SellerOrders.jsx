@@ -53,6 +53,11 @@ export default function SellerOrders({ items }) {
                         {flash.success}
                     </div>
                 )}
+                {flash?.error && (
+                    <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+                        {flash.error}
+                    </div>
+                )}
 
                 {rows.length === 0 ? (
                     <div className="flex flex-col items-center justify-center rounded-2xl border border-outline-variant bg-white py-20 text-center">

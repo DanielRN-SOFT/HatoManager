@@ -35,11 +35,19 @@ const SalesIndex = () => {
         purchases,
         stats = {},
         tab: initialTab = 'ventas',
+        flash,
     } = usePage().props;
     const [tab, setTab] = useState(initialTab);
-    const [detail, setDetail] = useState(null);
+    const [detailId, setDetailId] = useState(null);
 
     const activeOrders = tab === 'ventas' ? sales : purchases;
+
+    // Derivado de las props actuales (sales/purchases), no una copia congelada:
+    // así, cuando el backend confirma/rechaza un animal y las props se
+    // refrescan, el modal muestra el estado nuevo sin necesidad de cerrarlo.
+    const detail = detailId
+        ? ((activeOrders?.data ?? []).find((o) => o.id === detailId) ?? null)
+        : null;
 
     function handlePageChange(page) {
         const pageKey = tab === 'ventas' ? 'sales_page' : 'purchases_page';
@@ -56,7 +64,7 @@ const SalesIndex = () => {
             <DetailModal
                 order={detail}
                 mode={tab}
-                onClose={() => setDetail(null)}
+                onClose={() => setDetailId(null)}
                 BIZ_STYLES={BIZ_STYLES}
                 PAY_STYLES={PAY_STYLES}
             />
@@ -82,6 +90,17 @@ const SalesIndex = () => {
                     </div>
                 </div>
             </div>
+
+            {flash?.success && (
+                <div className="mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+                    {flash.success}
+                </div>
+            )}
+            {flash?.error && (
+                <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">
+                    {flash.error}
+                </div>
+            )}
 
             {/* Stats */}
             <div className="mb-6 grid grid-cols-1 gap-3 lg:grid-cols-4">
@@ -130,7 +149,7 @@ const SalesIndex = () => {
                 <OrdersTable
                     orders={activeOrders}
                     mode={tab}
-                    onDetail={setDetail}
+                    onDetail={(order) => setDetailId(order.id)}
                     onPageChange={handlePageChange}
                     BIZ_STYLES={BIZ_STYLES}
                     PAY_STYLES={PAY_STYLES}

@@ -282,58 +282,70 @@ class EcommerceSalesController extends Controller
         // Solo se puede actuar si está pendiente
         abort_unless($row->status_order === 'Pendiente de confirmacion', 422);
 
-        \Illuminate\Support\Facades\DB::transaction(function () use ($row, $action, $user) {
-            if ($action === 'confirm') {
-                // ── Confirmar ──────────────────────────────────────────
-                $row->update(['status_order' => 'Confirmado']);
-                $row->animal->update(['status' => 'Vendido']);
-
-                // Recalcular bussiness_status del pedido:
-                // Si TODOS los animales del pedido están confirmados → Completado
-                $order      = $row->order;
-                $allAnimals = $order->animals;
-                $allDone    = $allAnimals->every(
-                    fn($a) => in_array($a->pivot->status_order, ['Confirmado', 'Rechazado'])
-                );
-
-                if ($allDone) {
-                    $anyConfirmed = $allAnimals->some(fn($a) => $a->pivot->status_order === 'Confirmado');
-                    $order->update([
-                        'bussiness_status' => $anyConfirmed ? 'Completado' : 'Rechazado por ganadero',
-                    ]);
-                }
-
-                // Notificar al comprador
-                $order->user?->notify(new \App\Notifications\AnimalConfirmadoNotification($row));
-            } else {
-                $row->update(['status_order' => 'Rechazado']);
-                $row->animal->update(['status' => 'Publicado']);
-
-                $order = $row->order;
-                $originalTx = $order->transaction;
-
-                if ($originalTx && $originalTx->wompi_id) {
-                    $wompiService = app(\App\Services\WompiService::class);
-                    $reembolso = $wompiService->solicitarReembolso(
-                        $originalTx,
-                        'rechazo_ganadero',
-                        (float) $row->snapshot_price
-                    );
-
-                    // Actualizar payment_status del pedido si el reembolso fue exitoso
-                    if ($reembolso->transaction_status === 'reembolsada') {
-                        $order->update(['payment_status' => 'Reembolsado']);
-                    }
-                }
-
-                // Recalcular bussiness_status (código que ya tienes)...
-
-                // Notificar al comprador (ya existe AnimalRechazadoNotification)
-                $order->user?->notify(new \App\Notifications\AnimalRechazadoNotification($row));
-            }
-        });
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($row, $action, $user) {
+                $this->applyAnimalOrderAction($row, $action, $user);
+            });
+        } catch (\RuntimeException $e) {
+            // El reembolso con Wompi falló: la transacción hizo rollback completo
+            // (el animal sigue reservado, status_order sigue "Pendiente de confirmacion").
+            // No liberamos el animal para no dejar al comprador sin animal y sin plata.
+            return back()->with('error', 'No se pudo procesar el reembolso con Wompi. Intenta de nuevo en unos minutos o contacta soporte. (' . $e->getMessage() . ')');
+        }
 
         return back()->with('success', $action === 'confirm' ? 'Animal confirmado.' : 'Animal rechazado y reembolso registrado.');
+    }
+
+    private function applyAnimalOrderAction($row, string $action, $user): void
+    {
+        if ($action === 'confirm') {
+            // ── Confirmar ──────────────────────────────────────────
+            $row->update(['status_order' => 'Confirmado']);
+            $row->animal->update(['status' => 'Vendido']);
+
+            // Recalcular bussiness_status del pedido:
+            // Si TODOS los animales del pedido están confirmados → Completado
+            $order      = $row->order;
+            $allAnimals = $order->animals;
+            $allDone    = $allAnimals->every(
+                fn($a) => in_array($a->pivot->status_order, ['Confirmado', 'Rechazado'])
+            );
+
+            if ($allDone) {
+                $anyConfirmed = $allAnimals->some(fn($a) => $a->pivot->status_order === 'Confirmado');
+                $order->update([
+                    'bussiness_status' => $anyConfirmed ? 'Completado' : 'Rechazado por ganadero',
+                ]);
+            }
+
+            // Notificar al comprador
+            $order->user?->notify(new \App\Notifications\AnimalConfirmadoNotification($row));
+        } else {
+            $row->update(['status_order' => 'Rechazado']);
+            $row->animal->update(['status' => 'Publicado']);
+
+            $order = $row->order;
+            $originalTx = $order->transaction;
+
+            if ($originalTx && $originalTx->wompi_id) {
+                $wompiService = app(\App\Services\WompiService::class);
+                $reembolso = $wompiService->solicitarReembolso(
+                    $originalTx,
+                    'rechazo_ganadero',
+                    (float) $row->snapshot_price
+                );
+
+                // Actualizar payment_status del pedido si el reembolso fue exitoso
+                if ($reembolso->transaction_status === 'reembolsada') {
+                    $order->update(['payment_status' => 'Reembolsado']);
+                }
+            }
+
+            // Recalcular bussiness_status (código que ya tienes)...
+
+            // Notificar al comprador (ya existe AnimalRechazadoNotification)
+            $order->user?->notify(new \App\Notifications\AnimalRechazadoNotification($row));
+        }
     }
 
 

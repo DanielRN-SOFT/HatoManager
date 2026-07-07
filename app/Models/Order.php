@@ -30,7 +30,7 @@ class Order extends Model
     {
         return $this->belongsToMany(Animal::class)
             ->using(AnimalOrder::class)
-            ->withPivot('user_id', 'status_order', 'snapshot_price')
+            ->withPivot('id', 'user_id', 'status_order', 'snapshot_price')
             ->withTimestamps();
     }
 
