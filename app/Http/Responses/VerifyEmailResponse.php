@@ -19,13 +19,19 @@ class VerifyEmailResponse implements VerifyEmailResponseContract
             return redirect()->route('ecommerce.index');
         }
 
-        // Veterinario: NO debe ir al dashboard automáticamente
+        // Veterinario: va directo a animals.index
         if ($user->hasRole('veterinario')) {
-            return redirect()->route('login')
-                ->with('status', 'Tu correo ha sido verificado. Por favor inicia sesión.');
+            if ($user->farms()->count() > 1) {
+                return redirect()->route('select-farm.index');
+            }
+            $farm = $user->farms()->first();
+            if ($farm) {
+                session(['active_farm_id' => $farm->id]);
+            }
+            return redirect()->route('animals.index');
         }
 
-        // Ganadero: mantiene el flujo normal hacia el dashboard
+        // Ganadero: mantiene el flujo hacia el dashboard
         if ($user->hasRole('ganadero')) {
             if ($user->farms()->count() > 1) {
                 return redirect()->route('select-farm.index');
