@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Order;
+use App\Models\Transaction;
 use App\Notifications\PedidoExpiradoNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,7 +26,20 @@ class CancelarPedidosPendientes implements ShouldQueue
 
         foreach ($pedidos as $order) {
             DB::transaction(function () use ($order) {
-                $order->update(['bussiness_status' => 'Cancelado por expiración']);
+                $transaction = Transaction::create([
+                    'internal_reference' => $order->reference,
+                    'transaction_date'   => now(),
+                    'moneda'             => 'COP',
+                    'amount'             => $order->subtotal,
+                    'transaction_status' => 'expirada',
+                    'transaction_type'   => 'compra',
+                ]);
+
+                $order->update([
+                    'bussiness_status' => 'Cancelado por expiración',
+                    'payment_status'   => 'Expirado',
+                    'transaction_id'   => $transaction->id,
+                ]);
 
                 foreach ($order->animals as $animal) {
                     if ($animal->status === 'Reservado') {
