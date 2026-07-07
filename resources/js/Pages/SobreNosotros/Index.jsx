@@ -201,7 +201,7 @@ export default function SobreNosotros() {
                         transparentes.
                     </p>
                     <Link
-                        href="/sales"
+                        href="/ventas"
                         className="inline-flex items-center gap-2 rounded-xl bg-primary px-8 py-4 text-lg font-bold text-on-primary transition-all hover:bg-primary-container"
                     >
                         Explorar Catálogo

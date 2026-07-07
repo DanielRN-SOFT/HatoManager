@@ -41,7 +41,7 @@ export default function OrderHistory({ orders }) {
                             Cuando realices una compra aparecerá aquí.
                         </p>
                         <Link
-                            href="/sales"
+                            href="/ventas"
                             className="mt-6 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-on-primary no-underline transition-all hover:bg-primary-container"
                         >
                             Ver catálogo

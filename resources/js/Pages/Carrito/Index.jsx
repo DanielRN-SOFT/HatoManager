@@ -312,7 +312,7 @@ export default function CartIndex({ grupos, total, count }) {
                                 )}
 
                                 <button
-                                    onClick={() => router.visit('/sales')}
+                                    onClick={() => router.visit('/ventas')}
                                     className="mt-3 w-full rounded-xl border border-outline-variant py-2.5 text-sm font-medium text-on-surface-variant transition-all hover:bg-surface-container"
                                 >
                                     Seguir comprando
