@@ -74,7 +74,7 @@ export default function CheckoutResult({ status, reference, orderId }) {
                             </button>
                         )}
                         <button
-                            onClick={() => router.visit('/sales')}
+                            onClick={() => router.visit('/ventas')}
                             className="w-full rounded-xl border border-outline-variant py-2.5 text-sm font-medium text-on-surface-variant hover:bg-surface-container"
                         >
                             Seguir comprando
