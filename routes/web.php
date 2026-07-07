@@ -192,8 +192,9 @@ Route::middleware(['auth', 'verified', 'role:ganadero'])->group(function () {
     Route::resource('animals', AnimalController::class)->except(['index']);
     Route::put('/animals/{animal}/restore', [AnimalController::class, 'restore'])->name('animals.restore')->withTrashed();
 
-    // Pesajes
-    Route::resource('/weight-records', WeightRecordController::class)->except(['index']);
+    // Pesajes — edición/eliminación/restauración exclusiva del ganadero
+    Route::put('/weight-records/{weightRecord}', [WeightRecordController::class, 'update'])->name('weight-records.update');
+    Route::delete('/weight-records/{weightRecord}', [WeightRecordController::class, 'destroy'])->name('weight-records.destroy');
     Route::put('/weight-records/{weightRecord}/restore', [WeightRecordController::class, 'restore'])
         ->name('weight-records.restore')
         ->withTrashed();
@@ -223,13 +224,13 @@ Route::middleware(['auth', 'verified', 'role:ganadero|veterinario'])->group(func
 
     // Sanidad
     Route::resource('sanidad', HealthRecordController::class)->parameters(['sanidad' => 'health'])->names('health');
-
     // Animales
     Route::get('/animals', [AnimalController::class, 'index'])->name('animals.index');
     Route::get('/animals/{animal}/certificado', [HealthRecordController::class, 'certificadoIndividual'])->name('health.certificado.individual');
 
     // Pesajes
     Route::get('/weight-records', [WeightRecordController::class, 'index'])->name('weight-records.index');
+    Route::post('/weight-records', [WeightRecordController::class, 'store'])->name('weight-records.store');
 
     // Cerficado de finca
     Route::get('/fincas/{farm}/certificado-lote', [HealthRecordController::class, 'certificadoLote'])->name('health.certificado.lote');

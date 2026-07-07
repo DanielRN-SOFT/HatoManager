@@ -24,7 +24,8 @@ export default function Index({
     productiveStages,
     weightMethods,
 }) {
-    const { isGanadero } = useRole();
+    const { isGanadero, isVeterinario } = useRole();
+    const canCreate = isGanadero || isVeterinario;
     const [modal, setModal] = useState({
         show: false,
         mode: 'create',
@@ -98,7 +99,7 @@ export default function Index({
                             </p>
                         </div>
                     </div>
-                    {isGanadero && (
+                    {canCreate && (
                         <button
                             onClick={openCreate}
                             className="flex items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95"
@@ -163,7 +164,7 @@ export default function Index({
                         <p className="text-sm">
                             No hay registros para mostrar.
                         </p>
-                        {isGanadero && (
+                        {canCreate && (
                             <button
                                 onClick={openCreate}
                                 className="mt-1 text-sm text-primary hover:underline"
