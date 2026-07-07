@@ -1,4 +1,10 @@
-export default function FarmCard({ farm, onEdit, onDeactivate, onRestore }) {
+export default function FarmCard({
+    farm,
+    onEdit,
+    onDeactivate,
+    onRestore,
+    readOnly = false,
+}) {
     const isActive = !farm.deleted_at;
 
     return (
@@ -55,7 +61,14 @@ export default function FarmCard({ farm, onEdit, onDeactivate, onRestore }) {
             </div>
 
             {/* Acciones */}
-            {isActive ? (
+            {readOnly ? (
+                <div className="flex items-center justify-center gap-1 rounded-lg border border-outline-variant/40 px-3 py-1.5 text-xs text-on-surface-variant/70">
+                    <span className="material-symbols-outlined text-[14px]">
+                        visibility
+                    </span>
+                    Solo lectura
+                </div>
+            ) : isActive ? (
                 <div className="flex gap-2">
                     <button
                         onClick={() => onEdit(farm)}

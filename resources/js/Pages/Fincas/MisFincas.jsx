@@ -4,10 +4,13 @@ import FarmForm from '@/Components/Fincas/FarmForm';
 import Modal from '@/Components/Modal';
 import Flash from '@/Components/Shared/Flash';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
 export default function MisFincas({ farms }) {
+    const { auth } = usePage().props;
+    const isVeterinario = auth?.roles?.includes('veterinario') && !auth?.roles?.includes('ganadero');
+
     const [showForm, setShowForm] = useState(false);
     const [editingFarm, setEditingFarm] = useState(null);
     const [confirmFarm, setConfirmFarm] = useState(null);
@@ -65,15 +68,24 @@ export default function MisFincas({ farms }) {
                             </p>
                         </div>
                     </div>
-                    <button
-                        onClick={() => setShowForm(true)}
-                        className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95 sm:w-auto sm:justify-start"
-                    >
-                        <span className="material-symbols-outlined text-[20px]">
-                            add_circle
+                    {isVeterinario ? (
+                        <span className="flex items-center gap-2 rounded-2xl bg-outline-variant/20 px-4 py-2 text-xs font-semibold text-on-surface-variant">
+                            <span className="material-symbols-outlined text-[18px]">
+                                visibility
+                            </span>
+                            Solo lectura
                         </span>
-                        Nueva Finca
-                    </button>
+                    ) : (
+                        <button
+                            onClick={() => setShowForm(true)}
+                            className="flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-md shadow-primary/30 transition-all duration-200 hover:shadow-lg hover:shadow-primary/40 active:scale-95 sm:w-auto sm:justify-start"
+                        >
+                            <span className="material-symbols-outlined text-[20px]">
+                                add_circle
+                            </span>
+                            Nueva Finca
+                        </button>
+                    )}
                 </div>
                 <Flash />
 
@@ -84,14 +96,18 @@ export default function MisFincas({ farms }) {
                             forest
                         </span>
                         <p className="text-sm text-on-surface-variant">
-                            Aún no tienes fincas registradas.
+                            {isVeterinario
+                                ? 'No tienes fincas asignadas todavía.'
+                                : 'Aún no tienes fincas registradas.'}
                         </p>
-                        <button
-                            onClick={() => setShowForm(true)}
-                            className="mt-3 text-sm text-primary underline-offset-2 hover:underline"
-                        >
-                            Crear mi primera finca
-                        </button>
+                        {!isVeterinario && (
+                            <button
+                                onClick={() => setShowForm(true)}
+                                className="mt-3 text-sm text-primary underline-offset-2 hover:underline"
+                            >
+                                Crear mi primera finca
+                            </button>
+                        )}
                     </div>
                 )}
 
@@ -105,6 +121,7 @@ export default function MisFincas({ farms }) {
                                 onEdit={handleEdit}
                                 onDeactivate={handleDeactivate}
                                 onRestore={handleRestore}
+                                readOnly={isVeterinario}
                             />
                         ))}
                     </div>
@@ -124,6 +141,7 @@ export default function MisFincas({ farms }) {
                                     onEdit={handleEdit}
                                     onDeactivate={handleDeactivate}
                                     onRestore={handleRestore}
+                                    readOnly={isVeterinario}
                                 />
                             ))}
                         </div>
