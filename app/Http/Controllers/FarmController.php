@@ -109,6 +109,25 @@ class FarmController extends Controller
             'No tienes acceso a esta finca.'
         );
 
+        // ── Validaciones antes de desactivar ─────────────────────
+        $tieneAnimalesActivos = $farm->animals()
+            ->whereNotIn('status', ['Inactivo', 'Muerto'])
+            ->exists();
+
+        if ($tieneAnimalesActivos) {
+            return redirect()->route('farms.index')
+                ->with('error', "No se puede desactivar \"{$farm->name}\": tiene animales activos. Da de baja o retira los animales primero.");
+        }
+
+        $tienePedidosPendientes = \App\Models\Order::whereHas('animals', function ($q) use ($farm) {
+            $q->where('animals.farm_id', $farm->id);
+        })->whereIn('bussiness_status', ['Pendiente de pago', 'Pendiente de confirmacion'])->exists();
+
+        if ($tienePedidosPendientes) {
+            return redirect()->route('farms.index')
+                ->with('error', "No se puede desactivar \"{$farm->name}\": tiene pedidos pendientes asociados a sus animales.");
+        }
+
         $farm->delete();
 
         // ── Manejo de sesión ─────────────────────────────────────
